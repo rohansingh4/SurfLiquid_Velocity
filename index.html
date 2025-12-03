@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonic Execution Layer - WETH/USDC Monitor</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,105 +13,132 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f0f1e;
+            color: #fff;
             padding: 20px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         header {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 20px 30px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #2a2a3e;
         }
 
         h1 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 10px;
+            color: #00d4ff;
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .pool-info {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #8e8ea9;
         }
 
         .pool-info span {
-            background: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .dashboard {
+        .pool-info strong {
+            color: #fff;
+        }
+
+        .main-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 300px 1fr;
             gap: 20px;
             margin-bottom: 20px;
         }
 
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         .card {
-            background: white;
-            border-radius: 10px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #2a2a3e;
         }
 
         .card h2 {
-            color: #667eea;
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
+            color: #00d4ff;
+            font-size: 16px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .stat {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 5px;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            font-size: 13px;
         }
 
         .stat-label {
-            font-weight: 600;
-            color: #555;
+            color: #8e8ea9;
         }
 
         .stat-value {
-            color: #333;
-            font-weight: bold;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .price-large {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00ff88;
+            margin: 12px 0;
+            text-align: center;
+        }
+
+        .price-large.down {
+            color: #ff4444;
         }
 
         .status-indicator {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             margin-right: 8px;
         }
 
         .status-open {
-            background: #28a745;
+            background: #00ff88;
+            box-shadow: 0 0 8px #00ff88;
             animation: pulse 2s infinite;
         }
 
         .status-waiting {
-            background: #ffc107;
+            background: #ffaa00;
         }
 
         .status-outofrange {
-            background: #dc3545;
+            background: #ff4444;
             animation: blink 1s infinite;
         }
 
@@ -125,104 +152,208 @@
             50% { opacity: 0.3; }
         }
 
-        .chart-container {
-            grid-column: 1 / -1;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-        }
-
-        .distribution {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .dist-bar {
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-
-        .weth-bar {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-
-        .usdc-bar {
-            background: linear-gradient(90deg, #2ecc71, #27ae60);
-        }
-
-        .price-large {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-
         .range-info {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .range-box {
-            flex: 1;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
+            border: 2px solid;
         }
 
         .upper-range {
-            background: #ffe5e5;
-            border: 2px solid #ff6b6b;
+            background: rgba(255, 68, 68, 0.1);
+            border-color: #ff4444;
         }
 
         .lower-range {
-            background: #e5f3ff;
-            border: 2px solid #6bb6ff;
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .range-label {
+            font-size: 11px;
+            color: #8e8ea9;
+            margin-bottom: 4px;
+        }
+
+        .range-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .chart-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2a2a3e;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            color: #00d4ff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .time-filter {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .time-btn {
+            background: transparent;
+            color: #8e8ea9;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .time-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .time-btn.active {
+            background: #00d4ff;
+            color: #0f0f1e;
+        }
+
+        .chart-type-toggle {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .type-btn {
+            background: transparent;
+            color: #8e8ea9;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .type-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .type-btn.active {
+            background: #00d4ff;
+            color: #0f0f1e;
+        }
+
+        #chart-container {
+            height: 500px;
+            margin-top: 10px;
+        }
+
+        .distribution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .dist-card {
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .weth-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .usdc-card {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.2));
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .dist-label {
+            font-size: 11px;
+            color: #8e8ea9;
+            margin-bottom: 4px;
+        }
+
+        .dist-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
         }
 
         .last-update {
             text-align: center;
-            color: white;
+            color: #8e8ea9;
             margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #0f0f1e;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
             font-size: 14px;
-        }
-
-        .controls {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
         }
 
-        button:hover {
-            background: #667eea;
-            color: white;
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 212, 255, 0.4);
         }
 
-        @media (max-width: 768px) {
-            .dashboard {
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-live {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -231,106 +362,101 @@
 <body>
     <div class="container">
         <header>
-            <h1>Sonic Execution Layer - WETH/USDC Monitor</h1>
+            <h1>
+                Sonic Execution Layer - WETH/USDC Monitor
+                <span class="badge badge-live">● LIVE</span>
+            </h1>
             <div class="pool-info">
                 <span><strong>Pool:</strong> 0x6fb3...0b40</span>
                 <span><strong>DEX:</strong> Shadow</span>
-                <span><strong>Interval:</strong> 15 seconds</span>
+                <span><strong>Network:</strong> Sonic</span>
+                <span><strong>Interval:</strong> 15s</span>
                 <span><strong>Range:</strong> ±0.1%</span>
+                <span><strong>Source:</strong> On-Chain RPC</span>
             </div>
         </header>
 
-        <div class="controls">
-            <button onclick="location.reload()">🔄 Refresh</button>
-        </div>
-
-        <div class="dashboard">
-            <div class="card">
-                <h2>💰 Current Price</h2>
-                <div class="price-large" id="currentPrice">$0.00</div>
-                <div class="stat">
-                    <span class="stat-label">Liquidity:</span>
-                    <span class="stat-value" id="liquidity">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">WETH Amount:</span>
-                    <span class="stat-value" id="wethAmount">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">USDC Amount:</span>
-                    <span class="stat-value" id="usdcAmount">0</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>📍 Position Status</h2>
-                <div class="stat">
-                    <span class="stat-label">Status:</span>
-                    <span class="stat-value" id="positionStatus">
-                        <span class="status-indicator"></span>No Position
-                    </span>
-                </div>
-                <div class="range-info">
-                    <div class="range-box upper-range">
-                        <div style="font-size: 12px; color: #666;">Upper Range</div>
-                        <div style="font-size: 18px; font-weight: bold;" id="upperRange">$0.00</div>
+        <div class="main-grid">
+            <div class="sidebar">
+                <div class="card">
+                    <h2>💰 Current Price</h2>
+                    <div class="price-large" id="currentPrice">$0.00</div>
+                    <div class="stat">
+                        <span class="stat-label">24h Change:</span>
+                        <span class="stat-value" id="priceChange">+0.00%</span>
                     </div>
-                    <div class="range-box lower-range">
-                        <div style="font-size: 12px; color: #666;">Lower Range</div>
-                        <div style="font-size: 18px; font-weight: bold;" id="lowerRange">$0.00</div>
+                    <div class="stat">
+                        <span class="stat-label">Liquidity:</span>
+                        <span class="stat-value" id="liquidity">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">WETH:</span>
+                        <span class="stat-value" id="wethAmount">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">USDC:</span>
+                        <span class="stat-value" id="usdcAmount">0</span>
                     </div>
                 </div>
-                <div class="stat" style="margin-top: 15px;">
-                    <span class="stat-label">Rebalance Type:</span>
-                    <span class="stat-value" id="rebalanceType">N/A</span>
-                </div>
-            </div>
 
-            <div class="card">
-                <h2>📊 Current Candle (15s)</h2>
-                <div class="stat">
-                    <span class="stat-label">Open:</span>
-                    <span class="stat-value" id="candleOpen">$0.00</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">High:</span>
-                    <span class="stat-value" id="candleHigh">$0.00</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Low:</span>
-                    <span class="stat-value" id="candleLow">$0.00</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Close:</span>
-                    <span class="stat-value" id="candleClose">$0.00</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔄 Token Distribution</h2>
-                <div class="distribution">
-                    <div class="dist-bar weth-bar" id="wethBar" style="width: 50%;">
-                        WETH: 50%
+                <div class="card">
+                    <h2>📍 Position Status</h2>
+                    <div class="stat">
+                        <span class="stat-label">Status:</span>
+                        <span class="stat-value" id="positionStatus">
+                            <span class="status-indicator"></span>No Position
+                        </span>
                     </div>
-                    <div class="dist-bar usdc-bar" id="usdcBar" style="width: 50%;">
-                        USDC: 50%
+                    <div class="range-info">
+                        <div class="range-box upper-range">
+                            <div class="range-label">Upper Range</div>
+                            <div class="range-value" id="upperRange">$0</div>
+                        </div>
+                        <div class="range-box lower-range">
+                            <div class="range-label">Lower Range</div>
+                            <div class="range-value" id="lowerRange">$0</div>
+                        </div>
+                    </div>
+                    <div class="stat" style="margin-top: 16px;">
+                        <span class="stat-label">Rebalance Type:</span>
+                        <span class="stat-value" id="rebalanceType">N/A</span>
                     </div>
                 </div>
-                <div class="stat" style="margin-top: 15px;">
-                    <span class="stat-label">Total WETH %:</span>
-                    <span class="stat-value" id="wethPct">50.00%</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Total USDC %:</span>
-                    <span class="stat-value" id="usdcPct">50.00%</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="chart-container">
-            <h2>📈 Price Chart (Last Hour)</h2>
-            <div class="chart-wrapper">
-                <canvas id="priceChart"></canvas>
+                <div class="card">
+                    <h2>🔄 Token Distribution</h2>
+                    <div class="distribution">
+                        <div class="dist-card weth-card">
+                            <div class="dist-label">WETH</div>
+                            <div class="dist-value" id="wethPct">50%</div>
+                        </div>
+                        <div class="dist-card usdc-card">
+                            <div class="dist-label">USDC</div>
+                            <div class="dist-value" id="usdcPct">50%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
+            </div>
+
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">📊 Price Chart - 15s Candles</h2>
+                    <div class="chart-controls">
+                        <div class="time-filter">
+                            <button class="time-btn" data-range="15m">15m</button>
+                            <button class="time-btn active" data-range="1h">1H</button>
+                            <button class="time-btn" data-range="4h">4H</button>
+                            <button class="time-btn" data-range="24h">24H</button>
+                        </div>
+                        <div class="chart-type-toggle">
+                            <button class="type-btn active" data-type="candle">🕯️ Candles</button>
+                            <button class="type-btn" data-type="line">📈 Line</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-container"></div>
             </div>
         </div>
 
@@ -340,96 +466,179 @@
     </div>
 
     <script>
-        let priceChart = null;
+        let chart = null;
+        let candlestickSeries = null;
+        let lineSeries = null;
+        let upperRangeLine = null;
+        let lowerRangeLine = null;
+        let currentChartType = 'candle';
+        let currentTimeRange = '1h';
+        let allCandles = [];
 
         // Initialize chart
         function initChart() {
-            const ctx = document.getElementById('priceChart').getContext('2d');
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: 'Price (USDC per WETH)',
-                            data: [],
-                            borderColor: '#667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            pointRadius: 2
-                        },
-                        {
-                            label: 'Upper Range',
-                            data: [],
-                            borderColor: '#ff6b6b',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false
-                        },
-                        {
-                            label: 'Lower Range',
-                            data: [],
-                            borderColor: '#6bb6ff',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false
-                        }
-                    ]
+            const container = document.getElementById('chart-container');
+            chart = LightweightCharts.createChart(container, {
+                layout: {
+                    background: { color: '#16213e' },
+                    textColor: '#8e8ea9',
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Time'
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Price (USDC)'
-                            }
-                        }
-                    }
-                }
+                grid: {
+                    vertLines: { color: '#2a2a3e' },
+                    horzLines: { color: '#2a2a3e' },
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                rightPriceScale: {
+                    borderColor: '#2a2a3e',
+                },
+                timeScale: {
+                    borderColor: '#2a2a3e',
+                    timeVisible: true,
+                    secondsVisible: false,
+                },
             });
+
+            // Create candlestick series
+            candlestickSeries = chart.addCandlestickSeries({
+                upColor: '#00ff88',
+                downColor: '#ff4444',
+                borderUpColor: '#00ff88',
+                borderDownColor: '#ff4444',
+                wickUpColor: '#00ff88',
+                wickDownColor: '#ff4444',
+            });
+
+            // Create line series (hidden initially)
+            lineSeries = chart.addLineSeries({
+                color: '#00d4ff',
+                lineWidth: 2,
+                visible: false,
+            });
+
+            // Add range lines
+            upperRangeLine = chart.addLineSeries({
+                color: '#ff4444',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                title: 'Upper Range',
+            });
+
+            lowerRangeLine = chart.addLineSeries({
+                color: '#00d4ff',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                title: 'Lower Range',
+            });
+
+            // Make chart responsive
+            window.addEventListener('resize', () => {
+                chart.applyOptions({ width: container.clientWidth });
+            });
+        }
+
+        // Filter candles by time range
+        function filterCandlesByTimeRange(candles, range) {
+            if (!candles || candles.length === 0) return [];
+
+            const now = Date.now();
+            let cutoffTime;
+
+            switch(range) {
+                case '15m':
+                    cutoffTime = now - (15 * 60 * 1000);
+                    break;
+                case '1h':
+                    cutoffTime = now - (60 * 60 * 1000);
+                    break;
+                case '4h':
+                    cutoffTime = now - (4 * 60 * 60 * 1000);
+                    break;
+                case '24h':
+                    cutoffTime = now - (24 * 60 * 60 * 1000);
+                    break;
+                default:
+                    cutoffTime = now - (60 * 60 * 1000);
+            }
+
+            return candles.filter(c => c.timestamp >= cutoffTime);
+        }
+
+        // Update chart with candle data
+        function updateChart(candles, position) {
+            if (!candles || candles.length === 0) return;
+
+            // Filter by time range
+            const filteredCandles = filterCandlesByTimeRange(candles, currentTimeRange);
+
+            // Convert to TradingView format
+            const candleData = filteredCandles.map(c => ({
+                time: Math.floor(c.timestamp / 1000),
+                open: parseFloat(c.open),
+                high: parseFloat(c.high),
+                low: parseFloat(c.low),
+                close: parseFloat(c.close)
+            }));
+
+            const lineData = filteredCandles.map(c => ({
+                time: Math.floor(c.timestamp / 1000),
+                value: parseFloat(c.close)
+            }));
+
+            // Update series based on chart type
+            if (currentChartType === 'candle') {
+                candlestickSeries.setData(candleData);
+            } else {
+                lineSeries.setData(lineData);
+            }
+
+            // Update range lines if position exists
+            if (position) {
+                const upperRangeData = filteredCandles.map(c => ({
+                    time: Math.floor(c.timestamp / 1000),
+                    value: position.upper_range
+                }));
+
+                const lowerRangeData = filteredCandles.map(c => ({
+                    time: Math.floor(c.timestamp / 1000),
+                    value: position.lower_range
+                }));
+
+                upperRangeLine.setData(upperRangeData);
+                lowerRangeLine.setData(lowerRangeData);
+            }
+
+            chart.timeScale().fitContent();
         }
 
         // Update dashboard
         async function updateDashboard() {
             try {
-                const response = await fetch('http://localhost:3000/api/current');
-                const data = await response.json();
+                const [currentResponse, candlesResponse] = await Promise.all([
+                    fetch('http://localhost:3000/api/current'),
+                    fetch('http://localhost:3000/api/candles')
+                ]);
 
-                // Update current price and candle
-                if (data.currentCandle) {
-                    const candle = data.currentCandle;
-                    document.getElementById('currentPrice').textContent = `$${candle.close.toFixed(2)}`;
-                    document.getElementById('candleOpen').textContent = `$${candle.open.toFixed(2)}`;
-                    document.getElementById('candleHigh').textContent = `$${candle.high.toFixed(2)}`;
-                    document.getElementById('candleLow').textContent = `$${candle.low.toFixed(2)}`;
-                    document.getElementById('candleClose').textContent = `$${candle.close.toFixed(2)}`;
+                const currentData = await currentResponse.json();
+                const candlesData = await candlesResponse.json();
+
+                // Store all candles
+                allCandles = candlesData;
+
+                // Update current price and stats
+                if (currentData.currentCandle) {
+                    const candle = currentData.currentCandle;
+                    const price = candle.close;
+                    document.getElementById('currentPrice').textContent = `$${price.toFixed(2)}`;
                     document.getElementById('liquidity').textContent = parseInt(candle.liquidity).toLocaleString();
                     document.getElementById('wethAmount').textContent = candle.weth_amount.toFixed(4);
                     document.getElementById('usdcAmount').textContent = candle.usdc_amount.toFixed(2);
                 }
 
                 // Update position status
-                if (data.position) {
-                    const pos = data.position;
+                if (currentData.position) {
+                    const pos = currentData.position;
                     let statusClass = 'status-indicator';
                     let statusText = pos.status;
 
@@ -448,35 +657,13 @@
                     document.getElementById('rebalanceType').textContent = pos.rebalance_type || 'N/A';
 
                     // Update distribution
-                    const wethPct = pos.weth_pct.toFixed(2);
-                    const usdcPct = pos.usdc_pct.toFixed(2);
+                    const wethPct = pos.weth_pct.toFixed(1);
+                    const usdcPct = pos.usdc_pct.toFixed(1);
                     document.getElementById('wethPct').textContent = `${wethPct}%`;
                     document.getElementById('usdcPct').textContent = `${usdcPct}%`;
-                    document.getElementById('wethBar').style.width = `${wethPct}%`;
-                    document.getElementById('wethBar').textContent = `WETH: ${wethPct}%`;
-                    document.getElementById('usdcBar').style.width = `${usdcPct}%`;
-                    document.getElementById('usdcBar').textContent = `USDC: ${usdcPct}%`;
-                }
 
-                // Update chart
-                if (data.tickData && data.tickData.length > 0) {
-                    const labels = data.tickData.map(d =>
-                        new Date(d.timestamp).toLocaleTimeString()
-                    );
-                    const prices = data.tickData.map(d => d.price);
-
-                    let upperRanges = [];
-                    let lowerRanges = [];
-                    if (data.position) {
-                        upperRanges = new Array(prices.length).fill(data.position.upper_range);
-                        lowerRanges = new Array(prices.length).fill(data.position.lower_range);
-                    }
-
-                    priceChart.data.labels = labels;
-                    priceChart.data.datasets[0].data = prices;
-                    priceChart.data.datasets[1].data = upperRanges;
-                    priceChart.data.datasets[2].data = lowerRanges;
-                    priceChart.update('none');
+                    // Update chart
+                    updateChart(allCandles, pos);
                 }
 
                 // Update timestamp
@@ -485,6 +672,33 @@
                 console.error('Error updating dashboard:', error);
             }
         }
+
+        // Time range filter buttons
+        document.querySelectorAll('.time-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTimeRange = this.dataset.range;
+                updateChart(allCandles, null); // Will get position from next update
+            });
+        });
+
+        // Chart type toggle
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentChartType = this.dataset.type;
+
+                if (currentChartType === 'candle') {
+                    candlestickSeries.applyOptions({ visible: true });
+                    lineSeries.applyOptions({ visible: false });
+                } else {
+                    candlestickSeries.applyOptions({ visible: false });
+                    lineSeries.applyOptions({ visible: true });
+                }
+            });
+        });
 
         // Initialize
         initChart();
