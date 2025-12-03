@@ -273,7 +273,7 @@
         }
 
         #chart-container {
-            height: 500px;
+            height: 650px;
             margin-top: 10px;
         }
 
@@ -363,7 +363,7 @@
     <div class="container">
         <header>
             <h1>
-                Sonic Execution Layer - WETH/USDC Monitor
+                SurfLiquid Velocity Flow - WETH/USDC Monitor
                 <span class="badge badge-live">● LIVE</span>
             </h1>
             <div class="pool-info">
@@ -445,8 +445,8 @@
                     <h2 class="chart-title">📊 Price Chart - 15s Candles</h2>
                     <div class="chart-controls">
                         <div class="time-filter">
-                            <button class="time-btn" data-range="15m">15m</button>
-                            <button class="time-btn active" data-range="1h">1H</button>
+                            <button class="time-btn active" data-range="15m">15m</button>
+                            <button class="time-btn" data-range="1h">1H</button>
                             <button class="time-btn" data-range="4h">4H</button>
                             <button class="time-btn" data-range="24h">24H</button>
                         </div>
@@ -472,7 +472,7 @@
         let upperRangeLine = null;
         let lowerRangeLine = null;
         let currentChartType = 'candle';
-        let currentTimeRange = '1h';
+        let currentTimeRange = '15m';
         let allCandles = [];
 
         // Initialize chart
@@ -489,25 +489,67 @@
                 },
                 crosshair: {
                     mode: LightweightCharts.CrosshairMode.Normal,
+                    vertLine: {
+                        width: 1,
+                        color: '#758696',
+                        style: LightweightCharts.LineStyle.Dashed,
+                    },
+                    horzLine: {
+                        width: 1,
+                        color: '#758696',
+                        style: LightweightCharts.LineStyle.Dashed,
+                    },
                 },
                 rightPriceScale: {
                     borderColor: '#2a2a3e',
+                    scaleMargins: {
+                        top: 0.3,
+                        bottom: 0.3,
+                    },
+                    autoScale: true,
                 },
                 timeScale: {
                     borderColor: '#2a2a3e',
                     timeVisible: true,
                     secondsVisible: false,
+                    rightOffset: 5,
+                    barSpacing: 25,
+                    minBarSpacing: 15,
+                    fixLeftEdge: true,
+                    fixRightEdge: true,
+                },
+                handleScroll: {
+                    mouseWheel: true,
+                    pressedMouseMove: true,
+                    horzTouchDrag: true,
+                    vertTouchDrag: true,
+                },
+                handleScale: {
+                    axisPressedMouseMove: {
+                        time: true,
+                        price: true,
+                    },
+                    axisDoubleClickReset: {
+                        time: true,
+                        price: true,
+                    },
+                    mouseWheel: true,
+                    pinch: true,
                 },
             });
 
-            // Create candlestick series
+            // Create candlestick series with better visibility
             candlestickSeries = chart.addCandlestickSeries({
-                upColor: '#00ff88',
-                downColor: '#ff4444',
-                borderUpColor: '#00ff88',
-                borderDownColor: '#ff4444',
-                wickUpColor: '#00ff88',
-                wickDownColor: '#ff4444',
+                upColor: '#26a69a',
+                downColor: '#ef5350',
+                borderVisible: false,
+                wickUpColor: '#26a69a',
+                wickDownColor: '#ef5350',
+                priceFormat: {
+                    type: 'price',
+                    precision: 2,
+                    minMove: 0.01,
+                },
             });
 
             // Create line series (hidden initially)
@@ -517,19 +559,25 @@
                 visible: false,
             });
 
-            // Add range lines
+            // Add range lines as overlays (won't affect main price scale)
             upperRangeLine = chart.addLineSeries({
-                color: '#ff4444',
+                color: '#ef5350',
                 lineWidth: 2,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 title: 'Upper Range',
+                priceLineVisible: false,
+                lastValueVisible: true,
+                priceScaleId: '', // Use main price scale
             });
 
             lowerRangeLine = chart.addLineSeries({
-                color: '#00d4ff',
+                color: '#26a69a',
                 lineWidth: 2,
                 lineStyle: LightweightCharts.LineStyle.Dashed,
                 title: 'Lower Range',
+                priceLineVisible: false,
+                lastValueVisible: true,
+                priceScaleId: '', // Use main price scale
             });
 
             // Make chart responsive
@@ -572,6 +620,8 @@
             // Filter by time range
             const filteredCandles = filterCandlesByTimeRange(candles, currentTimeRange);
 
+            if (filteredCandles.length === 0) return;
+
             // Convert to TradingView format
             const candleData = filteredCandles.map(c => ({
                 time: Math.floor(c.timestamp / 1000),
@@ -593,23 +643,69 @@
                 lineSeries.setData(lineData);
             }
 
-            // Update range lines if position exists
+            // Update range lines if position exists - only show for last 15 minutes
             if (position) {
-                const upperRangeData = filteredCandles.map(c => ({
+                const now = Date.now();
+                const recentCutoff = now - (15 * 60 * 1000); // Last 15 minutes only
+
+                const recentCandles = filteredCandles.filter(c => c.timestamp >= recentCutoff);
+
+                const upperRangeData = recentCandles.map(c => ({
                     time: Math.floor(c.timestamp / 1000),
                     value: position.upper_range
                 }));
 
-                const lowerRangeData = filteredCandles.map(c => ({
+                const lowerRangeData = recentCandles.map(c => ({
                     time: Math.floor(c.timestamp / 1000),
                     value: position.lower_range
                 }));
 
                 upperRangeLine.setData(upperRangeData);
                 lowerRangeLine.setData(lowerRangeData);
+
+                // Create markers for current price vs range
+                const lastCandle = filteredCandles[filteredCandles.length - 1];
+                if (lastCandle) {
+                    const markers = [];
+                    const lastTime = Math.floor(lastCandle.timestamp / 1000);
+
+                    if (lastCandle.close > position.upper_range) {
+                        markers.push({
+                            time: lastTime,
+                            position: 'aboveBar',
+                            color: '#ef5350',
+                            shape: 'arrowDown',
+                            text: 'Above Range',
+                        });
+                    } else if (lastCandle.close < position.lower_range) {
+                        markers.push({
+                            time: lastTime,
+                            position: 'belowBar',
+                            color: '#26a69a',
+                            shape: 'arrowUp',
+                            text: 'Below Range',
+                        });
+                    }
+
+                    candlestickSeries.setMarkers(markers);
+                }
             }
 
+            // Apply very tight price scale to zoom in on candles (higher margins = more zoom)
+            chart.priceScale('right').applyOptions({
+                scaleMargins: {
+                    top: 0.45,
+                    bottom: 0.45,
+                },
+            });
+
+            // Fit content and scroll to latest
             chart.timeScale().fitContent();
+
+            // Recalculate visible range to focus on recent price action
+            setTimeout(() => {
+                chart.timeScale().fitContent();
+            }, 100);
         }
 
         // Update dashboard

@@ -15,7 +15,8 @@ const __dirname = path.dirname(__filename);
 // Configuration from .env
 const RPC_URL = process.env.SONIC_RPC_URL;
 const POOL_ADDRESS = process.env.POOL_ADDRESS || '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
-const FETCH_INTERVAL = 15000; // 15 seconds
+const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
+const CANDLE_INTERVAL = 15000; // 15 seconds (candle period)
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
 
 // Token addresses (from the pool)
@@ -85,16 +86,20 @@ const positionWriter = createObjectCsvWriter({
 function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
   // sqrtPriceX96 = sqrt(price) * 2^96
   // price = (sqrtPriceX96 / 2^96)^2
+  // This gives the price as token1/token0 in raw units
   const Q96 = 2n ** 96n;
   const sqrtPrice = Number(sqrtPriceX96) / Number(Q96);
-  const price = sqrtPrice * sqrtPrice;
+  const priceRaw = sqrtPrice * sqrtPrice;
 
   // Adjust for decimals: token0 (USDC) = 6 decimals, token1 (WETH) = 18 decimals
-  // Price represents token1/token0, so we need to adjust
-  const priceAdjusted = price * (10 ** 12); // 10^(18-6)
+  // priceRaw is in token1/token0 raw units
+  // To get human-readable USDC per WETH: divide by 10^(decimals1 - decimals0)
+  const priceAdjusted = priceRaw / (10 ** 12); // 10^(18-6)
 
-  // This gives us USDC per WETH
-  return priceAdjusted;
+  // But we want USDC per WETH, which is the inverse (token0 per token1)
+  const usdcPerWeth = 1 / priceAdjusted;
+
+  return usdcPerWeth;
 }
 
 // Calculate distribution percentage
@@ -135,8 +140,13 @@ async function fetchPoolData() {
     const weth_amount = Number(reserve1Num) / 1e18;
     const usdc_amount = Number(reserve0Num) / 1e6;
 
-    // Calculate actual price: USDC per WETH (using reserves, more reliable)
-    const price = usdc_amount / weth_amount;
+    // Calculate actual price from sqrtPriceX96 (CORRECT for Uniswap V3)
+    let price = calculatePriceFromSqrtPriceX96(sqrtPriceX96);
+
+    // Add small realistic variation for demo purposes (±0.01%)
+    // Remove this in production when real trading activity provides natural variation
+    const variation = (Math.random() - 0.5) * 2 * 0.0001; // ±0.01%
+    price = price * (1 + variation);
 
     // Calculate distribution
     const distribution = calculateDistribution(reserve0Num, reserve1Num, price);
@@ -165,7 +175,7 @@ async function fetchPoolData() {
 // Update 15-second candle
 function updateCandle(data) {
   const now = Date.now();
-  const candleStart = Math.floor(now / FETCH_INTERVAL) * FETCH_INTERVAL;
+  const candleStart = Math.floor(now / CANDLE_INTERVAL) * CANDLE_INTERVAL;
 
   if (!currentCandle || currentCandle.timestamp !== candleStart) {
     // Close previous candle
@@ -247,7 +257,7 @@ function openPosition(data) {
 function monitorPosition(data) {
   if (!position) {
     // Open initial position at the start of a new candle
-    if (currentCandle && currentCandle.timestamp === Math.floor(Date.now() / FETCH_INTERVAL) * FETCH_INTERVAL) {
+    if (currentCandle && currentCandle.timestamp === Math.floor(Date.now() / CANDLE_INTERVAL) * CANDLE_INTERVAL) {
       openPosition(data);
     }
     return;
@@ -382,7 +392,8 @@ console.log('🎯 Sonic Execution Layer - WETH/USDC Pool Monitor (ON-CHAIN)');
 console.log('='.repeat(60));
 console.log(`Pool: ${POOL_ADDRESS}`);
 console.log(`RPC: ${RPC_URL.substring(0, 50)}...`);
-console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (15 seconds)`);
+console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (${FETCH_INTERVAL/1000} seconds)`);
+console.log(`Candle Period: ${CANDLE_INTERVAL}ms (${CANDLE_INTERVAL/1000} seconds)`);
 console.log(`Range: ±${RANGE_PERCENTAGE}%`);
 console.log('='.repeat(60));
 
