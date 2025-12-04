@@ -1,10 +1,12 @@
 import axios from 'axios';
 import fs from 'fs';
-import { createObjectCsvWriter } from 'csv-writer';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { connectDB } from './db.js';
+import Candle from './models/Candle.js';
+import Position from './models/Position.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,36 +24,7 @@ let position = null;
 let positionHistory = [];
 let tickData = [];
 
-// Initialize CSV writers
-const candleWriter = createObjectCsvWriter({
-  path: 'candles.csv',
-  header: [
-    { id: 'timestamp', title: 'Timestamp' },
-    { id: 'open', title: 'Open' },
-    { id: 'high', title: 'High' },
-    { id: 'low', title: 'Low' },
-    { id: 'close', title: 'Close' },
-    { id: 'liquidity', title: 'Liquidity' },
-    { id: 'weth_amount', title: 'WETH Amount' },
-    { id: 'usdc_amount', title: 'USDC Amount' }
-  ],
-  append: true
-});
-
-const positionWriter = createObjectCsvWriter({
-  path: 'positions.csv',
-  header: [
-    { id: 'timestamp', title: 'Timestamp' },
-    { id: 'status', title: 'Status' },
-    { id: 'price', title: 'Price' },
-    { id: 'upper_range', title: 'Upper Range' },
-    { id: 'lower_range', title: 'Lower Range' },
-    { id: 'weth_pct', title: 'WETH %' },
-    { id: 'usdc_pct', title: 'USDC %' },
-    { id: 'rebalance_type', title: 'Rebalance Type' }
-  ],
-  append: true
-});
+// MongoDB will be used for persistence instead of CSV
 
 // Calculate price from sqrtPrice (Uniswap V3 formula)
 function calculatePrice(sqrtPriceX96, token0Decimals = 6, token1Decimals = 18) {
@@ -136,7 +109,7 @@ function updateCandle(data) {
     // Close previous candle
     if (currentCandle) {
       candles.push(currentCandle);
-      saveCandleToCSV(currentCandle);
+      saveCandleToMongoDB(currentCandle);
 
       // Check if we need to open a position after rebalance
       if (position && position.status === 'Waiting for Rebalance') {
@@ -205,7 +178,7 @@ function openPosition(data) {
   console.log(`  Lower Range: $${lowerRange.toFixed(2)} (-0.1%)`);
   console.log(`  WETH: ${data.weth_pct.toFixed(2)}% | USDC: ${data.usdc_pct.toFixed(2)}%`);
 
-  savePositionToCSV();
+  savePositionToMongoDB();
 }
 
 // Monitor position
@@ -226,7 +199,7 @@ function monitorPosition(data) {
     console.log(`  Current: $${data.price.toFixed(2)} > Upper: $${position.upper_range.toFixed(2)}`);
     position.status = 'Price Out of Range - UP';
     position.rebalance_type = 'RebalanceA';
-    savePositionToCSV();
+    savePositionToMongoDB();
 
     // Set to waiting for next candle
     position.status = 'Waiting for Rebalance';
@@ -235,7 +208,7 @@ function monitorPosition(data) {
     console.log(`  Current: $${data.price.toFixed(2)} < Lower: $${position.lower_range.toFixed(2)}`);
     position.status = 'Price Out of Range - DOWN';
     position.rebalance_type = 'RebalanceB';
-    savePositionToCSV();
+    savePositionToMongoDB();
 
     // Set to waiting for next candle
     position.status = 'Waiting for Rebalance';
@@ -246,40 +219,42 @@ function monitorPosition(data) {
   }
 }
 
-// Save candle to CSV
-async function saveCandleToCSV(candle) {
+// Save candle to MongoDB
+async function saveCandleToMongoDB(candle) {
   try {
-    await candleWriter.writeRecords([{
-      timestamp: new Date(candle.timestamp).toISOString(),
-      open: candle.open.toFixed(2),
-      high: candle.high.toFixed(2),
-      low: candle.low.toFixed(2),
-      close: candle.close.toFixed(2),
-      liquidity: candle.liquidity,
-      weth_amount: candle.weth_amount.toFixed(6),
-      usdc_amount: candle.usdc_amount.toFixed(2)
-    }]);
+    const candleDoc = new Candle({
+      timestamp: new Date(candle.timestamp),
+      open: parseFloat(candle.open.toFixed(2)),
+      high: parseFloat(candle.high.toFixed(2)),
+      low: parseFloat(candle.low.toFixed(2)),
+      close: parseFloat(candle.close.toFixed(2)),
+      liquidity: candle.liquidity.toString(),
+      weth_amount: parseFloat(candle.weth_amount.toFixed(6)),
+      usdc_amount: parseFloat(candle.usdc_amount.toFixed(2))
+    });
+    await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
   } catch (error) {
     console.error('Error saving candle:', error.message);
   }
 }
 
-// Save position to CSV
-async function savePositionToCSV() {
+// Save position to MongoDB
+async function savePositionToMongoDB() {
   if (!position) return;
 
   try {
-    await positionWriter.writeRecords([{
-      timestamp: new Date(position.timestamp).toISOString(),
+    const positionDoc = new Position({
+      timestamp: new Date(position.timestamp),
       status: position.status,
-      price: position.currentPrice.toFixed(2),
-      upper_range: position.upper_range.toFixed(2),
-      lower_range: position.lower_range.toFixed(2),
-      weth_pct: position.weth_pct.toFixed(2),
-      usdc_pct: position.usdc_pct.toFixed(2),
+      price: parseFloat(position.currentPrice.toFixed(2)),
+      upper_range: parseFloat(position.upper_range.toFixed(2)),
+      lower_range: parseFloat(position.lower_range.toFixed(2)),
+      weth_pct: parseFloat(position.weth_pct.toFixed(2)),
+      usdc_pct: parseFloat(position.usdc_pct.toFixed(2)),
       rebalance_type: position.rebalance_type || 'N/A'
-    }]);
+    });
+    await positionDoc.save();
 
     positionHistory.push({...position});
   } catch (error) {
@@ -344,16 +319,27 @@ app.listen(PORT, () => {
 });
 
 // Start the main loop
-console.log('='.repeat(60));
-console.log('🎯 Sonic Execution Layer - WETH/USDC Pool Monitor');
-console.log('='.repeat(60));
-console.log(`Pool: ${POOL_ADDRESS}`);
-console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (15 seconds)`);
-console.log(`Range: ±${RANGE_PERCENTAGE}%`);
-console.log('='.repeat(60));
+async function startApplication() {
+  console.log('='.repeat(60));
+  console.log('🎯 Sonic Execution Layer - WETH/USDC Pool Monitor');
+  console.log('='.repeat(60));
 
-// Initial fetch
-mainLoop();
+  // Connect to MongoDB
+  await connectDB();
 
-// Set interval for subsequent fetches
-setInterval(mainLoop, FETCH_INTERVAL);
+  console.log(`Pool: ${POOL_ADDRESS}`);
+  console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (15 seconds)`);
+  console.log(`Range: ±${RANGE_PERCENTAGE}%`);
+  console.log('='.repeat(60));
+
+  // Initial fetch
+  mainLoop();
+
+  // Set interval for subsequent fetches
+  setInterval(mainLoop, FETCH_INTERVAL);
+}
+
+startApplication().catch(err => {
+  console.error('Failed to start application:', err);
+  process.exit(1);
+});
