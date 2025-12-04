@@ -7,7 +7,8 @@
     "start": "node sonic-execution-onchain.js",
     "start:api": "node sonic-execution.js",
     "dev": "node sonic-execution-onchain.js",
-    "migrate": "node migrate-csv-to-mongodb.js"
+    "migrate": "node migrate-csv-to-mongodb.js",
+    "cleanup": "node cleanup-duplicates.js"
   },
   "dependencies": {
     "axios": "^1.6.0",
