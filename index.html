@@ -712,8 +712,9 @@
         async function updateDashboard() {
             try {
                 const [currentResponse, candlesResponse] = await Promise.all([
-                    fetch('http://localhost:3000/api/current'),
-                    fetch('http://localhost:3000/api/candles')
+                    // Use relative URLs so this works from any host (server IP, domain, or localhost)
+                    fetch('/api/current'),
+                    fetch('/api/candles')
                 ]);
 
                 const currentData = await currentResponse.json();
