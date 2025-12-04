@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 const positionSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
-    required: true,
-    index: true
+    required: true
   },
   status: {
     type: String,
@@ -40,8 +39,10 @@ const positionSchema = new mongoose.Schema({
   collection: 'positions'
 });
 
-// Create index for efficient queries
+// Create indexes for efficient queries
 positionSchema.index({ timestamp: -1 });
+positionSchema.index({ createdAt: -1 });
+positionSchema.index({ status: 1, timestamp: -1 });
 
 const Position = mongoose.model('Position', positionSchema);
 

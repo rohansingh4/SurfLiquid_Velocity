@@ -235,7 +235,11 @@ async function saveCandleToMongoDB(candle) {
     await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
   } catch (error) {
-    console.error('Error saving candle:', error.message);
+    if (error.code === 11000) {
+      console.log(`⚠️  Duplicate candle skipped for timestamp: ${new Date(candle.timestamp).toISOString()}`);
+    } else {
+      console.error('Error saving candle:', error.message);
+    }
   }
 }
 
@@ -309,6 +313,85 @@ app.get('/api/all-data', (req, res) => {
     position,
     positionHistory
   });
+});
+
+// MongoDB API endpoints with pagination
+app.get('/api/db/candles', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    const [candles, totalCount] = await Promise.all([
+      Candle.find()
+        .sort({ timestamp: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Candle.countDocuments()
+    ]);
+
+    res.json({
+      data: candles.reverse(),
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + candles.length < totalCount
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/db/positions', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    const [positions, totalCount] = await Promise.all([
+      Position.find()
+        .sort({ timestamp: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Position.countDocuments()
+    ]);
+
+    res.json({
+      data: positions.reverse(),
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + positions.length < totalCount
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/db/stats', async (req, res) => {
+  try {
+    const candleCount = await Candle.countDocuments();
+    const positionCount = await Position.countDocuments();
+    const latestCandle = await Candle.findOne().sort({ timestamp: -1 });
+    const latestPosition = await Position.findOne().sort({ timestamp: -1 });
+
+    res.json({
+      candleCount,
+      positionCount,
+      latestCandle,
+      latestPosition
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Start server

@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 const candleSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
-    required: true,
-    index: true
+    required: true
   },
   open: {
     type: Number,
@@ -39,8 +38,11 @@ const candleSchema = new mongoose.Schema({
   collection: 'candles'
 });
 
-// Create compound index for efficient queries
-candleSchema.index({ timestamp: -1 });
+// Create unique index on timestamp to prevent duplicates and optimize queries
+candleSchema.index({ timestamp: -1 }, { unique: true });
+
+// Create indexes for common query patterns
+candleSchema.index({ createdAt: -1 });
 
 const Candle = mongoose.model('Candle', candleSchema);
 
