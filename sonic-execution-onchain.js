@@ -437,6 +437,46 @@ app.get('/api/db/stats', async (req, res) => {
   }
 });
 
+// Get candles by time range for chart
+app.get('/api/db/candles/range', async (req, res) => {
+  try {
+    const range = req.query.range || '15m';
+    const now = new Date();
+    let startTime;
+
+    switch(range) {
+      case '15m':
+        startTime = new Date(now.getTime() - 15 * 60 * 1000);
+        break;
+      case '1h':
+        startTime = new Date(now.getTime() - 60 * 60 * 1000);
+        break;
+      case '4h':
+        startTime = new Date(now.getTime() - 4 * 60 * 60 * 1000);
+        break;
+      case '24h':
+        startTime = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case 'all':
+        startTime = new Date(0); // Get all data
+        break;
+      default:
+        startTime = new Date(now.getTime() - 60 * 60 * 1000);
+    }
+
+    const candles = await Candle.find({
+      timestamp: { $gte: startTime }
+    })
+    .sort({ timestamp: 1 })
+    .limit(range === 'all' ? 5000 : 1000)
+    .lean();
+
+    res.json(candles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {

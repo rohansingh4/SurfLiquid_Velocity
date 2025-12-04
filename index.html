@@ -887,24 +887,39 @@
         function updateChart(candles, position) {
             if (!candles || candles.length === 0) return;
 
-            // Filter by time range
-            const filteredCandles = filterCandlesByTimeRange(candles, currentTimeRange);
+            // MongoDB already filtered by time range, no need to filter again
+            const filteredCandles = candles;
 
-            if (filteredCandles.length === 0) return;
+            // Convert to TradingView format - handle both timestamp formats
+            const candleData = filteredCandles.map(c => {
+                // Convert timestamp to Unix seconds (handle Date objects, ISO strings, or milliseconds)
+                const timestamp = typeof c.timestamp === 'string'
+                    ? new Date(c.timestamp).getTime()
+                    : (typeof c.timestamp === 'object' && c.timestamp.getTime
+                        ? c.timestamp.getTime()
+                        : c.timestamp);
 
-            // Convert to TradingView format
-            const candleData = filteredCandles.map(c => ({
-                time: Math.floor(c.timestamp / 1000),
-                open: parseFloat(c.open),
-                high: parseFloat(c.high),
-                low: parseFloat(c.low),
-                close: parseFloat(c.close)
-            }));
+                return {
+                    time: Math.floor(timestamp / 1000),
+                    open: parseFloat(c.open),
+                    high: parseFloat(c.high),
+                    low: parseFloat(c.low),
+                    close: parseFloat(c.close)
+                };
+            });
 
-            const lineData = filteredCandles.map(c => ({
-                time: Math.floor(c.timestamp / 1000),
-                value: parseFloat(c.close)
-            }));
+            const lineData = filteredCandles.map(c => {
+                const timestamp = typeof c.timestamp === 'string'
+                    ? new Date(c.timestamp).getTime()
+                    : (typeof c.timestamp === 'object' && c.timestamp.getTime
+                        ? c.timestamp.getTime()
+                        : c.timestamp);
+
+                return {
+                    time: Math.floor(timestamp / 1000),
+                    value: parseFloat(c.close)
+                };
+            });
 
             // Update series based on chart type
             if (currentChartType === 'candle') {
@@ -918,17 +933,38 @@
                 const now = Date.now();
                 const recentCutoff = now - (15 * 60 * 1000); // Last 15 minutes only
 
-                const recentCandles = filteredCandles.filter(c => c.timestamp >= recentCutoff);
+                const recentCandles = filteredCandles.filter(c => {
+                    const timestamp = typeof c.timestamp === 'string'
+                        ? new Date(c.timestamp).getTime()
+                        : (typeof c.timestamp === 'object' && c.timestamp.getTime
+                            ? c.timestamp.getTime()
+                            : c.timestamp);
+                    return timestamp >= recentCutoff;
+                });
 
-                const upperRangeData = recentCandles.map(c => ({
-                    time: Math.floor(c.timestamp / 1000),
-                    value: position.upper_range
-                }));
+                const upperRangeData = recentCandles.map(c => {
+                    const timestamp = typeof c.timestamp === 'string'
+                        ? new Date(c.timestamp).getTime()
+                        : (typeof c.timestamp === 'object' && c.timestamp.getTime
+                            ? c.timestamp.getTime()
+                            : c.timestamp);
+                    return {
+                        time: Math.floor(timestamp / 1000),
+                        value: position.upper_range
+                    };
+                });
 
-                const lowerRangeData = recentCandles.map(c => ({
-                    time: Math.floor(c.timestamp / 1000),
-                    value: position.lower_range
-                }));
+                const lowerRangeData = recentCandles.map(c => {
+                    const timestamp = typeof c.timestamp === 'string'
+                        ? new Date(c.timestamp).getTime()
+                        : (typeof c.timestamp === 'object' && c.timestamp.getTime
+                            ? c.timestamp.getTime()
+                            : c.timestamp);
+                    return {
+                        time: Math.floor(timestamp / 1000),
+                        value: position.lower_range
+                    };
+                });
 
                 upperRangeLine.setData(upperRangeData);
                 lowerRangeLine.setData(lowerRangeData);
@@ -937,7 +973,12 @@
                 const lastCandle = filteredCandles[filteredCandles.length - 1];
                 if (lastCandle) {
                     const markers = [];
-                    const lastTime = Math.floor(lastCandle.timestamp / 1000);
+                    const lastTimestamp = typeof lastCandle.timestamp === 'string'
+                        ? new Date(lastCandle.timestamp).getTime()
+                        : (typeof lastCandle.timestamp === 'object' && lastCandle.timestamp.getTime
+                            ? lastCandle.timestamp.getTime()
+                            : lastCandle.timestamp);
+                    const lastTime = Math.floor(lastTimestamp / 1000);
 
                     if (lastCandle.close > position.upper_range) {
                         markers.push({
@@ -984,16 +1025,17 @@
         // Update dashboard
         async function updateDashboard() {
             try {
+                // Load candles from MongoDB based on current time range
                 const [currentResponse, candlesResponse] = await Promise.all([
                     // Use relative URLs so this works from any host (server IP, domain, or localhost)
                     fetch('/api/current'),
-                    fetch('/api/candles')
+                    fetch(`/api/db/candles/range?range=${currentTimeRange}`)
                 ]);
 
                 const currentData = await currentResponse.json();
                 const candlesData = await candlesResponse.json();
 
-                // Store all candles
+                // Store all candles from MongoDB
                 allCandles = candlesData;
 
                 // Update current price and stats
@@ -1056,19 +1098,20 @@
                 this.classList.add('active');
                 currentTimeRange = this.dataset.range;
 
-                // Load all data from MongoDB if "All" is selected
-                if (currentTimeRange === 'all') {
-                    try {
-                        const response = await fetch('/api/db/candles?page=1&limit=1000');
-                        const result = await response.json();
-                        allCandles = result.data;
-                    } catch (error) {
-                        console.error('Error loading all candles:', error);
-                    }
-                }
+                // Load data from MongoDB for the selected time range
+                try {
+                    const response = await fetch(`/api/db/candles/range?range=${currentTimeRange}`);
+                    allCandles = await response.json();
 
-                window.chartInitialized = false; // Force fit content on range change
-                updateChart(allCandles, null); // Will get position from next update
+                    window.chartInitialized = false; // Force fit content on range change
+
+                    // Get current position for chart update
+                    const currentResponse = await fetch('/api/current');
+                    const currentData = await currentResponse.json();
+                    updateChart(allCandles, currentData.position || null);
+                } catch (error) {
+                    console.error('Error loading candles for range:', error);
+                }
             });
         });
 
