@@ -1147,7 +1147,12 @@
 
         // Update chart with candle data
         function updateChart(candles, position) {
-            if (!candles || candles.length === 0) return;
+            if (!candles || candles.length === 0) {
+                console.log('No candles data available for current time range');
+                return;
+            }
+
+            console.log(`Updating chart with ${candles.length} candles`);
 
             // Store position data for tooltip
             currentPosition = position;
@@ -1262,6 +1267,8 @@
         // Update dashboard
         async function updateDashboard() {
             try {
+                console.log(`Fetching data for time range: ${currentTimeRange}`);
+                
                 // Load positions data from MongoDB based on current time range
                 const [currentResponse, dataResponse] = await Promise.all([
                     // Use relative URLs so this works from any host (server IP, domain, or localhost)
@@ -1271,6 +1278,8 @@
 
                 const currentData = await currentResponse.json();
                 const chartData = await dataResponse.json();
+                
+                console.log(`Received ${chartData.length} positions for ${currentTimeRange}`);
 
                 // Store all positions data from MongoDB
                 allCandles = chartData;
@@ -1319,10 +1328,10 @@
                     const usdcPct = pos.usdc_pct.toFixed(1);
                     document.getElementById('wethPct').textContent = `${wethPct}%`;
                     document.getElementById('usdcPct').textContent = `${usdcPct}%`;
-
-                    // Update chart with current data (respecting the data view)
-                    updateChart(allCandles, pos);
                 }
+
+                // Always update chart with current data (even if no position yet)
+                updateChart(allCandles, currentData.position || null);
 
                 // Update timestamp
                 document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
@@ -1336,6 +1345,8 @@
             btn.addEventListener('click', async function() {
                 if (!this.dataset.range) return; // Skip zoom buttons
 
+                console.log(`Time filter clicked: ${this.dataset.range}`);
+                
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentTimeRange = this.dataset.range;
@@ -1344,6 +1355,8 @@
                 try {
                     const response = await fetch(`/api/db/positions/range?range=${currentTimeRange}`);
                     allCandles = await response.json();
+                    
+                    console.log(`Time filter loaded ${allCandles.length} positions for ${currentTimeRange}`);
 
                     window.chartInitialized = false; // Force fit content on range change
 
