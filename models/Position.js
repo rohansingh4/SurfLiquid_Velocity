@@ -40,7 +40,7 @@ const positionSchema = new mongoose.Schema({
 });
 
 // Create indexes for efficient queries
-positionSchema.index({ timestamp: -1 }, { unique: true });
+positionSchema.index({ timestamp: -1 });
 positionSchema.index({ createdAt: -1 });
 positionSchema.index({ status: 1, timestamp: -1 });
 
