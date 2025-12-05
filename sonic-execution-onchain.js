@@ -48,6 +48,7 @@ let lastPositionStatus = null; // Tracks last position status
 let positionHistory = [];
 let tickData = [];
 let outOfRangeDetectedAt = null; // Timestamp when out of range was first detected
+let positionSavedThisCycle = false; // Prevent duplicate saves in same candle cycle
 let justSavedRebalance = false; // Flag to prevent duplicate saves after rebalance
 
 // Web3 setup
@@ -170,7 +171,7 @@ async function updateCandle(data) {
           console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
-          justSavedRebalance = false; // Allow Monitoring to be saved normally
+          positionSavedThisCycle = false; // Allow Monitoring to be saved normally
         } else {
           // Still out of range - REBALANCE NOW
           const isUpRebalance = currentPrice > currentRanges.upper;
@@ -206,7 +207,7 @@ async function updateCandle(data) {
           // After rebalance, go back to Monitoring with new ranges
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
-          justSavedRebalance = true; // Prevent duplicate save
+          positionSavedThisCycle = true; // Prevent duplicate Monitoring save
         }
       } else if (!isInRange && lastPositionStatus !== 'Price-UP' && lastPositionStatus !== 'Price-DOWN') {
         // Price just went out of range - save Price-UP/DOWN
@@ -231,7 +232,23 @@ async function updateCandle(data) {
         
         lastPositionStatus = status;
         outOfRangeDetectedAt = Date.now();
-        // No need to set justSavedRebalance - status is Price-UP/DOWN, not Monitoring
+        positionSavedThisCycle = true; // Prevent duplicate save
+      } else if (isInRange && lastPositionStatus === 'Monitoring') {
+        // Normal Monitoring - save position for chart continuity
+        await savePositionData({
+          timestamp: data.timestamp,
+          status: 'Monitoring',
+          upper_range: currentRanges.upper,
+          lower_range: currentRanges.lower,
+          open: currentCandle.open,
+          high: currentCandle.high,
+          low: currentCandle.low,
+          close: currentCandle.close,
+          weth_pct: data.weth_pct,
+          usdc_pct: data.usdc_pct,
+          rebalance_type: 'N/A'
+        });
+        positionSavedThisCycle = false;
       }
     }
 
@@ -246,6 +263,9 @@ async function updateCandle(data) {
       weth_amount: data.weth_amount,
       usdc_amount: data.usdc_amount
     };
+    
+    // Reset flag for new candle cycle
+    positionSavedThisCycle = false;
 
     console.log(`\n=== New 10s Candle Started at ${new Date(candleStart).toISOString()} ===`);
   } else {
@@ -321,27 +341,6 @@ async function saveCandleToMongoDB(candle) {
     });
     await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
-    
-    // Save Monitoring status regularly for continuous chart data
-    // But skip if we just saved a rebalance (Open-UP/DOWN) to avoid duplicates
-    if (currentRanges && lastPositionStatus === 'Monitoring' && !justSavedRebalance) {
-      const weth_pct = (candle.weth_amount / (candle.weth_amount + candle.usdc_amount / candle.close)) * 100;
-      const usdc_pct = 100 - weth_pct;
-      
-      await savePositionData({
-        timestamp: candle.timestamp,
-        status: 'Monitoring',
-        upper_range: currentRanges.upper,
-        lower_range: currentRanges.lower,
-        open: parseFloat(candle.open.toFixed(2)),
-        high: parseFloat(candle.high.toFixed(2)),
-        low: parseFloat(candle.low.toFixed(2)),
-        close: parseFloat(candle.close.toFixed(2)),
-        weth_pct: parseFloat(weth_pct.toFixed(2)),
-        usdc_pct: parseFloat(usdc_pct.toFixed(2)),
-        rebalance_type: 'N/A'
-      });
-    }
     
     // Reset the flag for next candle
     justSavedRebalance = false;
