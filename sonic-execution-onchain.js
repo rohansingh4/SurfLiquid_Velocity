@@ -158,13 +158,19 @@ async function updateCandle(data) {
       candles.push(currentCandle);
       saveCandleToMongoDB(currentCandle);
 
-      // Check if we need to rebalance (Step 1: Open-UP/DOWN)
-      if (lastPositionStatus === 'Price-UP' || lastPositionStatus === 'Price-DOWN') {
-        const currentPrice = data.price;
-        const stillOutOfRange = currentPrice > currentRanges.upper || currentPrice < currentRanges.lower;
+      // Check status every 10 seconds on candle close
+      const currentPrice = data.price;
+      const isInRange = currentPrice >= currentRanges.lower && currentPrice <= currentRanges.upper;
 
-        if (stillOutOfRange) {
-          // Step 1: Rebalance - Update ranges
+      if (lastPositionStatus === 'Price-UP' || lastPositionStatus === 'Price-DOWN') {
+        // We detected out of range in previous check
+        if (isInRange) {
+          // Price came back in range - no rebalance needed
+          console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
+          lastPositionStatus = 'Monitoring';
+          outOfRangeDetectedAt = null;
+        } else {
+          // Still out of range - REBALANCE NOW
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
@@ -198,12 +204,30 @@ async function updateCandle(data) {
           // After rebalance, go back to Monitoring with new ranges
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
-        } else {
-          // Price came back in range - continue monitoring with old ranges
-          console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
-          lastPositionStatus = 'Monitoring';
-          outOfRangeDetectedAt = null;
         }
+      } else if (!isInRange && lastPositionStatus !== 'Price-UP' && lastPositionStatus !== 'Price-DOWN') {
+        // Price just went out of range - save Price-UP/DOWN
+        const isAbove = currentPrice > currentRanges.upper;
+        const status = isAbove ? 'Price-UP' : 'Price-DOWN';
+        
+        console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAbove ? '>' : '<'} ${isAbove ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
+        
+        await savePositionData({
+          timestamp: data.timestamp,
+          status: status,
+          upper_range: currentRanges.upper,
+          lower_range: currentRanges.lower,
+          open: currentCandle.open,
+          high: currentCandle.high,
+          low: currentCandle.low,
+          close: currentCandle.close,
+          weth_pct: data.weth_pct,
+          usdc_pct: data.usdc_pct,
+          rebalance_type: 'N/A'
+        });
+        
+        lastPositionStatus = status;
+        outOfRangeDetectedAt = Date.now();
       }
     }
 
@@ -244,7 +268,7 @@ async function updateCandle(data) {
   }
 }
 
-// Stream position data every 10 seconds (called from main loop)
+// Initialize ranges on first run
 async function streamPositionData(data) {
   if (!currentCandle) return;
 
@@ -255,53 +279,16 @@ async function streamPositionData(data) {
       upper: openPrice * (1 + RANGE_PERCENTAGE / 100),
       lower: openPrice * (1 - RANGE_PERCENTAGE / 100)
     };
+    lastPositionStatus = 'Monitoring';
     console.log(`\n🎯 Initial Ranges Set: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
   }
 
+  // Just log current status, don't save (saving happens on candle close only)
   const currentPrice = data.price;
   const isInRange = currentPrice >= currentRanges.lower && currentPrice <= currentRanges.upper;
-
-  let status, rebalanceType = 'N/A';
-
+  
   if (isInRange) {
-    // Step 2: Monitoring - Price is in range
-    status = 'Monitoring';
-    
-    // Log if coming back from out-of-range
-    if (lastPositionStatus === 'Price-UP' || lastPositionStatus === 'Price-DOWN') {
-      console.log(`✅ Back to Monitoring: $${currentPrice.toFixed(2)}`);
-    }
-    
-    outOfRangeDetectedAt = null;
-  } else {
-    // Step 3: Price out of range
-    const isAboveRange = currentPrice > currentRanges.upper;
-    status = isAboveRange ? 'Price-UP' : 'Price-DOWN';
-
-    // Only log and mark as detected once
-    if (!outOfRangeDetectedAt) {
-      outOfRangeDetectedAt = Date.now();
-      console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAboveRange ? '>' : '<'} ${isAboveRange ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
-    }
-  }
-
-  // Only save position when status actually changes
-  if (status !== lastPositionStatus) {
-    await savePositionData({
-      timestamp: data.timestamp,
-      status: status,
-      upper_range: currentRanges.upper,
-      lower_range: currentRanges.lower,
-      open: currentCandle.open,
-      high: currentCandle.high,
-      low: currentCandle.low,
-      close: currentCandle.close,
-      weth_pct: data.weth_pct,
-      usdc_pct: data.usdc_pct,
-      rebalance_type: rebalanceType
-    });
-    
-    lastPositionStatus = status;
+    console.log(`📊 Monitoring: $${currentPrice.toFixed(2)} (Range: ${currentRanges.lower.toFixed(2)} - ${currentRanges.upper.toFixed(2)})`);
   }
 }
 
