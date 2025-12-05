@@ -148,7 +148,7 @@ async function fetchPoolData() {
 }
 
 // Update 15-second candle
-function updateCandle(data) {
+async function updateCandle(data) {
   const now = Date.now();
   const candleStart = Math.floor(now / CANDLE_INTERVAL) * CANDLE_INTERVAL;
 
