@@ -195,11 +195,13 @@ async function updateCandle(data) {
             rebalance_type: rebalanceType
           });
 
-          lastPositionStatus = status;
+          // After rebalance, go back to Monitoring with new ranges
+          lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
         } else {
           // Price came back in range - continue monitoring with old ranges
           console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
+          lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
         }
       }
@@ -320,26 +322,6 @@ async function saveCandleToMongoDB(candle) {
     });
     await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
-    
-    // Also save position record every 10 seconds for continuous chart data
-    if (currentRanges) {
-      const weth_pct = (candle.weth_amount / (candle.weth_amount + candle.usdc_amount / candle.close)) * 100;
-      const usdc_pct = 100 - weth_pct;
-      
-      await savePositionData({
-        timestamp: candle.timestamp,
-        status: lastPositionStatus || 'Monitoring',
-        upper_range: currentRanges.upper,
-        lower_range: currentRanges.lower,
-        open: parseFloat(candle.open.toFixed(2)),
-        high: parseFloat(candle.high.toFixed(2)),
-        low: parseFloat(candle.low.toFixed(2)),
-        close: parseFloat(candle.close.toFixed(2)),
-        weth_pct: parseFloat(weth_pct.toFixed(2)),
-        usdc_pct: parseFloat(usdc_pct.toFixed(2)),
-        rebalance_type: 'N/A'
-      });
-    }
   } catch (error) {
     if (error.code === 11000) {
       console.log(`⚠️  Duplicate candle skipped for timestamp: ${new Date(candle.timestamp).toISOString()}`);
