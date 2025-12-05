@@ -478,6 +478,19 @@
             font-weight: 600;
         }
 
+        .rebalance-pending {
+            animation: blink-pending 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink-pending {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
         .pagination-controls {
             display: flex;
             justify-content: space-between;
@@ -1242,12 +1255,12 @@
                     // Color code rebalance type in sidebar
                     let rebalanceHTML = pos.rebalance_type || 'N/A';
 
-                    // If Waiting for Action, show pending indicator
+                    // If Waiting for Action, show pending indicator with blinking animation
                     if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
                         if (pos.rebalance_type === 'RebalanceA') {
-                            rebalanceHTML = `<span class="rebalance-a">RebalanceA ? ↑</span>`;
+                            rebalanceHTML = `<span class="rebalance-a rebalance-pending">RebalanceA ? ↑</span>`;
                         } else if (pos.rebalance_type === 'RebalanceB') {
-                            rebalanceHTML = `<span class="rebalance-b">RebalanceB ? ↓</span>`;
+                            rebalanceHTML = `<span class="rebalance-b rebalance-pending">RebalanceB ? ↓</span>`;
                         }
                     }
                     // If rebalance confirmed
@@ -1485,12 +1498,12 @@
                 // Color code rebalance type
                 let rebalanceDisplay = pos.rebalance_type || 'N/A';
 
-                // If Waiting for Action, show pending indicator
+                // If Waiting for Action, show pending indicator with blinking animation
                 if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
                     if (pos.rebalance_type === 'RebalanceA') {
-                        rebalanceDisplay = `<span class="rebalance-a">RebalanceA ? ↑</span>`;
+                        rebalanceDisplay = `<span class="rebalance-a rebalance-pending">RebalanceA ? ↑</span>`;
                     } else if (pos.rebalance_type === 'RebalanceB') {
-                        rebalanceDisplay = `<span class="rebalance-b">RebalanceB ? ↓</span>`;
+                        rebalanceDisplay = `<span class="rebalance-b rebalance-pending">RebalanceB ? ↓</span>`;
                     }
                 }
                 // If rebalance confirmed (Out of Range status)
