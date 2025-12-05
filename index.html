@@ -799,6 +799,7 @@
         let currentChartType = 'candle';
         let currentTimeRange = '15m';
         let allCandles = [];
+        let currentPosition = null; // Store current position data for tooltip
 
         // Initialize chart
         function initChart() {
@@ -967,6 +968,28 @@
                             hour12: true
                         });
                         
+                        // Build position info section if available
+                        let positionInfo = '';
+                        if (currentPosition) {
+                            // Get status color
+                            const statusColors = {
+                                'Monitoring': '#00d4ff',
+                                'Open-UP': '#00ff88',
+                                'Open-DOWN': '#00ff88',
+                                'Price-UP': '#ff4444',
+                                'Price-DOWN': '#ff4444'
+                            };
+                            const statusColor = statusColors[currentPosition.status] || '#00d4ff';
+                            
+                            positionInfo = `
+                                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="margin: 3px 0;">Status: <span style="color: ${statusColor}; font-weight: 600;">${currentPosition.status}</span></div>
+                                    <div style="margin: 3px 0;">Upper Range: <span style="color: #ff4444; font-weight: 600;">$${currentPosition.upper_range?.toFixed(2)}</span></div>
+                                    <div style="margin: 3px 0;">Lower Range: <span style="color: #26a69a; font-weight: 600;">$${currentPosition.lower_range?.toFixed(2)}</span></div>
+                                </div>
+                            `;
+                        }
+                        
                         tooltip.style.display = 'block';
                         tooltip.innerHTML = `
                             <div style="color: #00d4ff; font-weight: 600; margin-bottom: 8px;">${dateStr}</div>
@@ -977,6 +1000,7 @@
                             <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1);">
                                 Change: <span style="color: ${data.close >= data.open ? '#26a69a' : '#ef5350'}; font-weight: 600;">${((data.close - data.open) / data.open * 100).toFixed(2)}%</span>
                             </div>
+                            ${positionInfo}
                         `;
                     }
                 }
@@ -1128,6 +1152,9 @@
         // Update chart with candle data
         function updateChart(candles, position) {
             if (!candles || candles.length === 0) return;
+
+            // Store position data for tooltip
+            currentPosition = position;
 
             // MongoDB already filtered by time range, no need to filter again
             const filteredCandles = candles;
