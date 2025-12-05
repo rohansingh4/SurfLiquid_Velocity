@@ -712,7 +712,7 @@
 
             <div class="chart-section">
                 <div class="chart-header">
-                    <h2 class="chart-title">📊 Price Chart - 10s Candles</h2>
+                    <h2 class="chart-title">📊 Price Chart</h2>
                     <div class="chart-controls">
                         <div class="time-filter">
                             <button class="time-btn active" data-range="15m">15m</button>
@@ -745,10 +745,6 @@
         <div class="data-table-section">
             <div class="data-table-header">
                 <h2 class="data-table-title">📋 Historical Data</h2>
-                <div class="data-toggle">
-                    <button class="data-toggle-btn active" data-view="candles">🕯️ Candles</button>
-                    <button class="data-toggle-btn" data-view="positions">📍 Positions</button>
-                </div>
             </div>
 
             <div class="table-stats" id="tableStats">
@@ -1387,7 +1383,7 @@
         });
 
         // Data table functionality
-        let currentDataView = 'candles';
+        let currentDataView = 'positions';
         let currentPage = 1;
         let totalPages = 1;
         let dbStats = { candleCount: 0, positionCount: 0 };
@@ -1561,9 +1557,6 @@
                     <th>High</th>
                     <th>Low</th>
                     <th>Close</th>
-                    <th>WETH %</th>
-                    <th>USDC %</th>
-                    <th>Rebalance Type</th>
                 </tr>
             `;
 
@@ -1582,9 +1575,6 @@
                     statusClass += 'status-price-down';
                 }
 
-                // Rebalance type display (simple, no flashy colors per boss request)
-                let rebalanceDisplay = pos.rebalance_type || 'N/A';
-
                 return `
                     <tr>
                         <td>${new Date(pos.timestamp).toLocaleString()}</td>
@@ -1595,37 +1585,15 @@
                         <td>$${parseFloat(pos.high).toFixed(2)}</td>
                         <td>$${parseFloat(pos.low).toFixed(2)}</td>
                         <td>$${parseFloat(pos.close).toFixed(2)}</td>
-                        <td>${parseFloat(pos.weth_pct).toFixed(2)}%</td>
-                        <td>${parseFloat(pos.usdc_pct).toFixed(2)}%</td>
-                        <td>${rebalanceDisplay}</td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Data toggle buttons
-        document.querySelectorAll('.data-toggle-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.data-toggle-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentPage = 1; // Reset to page 1 when switching views
-                
-                // Update chart title to reflect data source
-                const chartTitle = document.querySelector('.chart-title');
-                if (this.dataset.view === 'candles') {
-                    chartTitle.textContent = '📊 Price Chart - 10s Candles';
-                } else {
-                    chartTitle.textContent = '📊 Price Chart - Positions Data';
-                }
-                
-                loadTableData(this.dataset.view, 1);
-            });
-        });
-
         // Initialize
         initChart();
         updateDashboard();
-        fetchDBStats().then(() => loadTableData('candles', 1));
+        fetchDBStats().then(() => loadTableData('positions', 1));
 
         // Update every 5 seconds
         setInterval(updateDashboard, 5000);
