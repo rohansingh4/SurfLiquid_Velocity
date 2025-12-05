@@ -715,11 +715,11 @@
                     <h2 class="chart-title">📊 Price Chart</h2>
                     <div class="chart-controls">
                         <div class="time-filter">
-                            <button class="time-btn active" data-range="15m">15m</button>
+                            <button class="time-btn" data-range="15m">15m</button>
                             <button class="time-btn" data-range="1h">1H</button>
                             <button class="time-btn" data-range="4h">4H</button>
                             <button class="time-btn" data-range="24h">24H</button>
-                            <button class="time-btn" data-range="all">All</button>
+                            <button class="time-btn active" data-range="all">All</button>
                         </div>
                         <div class="time-filter" style="margin-left: 12px;">
                             <button class="time-btn" onclick="zoomChart(1.2)" title="Zoom In">🔍+</button>
@@ -793,7 +793,7 @@
         let upperRangeLine = null;
         let lowerRangeLine = null;
         let currentChartType = 'candle';
-        let currentTimeRange = '15m';
+        let currentTimeRange = 'all';
         let allCandles = [];
         let currentPosition = null; // Store current position data for tooltip
 
