@@ -845,13 +845,14 @@
                 },
                 localization: {
                     timeFormatter: (timestamp) => {
-                        // Convert Unix timestamp to browser local time - matches table format exactly
+                        // Timestamp is already adjusted for local timezone in getTimeForChart()
+                        // Chart displays in UTC, but our adjusted timestamp makes it show local time
                         const date = new Date(timestamp * 1000);
-                        const hours = date.getHours();
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
+                        const hours = date.getUTCHours();
+                        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
                         const period = hours >= 12 ? 'PM' : 'AM';
                         const displayHours = hours % 12 || 12;
-                        return `${displayHours}:${minutes}`;
+                        return `${displayHours}:${minutes} ${period}`;
                     },
                 },
                 handleScroll: {
@@ -953,15 +954,18 @@
                 } else {
                     const data = param.seriesData.get(candlestickSeries);
                     if (data) {
+                        // param.time is already adjusted for timezone in getTimeForChart()
+                        // Use UTC methods since the timestamp is pre-adjusted
                         const time = new Date(param.time * 1000);
-                        const dateStr = time.toLocaleString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            hour12: true
-                        });
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const month = monthNames[time.getUTCMonth()];
+                        const day = time.getUTCDate();
+                        const hours = time.getUTCHours();
+                        const minutes = time.getUTCMinutes().toString().padStart(2, '0');
+                        const seconds = time.getUTCSeconds().toString().padStart(2, '0');
+                        const period = hours >= 12 ? 'PM' : 'AM';
+                        const displayHours = hours % 12 || 12;
+                        const dateStr = `${month} ${day}, ${displayHours}:${minutes}:${seconds} ${period}`;
                         
                         // Build position info section if available
                         let positionInfo = '';
@@ -1140,8 +1144,13 @@
                     ? timestamp.getTime()
                     : timestamp);
             
-            // Return as Unix seconds (chart will handle timezone via timeFormatter)
-            return Math.floor(ms / 1000);
+            // Adjust for timezone offset so chart displays in local time
+            // Chart library treats timestamps as UTC, so we shift by timezone offset
+            const date = new Date(ms);
+            const timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000;
+            
+            // Subtract offset: if you're UTC+5, offset is -300, so we add 300 minutes
+            return Math.floor((ms - timezoneOffsetMs) / 1000);
         }
 
         // Update chart with candle data
