@@ -848,9 +848,14 @@
                 },
                 localization: {
                     timeFormatter: (timestamp) => {
-                        // Convert Unix timestamp to browser local time
+                        // Convert Unix timestamp to browser local time with same format as table
                         const date = new Date(timestamp * 1000);
-                        return date.toLocaleTimeString();
+                        return date.toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true
+                        });
                     },
                 },
                 handleScroll: {
