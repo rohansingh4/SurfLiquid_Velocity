@@ -449,12 +449,33 @@
             color: #00d4ff;
         }
 
+        .status-waiting-action {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+
         .price-up {
             color: #26a69a;
         }
 
         .price-down {
             color: #ef5350;
+        }
+
+        .rebalance-a {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .rebalance-b {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
         }
 
         .pagination-controls {
@@ -560,7 +581,7 @@
                 <span><strong>Pool:</strong> 0x6fb3...0b40</span>
                 <span><strong>DEX:</strong> Shadow</span>
                 <span><strong>Network:</strong> Sonic</span>
-                <span><strong>Interval:</strong> 15s</span>
+                <span><strong>Interval:</strong> 10s</span>
                 <span><strong>Range:</strong> ±0.1%</span>
                 <span><strong>Source:</strong> On-Chain RPC</span>
             </div>
@@ -632,7 +653,7 @@
 
             <div class="chart-section">
                 <div class="chart-header">
-                    <h2 class="chart-title">📊 Price Chart - 15s Candles</h2>
+                    <h2 class="chart-title">📊 Price Chart - 10s Candles</h2>
                     <div class="chart-controls">
                         <div class="time-filter">
                             <button class="time-btn active" data-range="15m">15m</button>
@@ -1060,7 +1081,7 @@
 
                     if (pos.status.includes('Open')) {
                         statusClass += ' status-open';
-                    } else if (pos.status.includes('Waiting')) {
+                    } else if (pos.status.includes('Waiting for Action')) {
                         statusClass += ' status-waiting';
                     } else if (pos.status.includes('Out of Range')) {
                         statusClass += ' status-outofrange';
@@ -1070,7 +1091,15 @@
                         `<span class="${statusClass}"></span>${statusText}`;
                     document.getElementById('upperRange').textContent = `$${pos.upper_range.toFixed(2)}`;
                     document.getElementById('lowerRange').textContent = `$${pos.lower_range.toFixed(2)}`;
-                    document.getElementById('rebalanceType').textContent = pos.rebalance_type || 'N/A';
+
+                    // Color code rebalance type in sidebar
+                    let rebalanceHTML = pos.rebalance_type || 'N/A';
+                    if (pos.rebalance_type === 'RebalanceA') {
+                        rebalanceHTML = `<span class="rebalance-a">RebalanceA ↑</span>`;
+                    } else if (pos.rebalance_type === 'RebalanceB') {
+                        rebalanceHTML = `<span class="rebalance-b">RebalanceB ↓</span>`;
+                    }
+                    document.getElementById('rebalanceType').innerHTML = rebalanceHTML;
 
                     // Update distribution
                     const wethPct = pos.weth_pct.toFixed(1);
@@ -1292,6 +1321,16 @@
                     statusClass += 'status-range-up';
                 } else if (pos.status.includes('DOWN')) {
                     statusClass += 'status-range-down';
+                } else if (pos.status.includes('Waiting for Action')) {
+                    statusClass += 'status-waiting-action';
+                }
+
+                // Color code rebalance type
+                let rebalanceDisplay = pos.rebalance_type || 'N/A';
+                if (pos.rebalance_type === 'RebalanceA') {
+                    rebalanceDisplay = `<span class="rebalance-a">RebalanceA ↑</span>`;
+                } else if (pos.rebalance_type === 'RebalanceB') {
+                    rebalanceDisplay = `<span class="rebalance-b">RebalanceB ↓</span>`;
                 }
 
                 return `
@@ -1303,7 +1342,7 @@
                         <td>$${parseFloat(pos.lower_range).toFixed(2)}</td>
                         <td>${parseFloat(pos.weth_pct).toFixed(2)}%</td>
                         <td>${parseFloat(pos.usdc_pct).toFixed(2)}%</td>
-                        <td>${pos.rebalance_type || 'N/A'}</td>
+                        <td>${rebalanceDisplay}</td>
                     </tr>
                 `;
             }).join('');

@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 // Configuration
 const POOL_ADDRESS = '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
 const API_URL = 'https://api.shadow.so/mixed-pairs';
-const FETCH_INTERVAL = 15000; // 15 seconds
+const FETCH_INTERVAL = 10000; // 10 seconds
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
 
 // State management
@@ -111,9 +111,37 @@ function updateCandle(data) {
       candles.push(currentCandle);
       saveCandleToMongoDB(currentCandle);
 
-      // Check if we need to open a position after rebalance
-      if (position && position.status === 'Waiting for Rebalance') {
-        openPosition(data);
+      // Check if we need to handle "Waiting for Action" state
+      if (position && position.status === 'Waiting for Action') {
+        // Verify if rebalance is still needed
+        const needsRebalance = data.price > position.upper_range || data.price < position.lower_range;
+
+        if (needsRebalance) {
+          // Price is still out of range - execute rebalance
+          const outOfRangeStatus = data.price > position.upper_range ? 'Price Out of Range - UP' : 'Price Out of Range - DOWN';
+          console.log(`\n🔄 REBALANCE REQUIRED - ${outOfRangeStatus}`);
+          console.log(`  Price: $${data.price.toFixed(2)} still outside range (${position.lower_range.toFixed(2)} - ${position.upper_range.toFixed(2)})`);
+
+          // Save the out-of-range status before rebalancing
+          position.status = outOfRangeStatus;
+          position.timestamp = data.timestamp;
+          position.currentPrice = data.price;
+          savePositionToMongoDB();
+
+          // Open new position with new ranges
+          openPosition(data);
+        } else {
+          // Price came back in range - keep existing position with original ranges
+          console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
+          console.log(`  Price: $${data.price.toFixed(2)} is within range (${position.lower_range.toFixed(2)} - ${position.upper_range.toFixed(2)})`);
+          position.status = 'Position Open';
+          position.timestamp = data.timestamp;
+          position.currentPrice = data.price;
+          position.weth_pct = data.weth_pct;
+          position.usdc_pct = data.usdc_pct;
+          position.rebalance_type = null;
+          savePositionToMongoDB();
+        }
       }
     }
 
@@ -129,7 +157,7 @@ function updateCandle(data) {
       usdc_amount: data.usdc_amount
     };
 
-    console.log(`\n=== New 15s Candle Started at ${new Date(candleStart).toISOString()} ===`);
+    console.log(`\n=== New 10s Candle Started at ${new Date(candleStart).toISOString()} ===`);
   } else {
     // Update current candle
     currentCandle.high = Math.max(currentCandle.high, data.price);
@@ -148,8 +176,8 @@ function updateCandle(data) {
     usdc_pct: data.usdc_pct
   });
 
-  // Keep only last hour of tick data (240 ticks for 15s intervals)
-  if (tickData.length > 240) {
+  // Keep only last hour of tick data (360 ticks for 10s intervals)
+  if (tickData.length > 360) {
     tickData.shift();
   }
 }
@@ -195,23 +223,25 @@ function monitorPosition(data) {
 
   // Check if price is out of range
   if (data.price > position.upper_range) {
-    console.log(`\n⚠️  PRICE OUT OF RANGE - UP`);
-    console.log(`  Current: $${data.price.toFixed(2)} > Upper: $${position.upper_range.toFixed(2)}`);
-    position.status = 'Price Out of Range - UP';
-    position.rebalance_type = 'RebalanceA';
-    savePositionToMongoDB();
-
-    // Set to waiting for next candle
-    position.status = 'Waiting for Rebalance';
+    // Only save if we're not already waiting for action
+    if (position.status !== 'Waiting for Action') {
+      console.log(`\n⚠️  PRICE OUT OF RANGE - UP`);
+      console.log(`  Current: $${data.price.toFixed(2)} > Upper: $${position.upper_range.toFixed(2)}`);
+      position.status = 'Waiting for Action';
+      position.rebalance_type = 'RebalanceA';
+      position.timestamp = data.timestamp;
+      savePositionToMongoDB();
+    }
   } else if (data.price < position.lower_range) {
-    console.log(`\n⚠️  PRICE OUT OF RANGE - DOWN`);
-    console.log(`  Current: $${data.price.toFixed(2)} < Lower: $${position.lower_range.toFixed(2)}`);
-    position.status = 'Price Out of Range - DOWN';
-    position.rebalance_type = 'RebalanceB';
-    savePositionToMongoDB();
-
-    // Set to waiting for next candle
-    position.status = 'Waiting for Rebalance';
+    // Only save if we're not already waiting for action
+    if (position.status !== 'Waiting for Action') {
+      console.log(`\n⚠️  PRICE OUT OF RANGE - DOWN`);
+      console.log(`  Current: $${data.price.toFixed(2)} < Lower: $${position.lower_range.toFixed(2)}`);
+      position.status = 'Waiting for Action';
+      position.rebalance_type = 'RebalanceB';
+      position.timestamp = data.timestamp;
+      savePositionToMongoDB();
+    }
   } else {
     if (position.status === 'Position Open') {
       console.log(`✓ Position in range: $${data.price.toFixed(2)} (${position.lower_range.toFixed(2)} - ${position.upper_range.toFixed(2)})`);
@@ -411,7 +441,7 @@ async function startApplication() {
   await connectDB();
 
   console.log(`Pool: ${POOL_ADDRESS}`);
-  console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (15 seconds)`);
+  console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (10 seconds)`);
   console.log(`Range: ±${RANGE_PERCENTAGE}%`);
   console.log('='.repeat(60));
 
