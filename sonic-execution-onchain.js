@@ -266,35 +266,43 @@ async function streamPositionData(data) {
   if (isInRange) {
     // Step 2: Monitoring - Price is in range
     status = 'Monitoring';
+    
+    // Log if coming back from out-of-range
+    if (lastPositionStatus === 'Price-UP' || lastPositionStatus === 'Price-DOWN') {
+      console.log(`✅ Back to Monitoring: $${currentPrice.toFixed(2)}`);
+    }
+    
     outOfRangeDetectedAt = null;
-    console.log(`📊 Monitoring: $${currentPrice.toFixed(2)} (Range: ${currentRanges.lower.toFixed(2)} - ${currentRanges.upper.toFixed(2)})`);
   } else {
     // Step 3: Price out of range
     const isAboveRange = currentPrice > currentRanges.upper;
     status = isAboveRange ? 'Price-UP' : 'Price-DOWN';
 
+    // Only log and mark as detected once
     if (!outOfRangeDetectedAt) {
       outOfRangeDetectedAt = Date.now();
       console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAboveRange ? '>' : '<'} ${isAboveRange ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
     }
   }
 
-  // Save position data with current candle OHLC
-  await savePositionData({
-    timestamp: data.timestamp,
-    status: status,
-    upper_range: currentRanges.upper,
-    lower_range: currentRanges.lower,
-    open: currentCandle.open,
-    high: currentCandle.high,
-    low: currentCandle.low,
-    close: currentCandle.close,
-    weth_pct: data.weth_pct,
-    usdc_pct: data.usdc_pct,
-    rebalance_type: rebalanceType
-  });
-
-  lastPositionStatus = status;
+  // Only save position when status actually changes
+  if (status !== lastPositionStatus) {
+    await savePositionData({
+      timestamp: data.timestamp,
+      status: status,
+      upper_range: currentRanges.upper,
+      lower_range: currentRanges.lower,
+      open: currentCandle.open,
+      high: currentCandle.high,
+      low: currentCandle.low,
+      close: currentCandle.close,
+      weth_pct: data.weth_pct,
+      usdc_pct: data.usdc_pct,
+      rebalance_type: rebalanceType
+    });
+    
+    lastPositionStatus = status;
+  }
 }
 
 // Save position data to MongoDB
@@ -322,6 +330,27 @@ async function saveCandleToMongoDB(candle) {
     });
     await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
+    
+    // Save Monitoring status regularly for continuous chart data
+    // Price-UP/DOWN and Open-UP/DOWN are saved only when they occur
+    if (currentRanges && lastPositionStatus === 'Monitoring') {
+      const weth_pct = (candle.weth_amount / (candle.weth_amount + candle.usdc_amount / candle.close)) * 100;
+      const usdc_pct = 100 - weth_pct;
+      
+      await savePositionData({
+        timestamp: candle.timestamp,
+        status: 'Monitoring',
+        upper_range: currentRanges.upper,
+        lower_range: currentRanges.lower,
+        open: parseFloat(candle.open.toFixed(2)),
+        high: parseFloat(candle.high.toFixed(2)),
+        low: parseFloat(candle.low.toFixed(2)),
+        close: parseFloat(candle.close.toFixed(2)),
+        weth_pct: parseFloat(weth_pct.toFixed(2)),
+        usdc_pct: parseFloat(usdc_pct.toFixed(2)),
+        rebalance_type: 'N/A'
+      });
+    }
   } catch (error) {
     if (error.code === 11000) {
       console.log(`⚠️  Duplicate candle skipped for timestamp: ${new Date(candle.timestamp).toISOString()}`);
