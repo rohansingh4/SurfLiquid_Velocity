@@ -1262,21 +1262,17 @@
         // Update dashboard
         async function updateDashboard() {
             try {
-                // Load data from MongoDB based on current time range AND current data view
-                const dataEndpoint = currentDataView === 'candles' 
-                    ? `/api/db/candles/range?range=${currentTimeRange}`
-                    : `/api/db/positions/range?range=${currentTimeRange}`;
-
+                // Load positions data from MongoDB based on current time range
                 const [currentResponse, dataResponse] = await Promise.all([
                     // Use relative URLs so this works from any host (server IP, domain, or localhost)
                     fetch('/api/current'),
-                    fetch(dataEndpoint)
+                    fetch(`/api/db/positions/range?range=${currentTimeRange}`)
                 ]);
 
                 const currentData = await currentResponse.json();
                 const chartData = await dataResponse.json();
 
-                // Store all data from MongoDB (candles or positions based on current view)
+                // Store all positions data from MongoDB
                 allCandles = chartData;
 
                 // Update current price and stats
@@ -1344,13 +1340,9 @@
                 this.classList.add('active');
                 currentTimeRange = this.dataset.range;
 
-                // Load data from MongoDB for the selected time range (respecting current data view)
+                // Load positions data from MongoDB for the selected time range
                 try {
-                    const dataEndpoint = currentDataView === 'candles' 
-                        ? `/api/db/candles/range?range=${currentTimeRange}`
-                        : `/api/db/positions/range?range=${currentTimeRange}`;
-                    
-                    const response = await fetch(dataEndpoint);
+                    const response = await fetch(`/api/db/positions/range?range=${currentTimeRange}`);
                     allCandles = await response.json();
 
                     window.chartInitialized = false; // Force fit content on range change
@@ -1383,7 +1375,6 @@
         });
 
         // Data table functionality
-        let currentDataView = 'positions';
         let currentPage = 1;
         let totalPages = 1;
         let dbStats = { candleCount: 0, positionCount: 0 };
@@ -1398,22 +1389,13 @@
         }
 
         async function loadTableData(view, page = 1) {
-            currentDataView = view;
             currentPage = page;
 
             try {
-                const endpoint = view === 'candles' ?
-                    `/api/db/candles?page=${page}&limit=100` :
-                    `/api/db/positions?page=${page}&limit=100`;
-
-                const response = await fetch(endpoint);
+                const response = await fetch(`/api/db/positions?page=${page}&limit=100`);
                 const result = await response.json();
 
-                if (view === 'candles') {
-                    displayCandlesTable(result.data);
-                } else {
-                    displayPositionsTable(result.data);
-                }
+                displayPositionsTable(result.data);
 
                 // Update pagination
                 totalPages = result.pagination.totalPages;
@@ -1429,21 +1411,17 @@
                 }
 
                 // SYNC CHART WITH TABLE DATA
-                await syncChartWithTable(view);
+                await syncChartWithTable();
             } catch (error) {
                 console.error('Error loading table data:', error);
             }
         }
 
         // Sync chart to show same data as table
-        async function syncChartWithTable(view) {
+        async function syncChartWithTable() {
             try {
-                // Load data for current time range based on view
-                const endpoint = view === 'candles' ?
-                    `/api/db/candles/range?range=${currentTimeRange}` :
-                    `/api/db/positions/range?range=${currentTimeRange}`;
-
-                const response = await fetch(endpoint);
+                // Load positions data for current time range
+                const response = await fetch(`/api/db/positions/range?range=${currentTimeRange}`);
                 const data = await response.json();
 
                 // Update chart with the same data source as table
@@ -1485,7 +1463,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'page-btn' + (i === pagination.page ? ' active' : '');
                 btn.textContent = i;
-                btn.onclick = () => loadTableData(currentDataView, i);
+                btn.onclick = () => loadTableData('positions', i);
                 pageNumbers.appendChild(btn);
             }
         }
@@ -1493,7 +1471,7 @@
         function changePage(delta) {
             const newPage = currentPage + delta;
             if (newPage >= 1 && newPage <= totalPages) {
-                loadTableData(currentDataView, newPage);
+                loadTableData('positions', newPage);
             }
         }
 
@@ -1598,7 +1576,7 @@
         // Update every 5 seconds
         setInterval(updateDashboard, 5000);
         setInterval(() => {
-            fetchDBStats().then(() => loadTableData(currentDataView, currentPage));
+            fetchDBStats().then(() => loadTableData('positions', currentPage));
         }, 10000); // Refresh table every 10 seconds
     </script>
 </body>
