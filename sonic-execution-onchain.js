@@ -353,6 +353,14 @@ app.use(express.static(__dirname));
 
 // API endpoints
 app.get('/api/current', (req, res) => {
+  // Build position object from current state
+  const position = currentRanges ? {
+    status: lastPositionStatus || 'No Position',
+    upper_range: currentRanges.upper,
+    lower_range: currentRanges.lower,
+    rebalance_type: 'N/A'
+  } : null;
+
   res.json({
     currentCandle,
     position,
