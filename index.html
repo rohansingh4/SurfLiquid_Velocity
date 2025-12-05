@@ -1213,18 +1213,22 @@
         // Update dashboard
         async function updateDashboard() {
             try {
-                // Load candles from MongoDB based on current time range
-                const [currentResponse, candlesResponse] = await Promise.all([
+                // Load data from MongoDB based on current time range AND current data view
+                const dataEndpoint = currentDataView === 'candles' 
+                    ? `/api/db/candles/range?range=${currentTimeRange}`
+                    : `/api/db/positions/range?range=${currentTimeRange}`;
+
+                const [currentResponse, dataResponse] = await Promise.all([
                     // Use relative URLs so this works from any host (server IP, domain, or localhost)
                     fetch('/api/current'),
-                    fetch(`/api/db/candles/range?range=${currentTimeRange}`)
+                    fetch(dataEndpoint)
                 ]);
 
                 const currentData = await currentResponse.json();
-                const candlesData = await candlesResponse.json();
+                const chartData = await dataResponse.json();
 
-                // Store all candles from MongoDB
-                allCandles = candlesData;
+                // Store all data from MongoDB (candles or positions based on current view)
+                allCandles = chartData;
 
                 // Update current price and stats
                 if (currentData.currentCandle) {
@@ -1271,7 +1275,7 @@
                     document.getElementById('wethPct').textContent = `${wethPct}%`;
                     document.getElementById('usdcPct').textContent = `${usdcPct}%`;
 
-                    // Update chart
+                    // Update chart with current data (respecting the data view)
                     updateChart(allCandles, pos);
                 }
 
@@ -1291,9 +1295,13 @@
                 this.classList.add('active');
                 currentTimeRange = this.dataset.range;
 
-                // Load data from MongoDB for the selected time range
+                // Load data from MongoDB for the selected time range (respecting current data view)
                 try {
-                    const response = await fetch(`/api/db/candles/range?range=${currentTimeRange}`);
+                    const dataEndpoint = currentDataView === 'candles' 
+                        ? `/api/db/candles/range?range=${currentTimeRange}`
+                        : `/api/db/positions/range?range=${currentTimeRange}`;
+                    
+                    const response = await fetch(dataEndpoint);
                     allCandles = await response.json();
 
                     window.chartInitialized = false; // Force fit content on range change
@@ -1303,7 +1311,7 @@
                     const currentData = await currentResponse.json();
                     updateChart(allCandles, currentData.position || null);
                 } catch (error) {
-                    console.error('Error loading candles for range:', error);
+                    console.error('Error loading data for range:', error);
                 }
             });
         });
@@ -1370,8 +1378,35 @@
                     const latest = new Date(result.data[result.data.length - 1].timestamp);
                     document.getElementById('latestRecord').textContent = latest.toLocaleString();
                 }
+
+                // SYNC CHART WITH TABLE DATA
+                await syncChartWithTable(view);
             } catch (error) {
                 console.error('Error loading table data:', error);
+            }
+        }
+
+        // Sync chart to show same data as table
+        async function syncChartWithTable(view) {
+            try {
+                // Load data for current time range based on view
+                const endpoint = view === 'candles' ?
+                    `/api/db/candles/range?range=${currentTimeRange}` :
+                    `/api/db/positions/range?range=${currentTimeRange}`;
+
+                const response = await fetch(endpoint);
+                const data = await response.json();
+
+                // Update chart with the same data source as table
+                allCandles = data;
+
+                // Get current position for range lines
+                const currentResponse = await fetch('/api/current');
+                const currentData = await currentResponse.json();
+                
+                updateChart(data, currentData.position || null);
+            } catch (error) {
+                console.error('Error syncing chart with table:', error);
             }
         }
 
@@ -1521,6 +1556,15 @@
                 document.querySelectorAll('.data-toggle-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentPage = 1; // Reset to page 1 when switching views
+                
+                // Update chart title to reflect data source
+                const chartTitle = document.querySelector('.chart-title');
+                if (this.dataset.view === 'candles') {
+                    chartTitle.textContent = '📊 Price Chart - 10s Candles';
+                } else {
+                    chartTitle.textContent = '📊 Price Chart - Positions Data';
+                }
+                
                 loadTableData(this.dataset.view, 1);
             });
         });
