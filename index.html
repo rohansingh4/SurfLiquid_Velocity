@@ -796,6 +796,7 @@
         let currentTimeRange = 'all';
         let allCandles = [];
         let currentPosition = null; // Store current position data for tooltip
+        let positionsMap = {}; // Map of timestamp -> position for accurate tooltip status
 
         // Initialize chart
         function initChart() {
@@ -968,23 +969,26 @@
                         const dateStr = `${month} ${day}, ${displayHours}:${minutes}:${seconds} ${period}`;
                         
                         // Build position info section if available
+                        // Look up position for this specific timestamp
                         let positionInfo = '';
-                        if (currentPosition) {
+                        const positionForThisCandle = positionsMap[param.time] || currentPosition;
+                        
+                        if (positionForThisCandle) {
                             // Get status color
                             const statusColors = {
                                 'Monitoring': '#00d4ff',
                                 'Open-UP': '#00ff88',
                                 'Open-DOWN': '#00ff88',
-                                'Price-UP': '#ff4444',
-                                'Price-DOWN': '#ff4444'
+                                'Price-UP': '#ff9800',
+                                'Price-DOWN': '#ff9800'
                             };
-                            const statusColor = statusColors[currentPosition.status] || '#00d4ff';
+                            const statusColor = statusColors[positionForThisCandle.status] || '#00d4ff';
                             
                             positionInfo = `
                                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
-                                    <div style="margin: 3px 0;">Status: <span style="color: ${statusColor}; font-weight: 600;">${currentPosition.status}</span></div>
-                                    <div style="margin: 3px 0;">Upper Range: <span style="color: #ff4444; font-weight: 600;">$${currentPosition.upper_range?.toFixed(2)}</span></div>
-                                    <div style="margin: 3px 0;">Lower Range: <span style="color: #26a69a; font-weight: 600;">$${currentPosition.lower_range?.toFixed(2)}</span></div>
+                                    <div style="margin: 3px 0;">Status: <span style="color: ${statusColor}; font-weight: 600;">${positionForThisCandle.status}</span></div>
+                                    <div style="margin: 3px 0;">Upper Range: <span style="color: #ff4444; font-weight: 600;">$${positionForThisCandle.upper_range?.toFixed(2)}</span></div>
+                                    <div style="margin: 3px 0;">Lower Range: <span style="color: #26a69a; font-weight: 600;">$${positionForThisCandle.lower_range?.toFixed(2)}</span></div>
                                 </div>
                             `;
                         }
@@ -1231,6 +1235,9 @@
                     .then(positionsData => {
                         const markers = [];
                         
+                        // Clear and rebuild positions map for tooltip
+                        positionsMap = {};
+                        
                         // Create a map of timestamps to position statuses
                         positionsData.forEach(pos => {
                             const posTime = typeof pos.timestamp === 'string'
@@ -1240,6 +1247,9 @@
                                     : pos.timestamp);
                             
                             const chartTime = getTimeForChart(posTime);
+                            
+                            // Store position by chart time for tooltip lookup
+                            positionsMap[chartTime] = pos;
                             
                             // Add markers for status changes
                             if (pos.status === 'Price-UP') {
