@@ -48,6 +48,7 @@ let lastPositionStatus = null; // Tracks last position status
 let positionHistory = [];
 let tickData = [];
 let outOfRangeDetectedAt = null; // Timestamp when out of range was first detected
+let justSavedRebalance = false; // Flag to prevent duplicate saves after rebalance
 
 // Web3 setup
 const provider = new ethers.JsonRpcProvider(RPC_URL);
@@ -169,6 +170,7 @@ async function updateCandle(data) {
           console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
+          justSavedRebalance = false; // Allow Monitoring to be saved normally
         } else {
           // Still out of range - REBALANCE NOW
           const isUpRebalance = currentPrice > currentRanges.upper;
@@ -204,6 +206,7 @@ async function updateCandle(data) {
           // After rebalance, go back to Monitoring with new ranges
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
+          justSavedRebalance = true; // Prevent duplicate save
         }
       } else if (!isInRange && lastPositionStatus !== 'Price-UP' && lastPositionStatus !== 'Price-DOWN') {
         // Price just went out of range - save Price-UP/DOWN
@@ -228,6 +231,7 @@ async function updateCandle(data) {
         
         lastPositionStatus = status;
         outOfRangeDetectedAt = Date.now();
+        // No need to set justSavedRebalance - status is Price-UP/DOWN, not Monitoring
       }
     }
 
@@ -319,8 +323,8 @@ async function saveCandleToMongoDB(candle) {
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
     
     // Save Monitoring status regularly for continuous chart data
-    // Price-UP/DOWN and Open-UP/DOWN are saved only when they occur
-    if (currentRanges && lastPositionStatus === 'Monitoring') {
+    // But skip if we just saved a rebalance (Open-UP/DOWN) to avoid duplicates
+    if (currentRanges && lastPositionStatus === 'Monitoring' && !justSavedRebalance) {
       const weth_pct = (candle.weth_amount / (candle.weth_amount + candle.usdc_amount / candle.close)) * 100;
       const usdc_pct = 100 - weth_pct;
       
@@ -338,6 +342,9 @@ async function saveCandleToMongoDB(candle) {
         rebalance_type: 'N/A'
       });
     }
+    
+    // Reset the flag for next candle
+    justSavedRebalance = false;
   } catch (error) {
     if (error.code === 11000) {
       console.log(`⚠️  Duplicate candle skipped for timestamp: ${new Date(candle.timestamp).toISOString()}`);
