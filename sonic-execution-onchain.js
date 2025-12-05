@@ -467,6 +467,68 @@ app.get('/api/db/stats', async (req, res) => {
   }
 });
 
+// Get position range info for a specific candle timestamp
+app.get('/api/position-range/:timestamp', async (req, res) => {
+  try {
+    const clickedTime = new Date(parseInt(req.params.timestamp));
+
+    // Find the position active at this timestamp
+    const activePosition = await Position.findOne({
+      timestamp: { $lte: clickedTime },
+      status: 'Position Open'
+    }).sort({ timestamp: -1 });
+
+    if (!activePosition) {
+      return res.json({ error: 'No active position found for this timestamp' });
+    }
+
+    const { upper_range, lower_range } = activePosition;
+
+    // Find when this range started (first Position Open with these exact ranges)
+    const rangeStart = await Position.findOne({
+      upper_range: upper_range,
+      lower_range: lower_range,
+      status: 'Position Open'
+    }).sort({ timestamp: 1 });
+
+    // Find when this range ended (next Position Open with different ranges)
+    const rangeEnd = await Position.findOne({
+      timestamp: { $gt: rangeStart.timestamp },
+      status: 'Position Open',
+      $or: [
+        { upper_range: { $ne: upper_range } },
+        { lower_range: { $ne: lower_range } }
+      ]
+    }).sort({ timestamp: 1 });
+
+    // Get all positions during this range period for additional context
+    const endTime = rangeEnd ? rangeEnd.timestamp : new Date();
+    const rangePositions = await Position.find({
+      timestamp: { $gte: rangeStart.timestamp, $lt: endTime }
+    }).sort({ timestamp: 1 });
+
+    // Check if rebalance occurred
+    const rebalanceOccurred = rangePositions.some(
+      p => p.status.includes('Out of Range') && p.rebalance_type
+    );
+
+    res.json({
+      rangeStart: rangeStart.timestamp,
+      rangeEnd: rangeEnd ? rangeEnd.timestamp : null,
+      upperRange: upper_range,
+      lowerRange: lower_range,
+      duration: rangeEnd ? (rangeEnd.timestamp - rangeStart.timestamp) / 1000 : null,
+      rebalanceOccurred,
+      rebalanceType: rebalanceOccurred
+        ? rangePositions.find(p => p.rebalance_type)?.rebalance_type
+        : null,
+      positions: rangePositions
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get candles by time range for chart
 app.get('/api/db/candles/range', async (req, res) => {
   try {

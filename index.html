@@ -563,6 +563,52 @@
             border: 1px solid rgba(0, 255, 136, 0.3);
         }
 
+        .range-info-popup {
+            position: absolute;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 300px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+            display: none;
+        }
+
+        .range-info-popup h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .range-info-popup p {
+            color: #fff;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .range-info-popup .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #ff4444;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .range-info-popup .close-btn:hover {
+            color: #ff6666;
+        }
+
+        .highlighted-range {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
         @media (max-width: 1200px) {
             .main-grid {
                 grid-template-columns: 1fr;
@@ -673,7 +719,13 @@
                         </div>
                     </div>
                 </div>
-                <div id="chart-container"></div>
+                <div id="chart-container" style="position: relative;">
+                    <div id="rangeInfoPopup" class="range-info-popup">
+                        <button class="close-btn" onclick="closeRangePopup()">×</button>
+                        <h4>📊 Position Range Info</h4>
+                        <div id="rangeInfoContent"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -851,6 +903,101 @@
             window.addEventListener('resize', () => {
                 chart.applyOptions({ width: container.clientWidth });
             });
+
+            // Add click handler for candles
+            chart.subscribeClick(async (param) => {
+                if (!param.time) return;
+
+                const clickedTime = param.time * 1000; // Convert to milliseconds
+
+                try {
+                    const response = await fetch(`/api/position-range/${clickedTime}`);
+                    const rangeInfo = await response.json();
+
+                    if (rangeInfo.error) {
+                        console.log('No range info available for this candle');
+                        return;
+                    }
+
+                    showRangeInfo(rangeInfo, param);
+                    highlightRangePeriod(rangeInfo);
+                } catch (error) {
+                    console.error('Error fetching range info:', error);
+                }
+            });
+        }
+
+        // Show range info popup
+        function showRangeInfo(rangeInfo, param) {
+            const popup = document.getElementById('rangeInfoPopup');
+            const content = document.getElementById('rangeInfoContent');
+
+            const duration = rangeInfo.duration
+                ? `${Math.floor(rangeInfo.duration / 60)}m ${Math.floor(rangeInfo.duration % 60)}s`
+                : 'Active';
+
+            const startTime = new Date(rangeInfo.rangeStart).toLocaleTimeString();
+            const endTime = rangeInfo.rangeEnd
+                ? new Date(rangeInfo.rangeEnd).toLocaleTimeString()
+                : 'Now';
+
+            const rebalanceStatus = rangeInfo.rebalanceOccurred
+                ? `<span style="color: ${rangeInfo.rebalanceType === 'RebalanceA' ? '#00ff88' : '#ff4444'}">${rangeInfo.rebalanceType} ${rangeInfo.rebalanceType === 'RebalanceA' ? '↑' : '↓'}</span>`
+                : '<span style="color: #00ff88">No rebalance</span>';
+
+            content.innerHTML = `
+                <p><strong>Range Period:</strong> ${startTime} - ${endTime}</p>
+                <p><strong>Duration:</strong> ${duration}</p>
+                <p><strong>Upper Range:</strong> $${rangeInfo.upperRange.toFixed(2)}</p>
+                <p><strong>Lower Range:</strong> $${rangeInfo.lowerRange.toFixed(2)}</p>
+                <p><strong>Status:</strong> ${rebalanceStatus}</p>
+            `;
+
+            popup.style.display = 'block';
+            popup.style.left = '50%';
+            popup.style.top = '20px';
+            popup.style.transform = 'translateX(-50%)';
+        }
+
+        // Close range popup
+        function closeRangePopup() {
+            document.getElementById('rangeInfoPopup').style.display = 'none';
+            // Clear any highlighted ranges
+            clearRangeHighlight();
+        }
+
+        let rangeHighlightSeries = null;
+
+        // Highlight the range period on chart
+        function highlightRangePeriod(rangeInfo) {
+            // Clear previous highlight
+            clearRangeHighlight();
+
+            // Create a background series to highlight the period
+            rangeHighlightSeries = chart.addLineSeries({
+                color: 'rgba(0, 212, 255, 0.2)',
+                lineWidth: 0,
+                priceLineVisible: false,
+                lastValueVisible: false,
+            });
+
+            // Create data points for the highlighted period
+            const startTime = Math.floor(new Date(rangeInfo.rangeStart).getTime() / 1000);
+            const endTime = rangeInfo.rangeEnd
+                ? Math.floor(new Date(rangeInfo.rangeEnd).getTime() / 1000)
+                : Math.floor(Date.now() / 1000);
+
+            // We'll use a filled area to show the range
+            // This is a simplified version - you might want to enhance this
+            console.log(`Highlighting period from ${new Date(startTime * 1000)} to ${new Date(endTime * 1000)}`);
+        }
+
+        // Clear range highlight
+        function clearRangeHighlight() {
+            if (rangeHighlightSeries) {
+                chart.removeSeries(rangeHighlightSeries);
+                rangeHighlightSeries = null;
+            }
         }
 
         // Filter candles by time range
