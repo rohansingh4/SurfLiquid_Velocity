@@ -924,31 +924,67 @@
                 priceScaleId: '', // Use main price scale
             });
 
+            // Create tooltip div for candle data
+            const tooltip = document.createElement('div');
+            tooltip.style = `
+                position: absolute;
+                display: none;
+                padding: 12px;
+                box-sizing: border-box;
+                font-size: 13px;
+                text-align: left;
+                z-index: 1000;
+                top: 12px;
+                left: 12px;
+                pointer-events: none;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                border: 2px solid #00d4ff;
+                border-radius: 8px;
+                color: #fff;
+                box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+            `;
+            container.appendChild(tooltip);
+
+            // Add crosshair move handler to show candle data
+            chart.subscribeCrosshairMove(param => {
+                if (
+                    param.point === undefined ||
+                    !param.time ||
+                    param.point.x < 0 ||
+                    param.point.y < 0
+                ) {
+                    tooltip.style.display = 'none';
+                } else {
+                    const data = param.seriesData.get(candlestickSeries);
+                    if (data) {
+                        const time = new Date(param.time * 1000);
+                        const dateStr = time.toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true
+                        });
+                        
+                        tooltip.style.display = 'block';
+                        tooltip.innerHTML = `
+                            <div style="color: #00d4ff; font-weight: 600; margin-bottom: 8px;">${dateStr}</div>
+                            <div style="margin: 3px 0;">Open: <span style="color: #fff; font-weight: 600;">$${data.open?.toFixed(2)}</span></div>
+                            <div style="margin: 3px 0;">High: <span style="color: #26a69a; font-weight: 600;">$${data.high?.toFixed(2)}</span></div>
+                            <div style="margin: 3px 0;">Low: <span style="color: #ef5350; font-weight: 600;">$${data.low?.toFixed(2)}</span></div>
+                            <div style="margin: 3px 0;">Close: <span style="color: #fff; font-weight: 600;">$${data.close?.toFixed(2)}</span></div>
+                            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                Change: <span style="color: ${data.close >= data.open ? '#26a69a' : '#ef5350'}; font-weight: 600;">${((data.close - data.open) / data.open * 100).toFixed(2)}%</span>
+                            </div>
+                        `;
+                    }
+                }
+            });
+
             // Make chart responsive
             window.addEventListener('resize', () => {
                 chart.applyOptions({ width: container.clientWidth });
-            });
-
-            // Add click handler for candles
-            chart.subscribeClick(async (param) => {
-                if (!param.time) return;
-
-                const clickedTime = param.time * 1000; // Convert to milliseconds
-
-                try {
-                    const response = await fetch(`/api/position-range/${clickedTime}`);
-                    const rangeInfo = await response.json();
-
-                    if (rangeInfo.error) {
-                        console.log('No range info available for this candle');
-                        return;
-                    }
-
-                    showRangeInfo(rangeInfo, param);
-                    highlightRangePeriod(rangeInfo);
-                } catch (error) {
-                    console.error('Error fetching range info:', error);
-                }
             });
         }
 
@@ -1076,8 +1112,8 @@
             chart.timeScale().fitContent();
         }
 
-        // Helper function to convert timestamp to local time for chart
-        function getLocalTimeForChart(timestamp) {
+        // Helper function to convert timestamp to Unix seconds for chart
+        function getTimeForChart(timestamp) {
             // Convert timestamp to milliseconds
             const ms = typeof timestamp === 'string'
                 ? new Date(timestamp).getTime()
@@ -1085,12 +1121,8 @@
                     ? timestamp.getTime()
                     : timestamp);
             
-            // Get timezone offset in milliseconds and adjust timestamp
-            const date = new Date(ms);
-            const timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000;
-            
-            // Subtract offset so when chart displays in UTC, it shows our local time
-            return Math.floor((ms - timezoneOffsetMs) / 1000);
+            // Return as Unix seconds (chart will handle timezone via timeFormatter)
+            return Math.floor(ms / 1000);
         }
 
         // Update chart with candle data
@@ -1103,7 +1135,7 @@
             // Convert to TradingView format - handle both timestamp formats
             const candleData = filteredCandles.map(c => {
                 return {
-                    time: getLocalTimeForChart(c.timestamp),
+                    time: getTimeForChart(c.timestamp),
                     open: parseFloat(c.open),
                     high: parseFloat(c.high),
                     low: parseFloat(c.low),
@@ -1113,7 +1145,7 @@
 
             const lineData = filteredCandles.map(c => {
                 return {
-                    time: getLocalTimeForChart(c.timestamp),
+                    time: getTimeForChart(c.timestamp),
                     value: parseFloat(c.close)
                 };
             });
@@ -1141,14 +1173,14 @@
 
                 const upperRangeData = recentCandles.map(c => {
                     return {
-                        time: getLocalTimeForChart(c.timestamp),
+                        time: getTimeForChart(c.timestamp),
                         value: position.upper_range
                     };
                 });
 
                 const lowerRangeData = recentCandles.map(c => {
                     return {
-                        time: getLocalTimeForChart(c.timestamp),
+                        time: getTimeForChart(c.timestamp),
                         value: position.lower_range
                     };
                 });
@@ -1160,7 +1192,7 @@
                 const lastCandle = filteredCandles[filteredCandles.length - 1];
                 if (lastCandle) {
                     const markers = [];
-                    const lastTime = getLocalTimeForChart(lastCandle.timestamp);
+                    const lastTime = getTimeForChart(lastCandle.timestamp);
 
                     if (lastCandle.close > position.upper_range) {
                         markers.push({
