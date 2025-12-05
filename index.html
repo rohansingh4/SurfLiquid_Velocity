@@ -1094,7 +1094,17 @@
 
                     // Color code rebalance type in sidebar
                     let rebalanceHTML = pos.rebalance_type || 'N/A';
-                    if (pos.rebalance_type === 'RebalanceA') {
+
+                    // If Waiting for Action, show pending indicator
+                    if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
+                        if (pos.rebalance_type === 'RebalanceA') {
+                            rebalanceHTML = `<span class="rebalance-a">RebalanceA ? ↑</span>`;
+                        } else if (pos.rebalance_type === 'RebalanceB') {
+                            rebalanceHTML = `<span class="rebalance-b">RebalanceB ? ↓</span>`;
+                        }
+                    }
+                    // If rebalance confirmed
+                    else if (pos.rebalance_type === 'RebalanceA') {
                         rebalanceHTML = `<span class="rebalance-a">RebalanceA ↑</span>`;
                     } else if (pos.rebalance_type === 'RebalanceB') {
                         rebalanceHTML = `<span class="rebalance-b">RebalanceB ↓</span>`;
@@ -1327,7 +1337,17 @@
 
                 // Color code rebalance type
                 let rebalanceDisplay = pos.rebalance_type || 'N/A';
-                if (pos.rebalance_type === 'RebalanceA') {
+
+                // If Waiting for Action, show pending indicator
+                if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
+                    if (pos.rebalance_type === 'RebalanceA') {
+                        rebalanceDisplay = `<span class="rebalance-a">RebalanceA ? ↑</span>`;
+                    } else if (pos.rebalance_type === 'RebalanceB') {
+                        rebalanceDisplay = `<span class="rebalance-b">RebalanceB ? ↓</span>`;
+                    }
+                }
+                // If rebalance confirmed (Out of Range status)
+                else if (pos.rebalance_type === 'RebalanceA') {
                     rebalanceDisplay = `<span class="rebalance-a">RebalanceA ↑</span>`;
                 } else if (pos.rebalance_type === 'RebalanceB') {
                     rebalanceDisplay = `<span class="rebalance-b">RebalanceB ↓</span>`;
