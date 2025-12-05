@@ -8,17 +8,29 @@ const positionSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['Position Open', 'Price Out of Range - UP', 'Price Out of Range - DOWN', 'Waiting for Action']
-  },
-  price: {
-    type: Number,
-    required: true
+    enum: ['Open-UP', 'Open-DOWN', 'Monitoring', 'Price-UP', 'Price-DOWN']
   },
   upper_range: {
     type: Number,
     required: true
   },
   lower_range: {
+    type: Number,
+    required: true
+  },
+  open: {
+    type: Number,
+    required: true
+  },
+  high: {
+    type: Number,
+    required: true
+  },
+  low: {
+    type: Number,
+    required: true
+  },
+  close: {
     type: Number,
     required: true
   },

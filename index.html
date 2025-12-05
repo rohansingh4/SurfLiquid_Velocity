@@ -434,22 +434,22 @@
             font-weight: 600;
         }
 
-        .status-open {
-            background: rgba(0, 123, 255, 0.2);
-            color: #007bff;
-        }
-
-        .status-range-up {
+        .status-open-up {
             background: rgba(0, 255, 136, 0.2);
             color: #00ff88;
         }
 
-        .status-range-down {
+        .status-open-down {
             background: rgba(255, 68, 68, 0.2);
             color: #ff4444;
         }
 
-        .status-waiting-action {
+        .status-monitoring {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .status-price-up, .status-price-down {
             background: rgba(255, 170, 0, 0.2);
             color: #ffaa00;
         }
@@ -846,6 +846,13 @@
                     lockVisibleTimeRangeOnResize: true,
                     shiftVisibleRangeOnNewBar: true,
                 },
+                localization: {
+                    timeFormatter: (timestamp) => {
+                        // Convert Unix timestamp to browser local time
+                        const date = new Date(timestamp * 1000);
+                        return date.toLocaleTimeString();
+                    },
+                },
                 handleScroll: {
                     mouseWheel: true,
                     pressedMouseMove: true,
@@ -1239,11 +1246,13 @@
                     let statusClass = 'status-indicator';
                     let statusText = pos.status;
 
-                    if (pos.status.includes('Open')) {
+                    if (pos.status === 'Open-UP') {
                         statusClass += ' status-open';
-                    } else if (pos.status.includes('Waiting for Action')) {
-                        statusClass += ' status-waiting';
-                    } else if (pos.status.includes('Out of Range')) {
+                    } else if (pos.status === 'Open-DOWN') {
+                        statusClass += ' status-open';
+                    } else if (pos.status === 'Monitoring') {
+                        statusClass += ' status-monitoring';
+                    } else if (pos.status === 'Price-UP' || pos.status === 'Price-DOWN') {
                         statusClass += ' status-outofrange';
                     }
 
@@ -1252,23 +1261,8 @@
                     document.getElementById('upperRange').textContent = `$${pos.upper_range.toFixed(2)}`;
                     document.getElementById('lowerRange').textContent = `$${pos.lower_range.toFixed(2)}`;
 
-                    // Color code rebalance type in sidebar
+                    // Rebalance type display (simple)
                     let rebalanceHTML = pos.rebalance_type || 'N/A';
-
-                    // If Waiting for Action, show pending indicator with blinking animation
-                    if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
-                        if (pos.rebalance_type === 'RebalanceA') {
-                            rebalanceHTML = `<span class="rebalance-a rebalance-pending">RebalanceA ? ↑</span>`;
-                        } else if (pos.rebalance_type === 'RebalanceB') {
-                            rebalanceHTML = `<span class="rebalance-b rebalance-pending">RebalanceB ? ↓</span>`;
-                        }
-                    }
-                    // If rebalance confirmed
-                    else if (pos.rebalance_type === 'RebalanceA') {
-                        rebalanceHTML = `<span class="rebalance-a">RebalanceA ↑</span>`;
-                    } else if (pos.rebalance_type === 'RebalanceB') {
-                        rebalanceHTML = `<span class="rebalance-b">RebalanceB ↓</span>`;
-                    }
                     document.getElementById('rebalanceType').innerHTML = rebalanceHTML;
 
                     // Update distribution
@@ -1473,9 +1467,12 @@
                 <tr>
                     <th>Timestamp</th>
                     <th>Status</th>
-                    <th>Price</th>
                     <th>Upper Range</th>
                     <th>Lower Range</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
                     <th>WETH %</th>
                     <th>USDC %</th>
                     <th>Rebalance Type</th>
@@ -1485,41 +1482,31 @@
             // Create table rows
             tbody.innerHTML = positions.slice(-100).reverse().map(pos => {
                 let statusClass = 'status-badge ';
-                if (pos.status.includes('Open')) {
-                    statusClass += 'status-open';
-                } else if (pos.status.includes('UP')) {
-                    statusClass += 'status-range-up';
-                } else if (pos.status.includes('DOWN')) {
-                    statusClass += 'status-range-down';
-                } else if (pos.status.includes('Waiting for Action')) {
-                    statusClass += 'status-waiting-action';
+                if (pos.status === 'Open-UP') {
+                    statusClass += 'status-open-up';
+                } else if (pos.status === 'Open-DOWN') {
+                    statusClass += 'status-open-down';
+                } else if (pos.status === 'Monitoring') {
+                    statusClass += 'status-monitoring';
+                } else if (pos.status === 'Price-UP') {
+                    statusClass += 'status-price-up';
+                } else if (pos.status === 'Price-DOWN') {
+                    statusClass += 'status-price-down';
                 }
 
-                // Color code rebalance type
+                // Rebalance type display (simple, no flashy colors per boss request)
                 let rebalanceDisplay = pos.rebalance_type || 'N/A';
-
-                // If Waiting for Action, show pending indicator with blinking animation
-                if (pos.status === 'Waiting for Action' && pos.rebalance_type) {
-                    if (pos.rebalance_type === 'RebalanceA') {
-                        rebalanceDisplay = `<span class="rebalance-a rebalance-pending">RebalanceA ? ↑</span>`;
-                    } else if (pos.rebalance_type === 'RebalanceB') {
-                        rebalanceDisplay = `<span class="rebalance-b rebalance-pending">RebalanceB ? ↓</span>`;
-                    }
-                }
-                // If rebalance confirmed (Out of Range status)
-                else if (pos.rebalance_type === 'RebalanceA') {
-                    rebalanceDisplay = `<span class="rebalance-a">RebalanceA ↑</span>`;
-                } else if (pos.rebalance_type === 'RebalanceB') {
-                    rebalanceDisplay = `<span class="rebalance-b">RebalanceB ↓</span>`;
-                }
 
                 return `
                     <tr>
                         <td>${new Date(pos.timestamp).toLocaleString()}</td>
                         <td><span class="${statusClass}">${pos.status}</span></td>
-                        <td>$${parseFloat(pos.price).toFixed(2)}</td>
                         <td>$${parseFloat(pos.upper_range).toFixed(2)}</td>
                         <td>$${parseFloat(pos.lower_range).toFixed(2)}</td>
+                        <td>$${parseFloat(pos.open).toFixed(2)}</td>
+                        <td>$${parseFloat(pos.high).toFixed(2)}</td>
+                        <td>$${parseFloat(pos.low).toFixed(2)}</td>
+                        <td>$${parseFloat(pos.close).toFixed(2)}</td>
                         <td>${parseFloat(pos.weth_pct).toFixed(2)}%</td>
                         <td>${parseFloat(pos.usdc_pct).toFixed(2)}%</td>
                         <td>${rebalanceDisplay}</td>
