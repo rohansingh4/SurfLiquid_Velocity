@@ -1076,6 +1076,23 @@
             chart.timeScale().fitContent();
         }
 
+        // Helper function to convert timestamp to local time for chart
+        function getLocalTimeForChart(timestamp) {
+            // Convert timestamp to milliseconds
+            const ms = typeof timestamp === 'string'
+                ? new Date(timestamp).getTime()
+                : (typeof timestamp === 'object' && timestamp.getTime
+                    ? timestamp.getTime()
+                    : timestamp);
+            
+            // Get timezone offset in milliseconds and adjust timestamp
+            const date = new Date(ms);
+            const timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000;
+            
+            // Subtract offset so when chart displays in UTC, it shows our local time
+            return Math.floor((ms - timezoneOffsetMs) / 1000);
+        }
+
         // Update chart with candle data
         function updateChart(candles, position) {
             if (!candles || candles.length === 0) return;
@@ -1085,15 +1102,8 @@
 
             // Convert to TradingView format - handle both timestamp formats
             const candleData = filteredCandles.map(c => {
-                // Convert timestamp to Unix seconds (handle Date objects, ISO strings, or milliseconds)
-                const timestamp = typeof c.timestamp === 'string'
-                    ? new Date(c.timestamp).getTime()
-                    : (typeof c.timestamp === 'object' && c.timestamp.getTime
-                        ? c.timestamp.getTime()
-                        : c.timestamp);
-
                 return {
-                    time: Math.floor(timestamp / 1000),
+                    time: getLocalTimeForChart(c.timestamp),
                     open: parseFloat(c.open),
                     high: parseFloat(c.high),
                     low: parseFloat(c.low),
@@ -1102,14 +1112,8 @@
             });
 
             const lineData = filteredCandles.map(c => {
-                const timestamp = typeof c.timestamp === 'string'
-                    ? new Date(c.timestamp).getTime()
-                    : (typeof c.timestamp === 'object' && c.timestamp.getTime
-                        ? c.timestamp.getTime()
-                        : c.timestamp);
-
                 return {
-                    time: Math.floor(timestamp / 1000),
+                    time: getLocalTimeForChart(c.timestamp),
                     value: parseFloat(c.close)
                 };
             });
@@ -1136,25 +1140,15 @@
                 });
 
                 const upperRangeData = recentCandles.map(c => {
-                    const timestamp = typeof c.timestamp === 'string'
-                        ? new Date(c.timestamp).getTime()
-                        : (typeof c.timestamp === 'object' && c.timestamp.getTime
-                            ? c.timestamp.getTime()
-                            : c.timestamp);
                     return {
-                        time: Math.floor(timestamp / 1000),
+                        time: getLocalTimeForChart(c.timestamp),
                         value: position.upper_range
                     };
                 });
 
                 const lowerRangeData = recentCandles.map(c => {
-                    const timestamp = typeof c.timestamp === 'string'
-                        ? new Date(c.timestamp).getTime()
-                        : (typeof c.timestamp === 'object' && c.timestamp.getTime
-                            ? c.timestamp.getTime()
-                            : c.timestamp);
                     return {
-                        time: Math.floor(timestamp / 1000),
+                        time: getLocalTimeForChart(c.timestamp),
                         value: position.lower_range
                     };
                 });
@@ -1166,12 +1160,7 @@
                 const lastCandle = filteredCandles[filteredCandles.length - 1];
                 if (lastCandle) {
                     const markers = [];
-                    const lastTimestamp = typeof lastCandle.timestamp === 'string'
-                        ? new Date(lastCandle.timestamp).getTime()
-                        : (typeof lastCandle.timestamp === 'object' && lastCandle.timestamp.getTime
-                            ? lastCandle.timestamp.getTime()
-                            : lastCandle.timestamp);
-                    const lastTime = Math.floor(lastTimestamp / 1000);
+                    const lastTime = getLocalTimeForChart(lastCandle.timestamp);
 
                     if (lastCandle.close > position.upper_range) {
                         markers.push({
