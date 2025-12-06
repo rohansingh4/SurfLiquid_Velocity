@@ -7,6 +7,9 @@
     "start": "node sonic-execution-onchain.js",
     "start:api": "node sonic-execution.js",
     "dev": "node sonic-execution-onchain.js",
+    "trade": "node trade-executor.js",
+    "trade:dry": "DRY_RUN=true node trade-executor.js",
+    "trade:live": "DRY_RUN=false node trade-executor.js",
     "migrate": "node migrate-csv-to-mongodb.js",
     "cleanup": "node cleanup-duplicates.js"
   },

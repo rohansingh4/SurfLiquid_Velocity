@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const MONGODB_URI = 'mongodb+srv://nishant:fq2OndbVPe3M5LZq@finora-backend.ztyjpt.mongodb.net/Velocity?tls=true';
+dotenv.config();
+
+// Use environment variable or fallback to local MongoDB for development
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/VelocityPhase2';
 
 let isConnected = false;
 

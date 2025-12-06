@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 // Configuration from .env
 const RPC_URL = process.env.SONIC_RPC_URL;
 const POOL_ADDRESS = process.env.POOL_ADDRESS || '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
-const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
+const FETCH_INTERVAL = 10000; // 10 seconds
 const CANDLE_INTERVAL = 10000; // 10 seconds (candle period)
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
 
@@ -48,8 +48,6 @@ let lastPositionStatus = null; // Tracks last position status
 let positionHistory = [];
 let tickData = [];
 let outOfRangeDetectedAt = null; // Timestamp when out of range was first detected
-let positionSavedThisCycle = false; // Prevent duplicate saves in same candle cycle
-let justSavedRebalance = false; // Flag to prevent duplicate saves after rebalance
 
 // Web3 setup
 const provider = new ethers.JsonRpcProvider(RPC_URL);
@@ -160,20 +158,13 @@ async function updateCandle(data) {
       candles.push(currentCandle);
       saveCandleToMongoDB(currentCandle);
 
-      // Check status every 10 seconds on candle close
-      const currentPrice = data.price;
-      const isInRange = currentPrice >= currentRanges.lower && currentPrice <= currentRanges.upper;
-
+      // Check if we need to rebalance (Step 1: Open-UP/DOWN)
       if (lastPositionStatus === 'Price-UP' || lastPositionStatus === 'Price-DOWN') {
-        // We detected out of range in previous check
-        if (isInRange) {
-          // Price came back in range - no rebalance needed
-          console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
-          lastPositionStatus = 'Monitoring';
-          outOfRangeDetectedAt = null;
-          positionSavedThisCycle = false; // Allow Monitoring to be saved normally
-        } else {
-          // Still out of range - REBALANCE NOW
+        const currentPrice = data.price;
+        const stillOutOfRange = currentPrice > currentRanges.upper || currentPrice < currentRanges.lower;
+
+        if (stillOutOfRange) {
+          // Step 1: Rebalance - Update ranges
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
@@ -207,48 +198,12 @@ async function updateCandle(data) {
           // After rebalance, go back to Monitoring with new ranges
           lastPositionStatus = 'Monitoring';
           outOfRangeDetectedAt = null;
-          positionSavedThisCycle = true; // Prevent duplicate Monitoring save
+        } else {
+          // Price came back in range - continue monitoring with old ranges
+          console.log(`\n✅ PRICE BACK IN RANGE - No rebalance needed`);
+          lastPositionStatus = 'Monitoring';
+          outOfRangeDetectedAt = null;
         }
-      } else if (!isInRange && lastPositionStatus !== 'Price-UP' && lastPositionStatus !== 'Price-DOWN') {
-        // Price just went out of range - save Price-UP/DOWN
-        const isAbove = currentPrice > currentRanges.upper;
-        const status = isAbove ? 'Price-UP' : 'Price-DOWN';
-        
-        console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAbove ? '>' : '<'} ${isAbove ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
-        
-        await savePositionData({
-          timestamp: data.timestamp,
-          status: status,
-          upper_range: currentRanges.upper,
-          lower_range: currentRanges.lower,
-          open: currentCandle.open,
-          high: currentCandle.high,
-          low: currentCandle.low,
-          close: currentCandle.close,
-          weth_pct: data.weth_pct,
-          usdc_pct: data.usdc_pct,
-          rebalance_type: 'N/A'
-        });
-        
-        lastPositionStatus = status;
-        outOfRangeDetectedAt = Date.now();
-        positionSavedThisCycle = true; // Prevent duplicate save
-      } else if (isInRange && lastPositionStatus === 'Monitoring') {
-        // Normal Monitoring - save position for chart continuity
-        await savePositionData({
-          timestamp: data.timestamp,
-          status: 'Monitoring',
-          upper_range: currentRanges.upper,
-          lower_range: currentRanges.lower,
-          open: currentCandle.open,
-          high: currentCandle.high,
-          low: currentCandle.low,
-          close: currentCandle.close,
-          weth_pct: data.weth_pct,
-          usdc_pct: data.usdc_pct,
-          rebalance_type: 'N/A'
-        });
-        positionSavedThisCycle = false;
       }
     }
 
@@ -263,9 +218,6 @@ async function updateCandle(data) {
       weth_amount: data.weth_amount,
       usdc_amount: data.usdc_amount
     };
-    
-    // Reset flag for new candle cycle
-    positionSavedThisCycle = false;
 
     console.log(`\n=== New 10s Candle Started at ${new Date(candleStart).toISOString()} ===`);
   } else {
@@ -292,7 +244,7 @@ async function updateCandle(data) {
   }
 }
 
-// Initialize ranges on first run
+// Stream position data every 10 seconds (called from main loop)
 async function streamPositionData(data) {
   if (!currentCandle) return;
 
@@ -303,17 +255,46 @@ async function streamPositionData(data) {
       upper: openPrice * (1 + RANGE_PERCENTAGE / 100),
       lower: openPrice * (1 - RANGE_PERCENTAGE / 100)
     };
-    lastPositionStatus = 'Monitoring';
     console.log(`\n🎯 Initial Ranges Set: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
   }
 
-  // Just log current status, don't save (saving happens on candle close only)
   const currentPrice = data.price;
   const isInRange = currentPrice >= currentRanges.lower && currentPrice <= currentRanges.upper;
-  
+
+  let status, rebalanceType = 'N/A';
+
   if (isInRange) {
+    // Step 2: Monitoring - Price is in range
+    status = 'Monitoring';
+    outOfRangeDetectedAt = null;
     console.log(`📊 Monitoring: $${currentPrice.toFixed(2)} (Range: ${currentRanges.lower.toFixed(2)} - ${currentRanges.upper.toFixed(2)})`);
+  } else {
+    // Step 3: Price out of range
+    const isAboveRange = currentPrice > currentRanges.upper;
+    status = isAboveRange ? 'Price-UP' : 'Price-DOWN';
+
+    if (!outOfRangeDetectedAt) {
+      outOfRangeDetectedAt = Date.now();
+      console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAboveRange ? '>' : '<'} ${isAboveRange ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
+    }
   }
+
+  // Save position data with current candle OHLC
+  await savePositionData({
+    timestamp: data.timestamp,
+    status: status,
+    upper_range: currentRanges.upper,
+    lower_range: currentRanges.lower,
+    open: currentCandle.open,
+    high: currentCandle.high,
+    low: currentCandle.low,
+    close: currentCandle.close,
+    weth_pct: data.weth_pct,
+    usdc_pct: data.usdc_pct,
+    rebalance_type: rebalanceType
+  });
+
+  lastPositionStatus = status;
 }
 
 // Save position data to MongoDB
@@ -341,9 +322,6 @@ async function saveCandleToMongoDB(candle) {
     });
     await candleDoc.save();
     console.log(`💾 Candle saved: O:${candle.open.toFixed(2)} H:${candle.high.toFixed(2)} L:${candle.low.toFixed(2)} C:${candle.close.toFixed(2)}`);
-    
-    // Reset the flag for next candle
-    justSavedRebalance = false;
   } catch (error) {
     if (error.code === 11000) {
       console.log(`⚠️  Duplicate candle skipped for timestamp: ${new Date(candle.timestamp).toISOString()}`);

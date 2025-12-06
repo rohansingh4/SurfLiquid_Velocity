@@ -796,7 +796,6 @@
         let currentTimeRange = 'all';
         let allCandles = [];
         let currentPosition = null; // Store current position data for tooltip
-        let positionsMap = {}; // Map of timestamp -> position for accurate tooltip status
 
         // Initialize chart
         function initChart() {
@@ -846,14 +845,13 @@
                 },
                 localization: {
                     timeFormatter: (timestamp) => {
-                        // Timestamp is already adjusted for local timezone in getTimeForChart()
-                        // Chart displays in UTC, but our adjusted timestamp makes it show local time
+                        // Convert Unix timestamp to browser local time - matches table format exactly
                         const date = new Date(timestamp * 1000);
-                        const hours = date.getUTCHours();
-                        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+                        const hours = date.getHours();
+                        const minutes = date.getMinutes().toString().padStart(2, '0');
                         const period = hours >= 12 ? 'PM' : 'AM';
                         const displayHours = hours % 12 || 12;
-                        return `${displayHours}:${minutes} ${period}`;
+                        return `${displayHours}:${minutes}`;
                     },
                 },
                 handleScroll: {
@@ -955,40 +953,34 @@
                 } else {
                     const data = param.seriesData.get(candlestickSeries);
                     if (data) {
-                        // param.time is already adjusted for timezone in getTimeForChart()
-                        // Use UTC methods since the timestamp is pre-adjusted
                         const time = new Date(param.time * 1000);
-                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                        const month = monthNames[time.getUTCMonth()];
-                        const day = time.getUTCDate();
-                        const hours = time.getUTCHours();
-                        const minutes = time.getUTCMinutes().toString().padStart(2, '0');
-                        const seconds = time.getUTCSeconds().toString().padStart(2, '0');
-                        const period = hours >= 12 ? 'PM' : 'AM';
-                        const displayHours = hours % 12 || 12;
-                        const dateStr = `${month} ${day}, ${displayHours}:${minutes}:${seconds} ${period}`;
+                        const dateStr = time.toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true
+                        });
                         
                         // Build position info section if available
-                        // Look up position for this specific timestamp
                         let positionInfo = '';
-                        const positionForThisCandle = positionsMap[param.time] || currentPosition;
-                        
-                        if (positionForThisCandle) {
+                        if (currentPosition) {
                             // Get status color
                             const statusColors = {
                                 'Monitoring': '#00d4ff',
                                 'Open-UP': '#00ff88',
                                 'Open-DOWN': '#00ff88',
-                                'Price-UP': '#ff9800',
-                                'Price-DOWN': '#ff9800'
+                                'Price-UP': '#ff4444',
+                                'Price-DOWN': '#ff4444'
                             };
-                            const statusColor = statusColors[positionForThisCandle.status] || '#00d4ff';
+                            const statusColor = statusColors[currentPosition.status] || '#00d4ff';
                             
                             positionInfo = `
                                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
-                                    <div style="margin: 3px 0;">Status: <span style="color: ${statusColor}; font-weight: 600;">${positionForThisCandle.status}</span></div>
-                                    <div style="margin: 3px 0;">Upper Range: <span style="color: #ff4444; font-weight: 600;">$${positionForThisCandle.upper_range?.toFixed(2)}</span></div>
-                                    <div style="margin: 3px 0;">Lower Range: <span style="color: #26a69a; font-weight: 600;">$${positionForThisCandle.lower_range?.toFixed(2)}</span></div>
+                                    <div style="margin: 3px 0;">Status: <span style="color: ${statusColor}; font-weight: 600;">${currentPosition.status}</span></div>
+                                    <div style="margin: 3px 0;">Upper Range: <span style="color: #ff4444; font-weight: 600;">$${currentPosition.upper_range?.toFixed(2)}</span></div>
+                                    <div style="margin: 3px 0;">Lower Range: <span style="color: #26a69a; font-weight: 600;">$${currentPosition.lower_range?.toFixed(2)}</span></div>
                                 </div>
                             `;
                         }
@@ -1148,13 +1140,8 @@
                     ? timestamp.getTime()
                     : timestamp);
             
-            // Adjust for timezone offset so chart displays in local time
-            // Chart library treats timestamps as UTC, so we shift by timezone offset
-            const date = new Date(ms);
-            const timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000;
-            
-            // Subtract offset: if you're UTC+5, offset is -300, so we add 300 minutes
-            return Math.floor((ms - timezoneOffsetMs) / 1000);
+            // Return as Unix seconds (chart will handle timezone via timeFormatter)
+            return Math.floor(ms / 1000);
         }
 
         // Update chart with candle data
@@ -1228,68 +1215,32 @@
                 upperRangeLine.setData(upperRangeData);
                 lowerRangeLine.setData(lowerRangeData);
 
-                // Create markers for status changes from position data
-                // Fetch position data to show markers for Price-UP/DOWN and Open-UP/DOWN
-                fetch(`/api/db/positions/range?range=${currentTimeRange}`)
-                    .then(res => res.json())
-                    .then(positionsData => {
-                        const markers = [];
-                        
-                        // Clear and rebuild positions map for tooltip
-                        positionsMap = {};
-                        
-                        // Create a map of timestamps to position statuses
-                        positionsData.forEach(pos => {
-                            const posTime = typeof pos.timestamp === 'string'
-                                ? new Date(pos.timestamp).getTime()
-                                : (typeof pos.timestamp === 'object' && pos.timestamp.getTime
-                                    ? pos.timestamp.getTime()
-                                    : pos.timestamp);
-                            
-                            const chartTime = getTimeForChart(posTime);
-                            
-                            // Store position by chart time for tooltip lookup
-                            positionsMap[chartTime] = pos;
-                            
-                            // Add markers for status changes
-                            if (pos.status === 'Price-UP') {
-                                markers.push({
-                                    time: chartTime,
-                                    position: 'aboveBar',
-                                    color: '#ff9800',
-                                    shape: 'circle',
-                                    text: '⚠ Price-UP',
-                                });
-                            } else if (pos.status === 'Price-DOWN') {
-                                markers.push({
-                                    time: chartTime,
-                                    position: 'belowBar',
-                                    color: '#ff9800',
-                                    shape: 'circle',
-                                    text: '⚠ Price-DOWN',
-                                });
-                            } else if (pos.status === 'Open-UP') {
-                                markers.push({
-                                    time: chartTime,
-                                    position: 'aboveBar',
-                                    color: '#4caf50',
-                                    shape: 'arrowUp',
-                                    text: '🔄 Rebalance UP',
-                                });
-                            } else if (pos.status === 'Open-DOWN') {
-                                markers.push({
-                                    time: chartTime,
-                                    position: 'belowBar',
-                                    color: '#4caf50',
-                                    shape: 'arrowDown',
-                                    text: '🔄 Rebalance DOWN',
-                                });
-                            }
+                // Create markers for current price vs range
+                const lastCandle = filteredCandles[filteredCandles.length - 1];
+                if (lastCandle) {
+                    const markers = [];
+                    const lastTime = getTimeForChart(lastCandle.timestamp);
+
+                    if (lastCandle.close > position.upper_range) {
+                        markers.push({
+                            time: lastTime,
+                            position: 'aboveBar',
+                            color: '#ef5350',
+                            shape: 'arrowDown',
+                            text: 'Above Range',
                         });
-                        
-                        candlestickSeries.setMarkers(markers);
-                    })
-                    .catch(err => console.error('Error fetching positions for markers:', err));
+                    } else if (lastCandle.close < position.lower_range) {
+                        markers.push({
+                            time: lastTime,
+                            position: 'belowBar',
+                            color: '#26a69a',
+                            shape: 'arrowUp',
+                            text: 'Below Range',
+                        });
+                    }
+
+                    candlestickSeries.setMarkers(markers);
+                }
             }
 
             // Auto-scale price if needed
