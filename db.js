@@ -3,8 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Use environment variable or fallback to local MongoDB for development
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/VelocityPhase2';
+// Production MongoDB URI (for reading signals)
+const PRODUCTION_MONGODB_URI = 'mongodb+srv://nishant:fq2OndbVPe3M5LZq@finora-backend.ztyjpt.mongodb.net/Velocity?tls=true';
+
+// Use environment variable, or production DB for signal reading, or local for isolated testing
+const MONGODB_URI = process.env.MONGODB_URI || PRODUCTION_MONGODB_URI;
 
 let isConnected = false;
 
