@@ -133,6 +133,16 @@ class TradingBot {
     return slot0[0];
   }
 
+  async getTickSpacing() {
+    try {
+      const tickSpacing = await this.poolContract.tickSpacing();
+      return Number(tickSpacing);
+    } catch (error) {
+      console.log('   Warning: Could not get tick spacing, using default 1');
+      return 1;
+    }
+  }
+
   // Tick to price conversion
   tickToPrice(tick) {
     return Math.pow(1.0001, tick);
@@ -651,17 +661,34 @@ class TradingBot {
           await new Promise(resolve => setTimeout(resolve, 3000));
         }
 
-        // Step 2: Add 100% liquidity
+        // Step 2: Add liquidity (use 99% of balance to avoid rounding errors)
         const finalBalances = await this.getBalances();
-        const tickLower = this.priceToTick(lowerRange);
-        const tickUpper = this.priceToTick(upperRange);
+
+        // DON'T use the narrow monitoring ranges!
+        // Calculate proper tick range for liquidity (±1000 ticks = ~10%)
+        const currentTick = this.priceToTick(currentPrice);
+        const tickRange = 1000; // Use same range as test script
+        const tickSpacing = await this.getTickSpacing();
+
+        const tickLower = Math.floor((currentTick - tickRange) / tickSpacing) * tickSpacing;
+        const tickUpper = Math.ceil((currentTick + tickRange) / tickSpacing) * tickSpacing;
+
+        console.log(`   Using wider tick range for liquidity:`);
+        console.log(`   Current Tick: ${currentTick}, Tick Spacing: ${tickSpacing}`);
+        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (±${tickRange} ticks = ~10%)`);
+
+        // Use 99% of balance to leave buffer for rounding errors
+        const wethToAdd = finalBalances.wethFormatted * 0.99;
+        const usdcToAdd = finalBalances.usdcFormatted * 0.99;
+
+        console.log(`   Using 99% of balance: ${wethToAdd.toFixed(6)} WETH, ${usdcToAdd.toFixed(2)} USDC`);
 
         try {
           const addResult = await this.addLiquidity(
             tickLower,
             tickUpper,
-            finalBalances.wethFormatted,
-            finalBalances.usdcFormatted
+            wethToAdd,
+            usdcToAdd
           );
 
           if (addResult) {
