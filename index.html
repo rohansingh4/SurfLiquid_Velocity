@@ -770,9 +770,123 @@
             font-size: 16px;
         }
 
+        /* Trading Section Styling */
+        .trading-section {
+            margin-top: 30px;
+            background: #1e2746;
+            border: 1px solid #2a2a3e;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .trading-header {
+            margin-bottom: 20px;
+        }
+
+        .trading-title {
+            font-size: 24px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .trading-stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .trading-stat-card {
+            background: #252d4a;
+            border: 1px solid #2a2a3e;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .trading-stat-label {
+            font-size: 12px;
+            color: #8e8ea9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trading-stat-value {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .pnl-card .trading-stat-value {
+            font-size: 22px;
+        }
+
+        .pnl-positive {
+            color: #26a69a !important;
+        }
+
+        .pnl-negative {
+            color: #ef5350 !important;
+        }
+
+        .status-pending {
+            background: #ffa726;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #26a69a;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-failed {
+            background: #ef5350;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tx-type-swap {
+            color: #00d4ff;
+        }
+
+        .tx-type-add {
+            color: #26a69a;
+        }
+
+        .tx-type-remove {
+            color: #ff9800;
+        }
+
+        .tx-hash-link {
+            color: #00d4ff;
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .tx-hash-link:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 1200px) {
             .main-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .trading-stats-row {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -936,6 +1050,74 @@
                 </div>
             </div>
         </div>
+
+        <!-- Trading Transactions Section -->
+        <div class="trading-section">
+            <div class="trading-header">
+                <h2 class="trading-title">🤖 Trading Bot Transactions</h2>
+                <div class="trading-stats-row" id="tradingStatsRow">
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">Wallet</div>
+                        <div class="trading-stat-value" id="walletAddress">Not configured</div>
+                    </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">WETH Balance</div>
+                        <div class="trading-stat-value" id="wethBalance">-</div>
+                    </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">USDC Balance</div>
+                        <div class="trading-stat-value" id="usdcBalance">-</div>
+                    </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">Total Transactions</div>
+                        <div class="trading-stat-value" id="totalTransactions">0</div>
+                    </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">Success Rate</div>
+                        <div class="trading-stat-value" id="successRate">0%</div>
+                    </div>
+                    <div class="trading-stat-card pnl-card">
+                        <div class="trading-stat-label">Total P&L</div>
+                        <div class="trading-stat-value" id="totalPnL">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead id="transactionTableHead">
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Signal</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>WETH</th>
+                            <th>USDC</th>
+                            <th>Price</th>
+                            <th>P&L</th>
+                            <th>TX Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 40px;">No transactions yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-controls">
+                <div class="pagination-info" id="txPaginationInfo">
+                    Page 1 of 1
+                </div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" id="txPrevPage" onclick="changeTxPage(-1)">← Previous</button>
+                    <div class="page-numbers" id="txPageNumbers"></div>
+                    <button class="page-btn" id="txNextPage" onclick="changeTxPage(1)">Next →</button>
+                </div>
+            </div>
+        </div>
+
         </div>
         <!-- End Sonic Data Tab -->
 
@@ -2021,16 +2203,196 @@
             currentPgTable = null;
         }
 
+        // Trading Transactions Management
+        let currentTxPage = 1;
+
+        async function loadTradingStats() {
+            try {
+                const response = await fetch('/api/transactions/stats');
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('totalTransactions').textContent = data.totalTransactions;
+
+                if (data.totalTransactions > 0) {
+                    const successRate = ((data.successfulTransactions / data.totalTransactions) * 100).toFixed(1);
+                    document.getElementById('successRate').textContent = `${successRate}%`;
+                } else {
+                    document.getElementById('successRate').textContent = '0%';
+                }
+
+                // Update P&L
+                const pnlElement = document.getElementById('totalPnL');
+                const pnlValue = data.totalPnL || 0;
+                pnlElement.textContent = `$${pnlValue.toFixed(2)}`;
+
+                if (pnlValue > 0) {
+                    pnlElement.classList.add('pnl-positive');
+                    pnlElement.classList.remove('pnl-negative');
+                } else if (pnlValue < 0) {
+                    pnlElement.classList.add('pnl-negative');
+                    pnlElement.classList.remove('pnl-positive');
+                }
+
+                // Update wallet balances
+                if (data.walletBalances) {
+                    document.getElementById('walletAddress').textContent =
+                        data.walletBalances.walletAddress.substring(0, 6) + '...' +
+                        data.walletBalances.walletAddress.substring(38);
+                    document.getElementById('wethBalance').textContent =
+                        data.walletBalances.weth.toFixed(6) + ' WETH';
+                    document.getElementById('usdcBalance').textContent =
+                        data.walletBalances.usdc.toFixed(2) + ' USDC';
+                } else {
+                    document.getElementById('walletAddress').textContent = 'Not configured';
+                    document.getElementById('wethBalance').textContent = '-';
+                    document.getElementById('usdcBalance').textContent = '-';
+                }
+
+            } catch (error) {
+                console.error('Error loading trading stats:', error);
+            }
+        }
+
+        async function loadTransactions(page = 1) {
+            try {
+                const response = await fetch(`/api/transactions?page=${page}&limit=20`);
+                const data = await response.json();
+
+                currentTxPage = page;
+
+                // Update pagination
+                updateTxPagination(data.pagination);
+
+                // Display transactions
+                const tbody = document.getElementById('transactionTableBody');
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px;">No transactions yet</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.data.map(tx => {
+                    const timestamp = new Date(tx.timestamp).toLocaleString();
+
+                    // Signal badge
+                    let signalClass = 'status-monitoring';
+                    if (tx.signal === 'Open-UP') signalClass = 'status-open-up';
+                    else if (tx.signal === 'Open-DOWN') signalClass = 'status-open-down';
+
+                    // Type styling
+                    let typeClass = 'tx-type-swap';
+                    let typeLabel = tx.txType;
+                    if (tx.txType === 'add_liquidity') {
+                        typeClass = 'tx-type-add';
+                        typeLabel = 'Add LP';
+                    } else if (tx.txType === 'remove_liquidity') {
+                        typeClass = 'tx-type-remove';
+                        typeLabel = 'Remove LP';
+                    } else if (tx.txType === 'swap') {
+                        typeLabel = 'Swap';
+                    }
+
+                    // Status badge
+                    const statusBadge = `<span class="status-${tx.status}">${tx.status}</span>`;
+
+                    // Amounts
+                    const wethAmount = tx.wethAmount !== undefined && tx.wethAmount !== null ?
+                        (tx.wethAmount >= 0 ? `+${tx.wethAmount.toFixed(6)}` : tx.wethAmount.toFixed(6)) : '-';
+                    const usdcAmount = tx.usdcAmount !== undefined && tx.usdcAmount !== null ?
+                        (tx.usdcAmount >= 0 ? `+${tx.usdcAmount.toFixed(2)}` : tx.usdcAmount.toFixed(2)) : '-';
+
+                    // Price
+                    const price = tx.price ? `$${tx.price.toFixed(2)}` : '-';
+
+                    // P&L
+                    let pnlHtml = '-';
+                    if (tx.profitLoss !== undefined && tx.profitLoss !== null) {
+                        const pnlClass = tx.profitLoss >= 0 ? 'pnl-positive' : 'pnl-negative';
+                        const pnlSign = tx.profitLoss >= 0 ? '+' : '';
+                        pnlHtml = `<span class="${pnlClass}">${pnlSign}$${tx.profitLoss.toFixed(2)}</span>`;
+                    }
+
+                    // TX Hash
+                    const txHashHtml = tx.txHash ?
+                        `<a href="https://sonicscan.org/tx/${tx.txHash}" target="_blank" class="tx-hash-link">${tx.txHash.substring(0, 8)}...</a>` :
+                        '-';
+
+                    return `
+                        <tr>
+                            <td>${timestamp}</td>
+                            <td><span class="${signalClass}">${tx.signal}</span></td>
+                            <td><span class="${typeClass}">${typeLabel}</span></td>
+                            <td>${statusBadge}</td>
+                            <td>${wethAmount}</td>
+                            <td>${usdcAmount}</td>
+                            <td>${price}</td>
+                            <td>${pnlHtml}</td>
+                            <td>${txHashHtml}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading transactions:', error);
+            }
+        }
+
+        function updateTxPagination(pagination) {
+            const { page, totalPages, totalCount, hasMore } = pagination;
+
+            // Update info text
+            document.getElementById('txPaginationInfo').textContent =
+                `Page ${page} of ${totalPages} (${totalCount.toLocaleString()} total)`;
+
+            // Update buttons
+            document.getElementById('txPrevPage').disabled = page === 1;
+            document.getElementById('txNextPage').disabled = !hasMore;
+
+            // Generate page numbers (show 5 pages at a time)
+            const pageNumbers = document.getElementById('txPageNumbers');
+            const maxVisible = 5;
+            let startPage = Math.max(1, page - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            let html = '';
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-btn ${i === page ? 'active' : ''}" onclick="goToTxPage(${i})">${i}</button>`;
+            }
+            pageNumbers.innerHTML = html;
+        }
+
+        function changeTxPage(delta) {
+            const newPage = currentTxPage + delta;
+            loadTransactions(newPage);
+        }
+
+        function goToTxPage(page) {
+            loadTransactions(page);
+        }
+
         // Initialize
         initChart();
         updateDashboard();
         fetchDBStats().then(() => loadTableData('positions', 1));
+        loadTradingStats();
+        loadTransactions(1);
 
         // Update every 5 seconds
         setInterval(updateDashboard, 5000);
         setInterval(() => {
             fetchDBStats().then(() => loadTableData('positions', currentPage));
         }, 10000); // Refresh table every 10 seconds
+
+        // Update trading stats and transactions every 10 seconds
+        setInterval(() => {
+            loadTradingStats();
+            loadTransactions(currentTxPage);
+        }, 10000);
     </script>
 </body>
 </html>

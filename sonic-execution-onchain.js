@@ -8,7 +8,9 @@ import dotenv from 'dotenv';
 import { connectDB } from './db.js';
 import Candle from './models/Candle.js';
 import Position from './models/Position.js';
+import Transaction from './models/Transaction.js';
 import { pgPool } from './pg-connection.js';
+import TradingBot from './trading-bot.js';
 
 dotenv.config();
 
@@ -25,6 +27,10 @@ const RANGE_PERCENTAGE = 0.1; // 0.1% range
 // Token addresses (from the pool)
 const USDC_ADDRESS = '0x29219dd400f2bf60e5a23d13be72b486d4038894';
 const WETH_ADDRESS = '0x50c42deacd8fc9773493ed674b675be577f2634b';
+
+// Trading wallet configuration
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const TRADING_ENABLED = PRIVATE_KEY && PRIVATE_KEY.length > 10;
 
 // Pool ABI (only the functions we need)
 const POOL_ABI = [
@@ -57,6 +63,16 @@ const provider = new ethers.JsonRpcProvider(RPC_URL);
 const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
 const token0Contract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
 const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
+
+// Trading bot setup
+let tradingBot = null;
+if (TRADING_ENABLED) {
+  const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+  tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS);
+  console.log(`🤖 Trading Bot initialized with wallet: ${wallet.address}`);
+} else {
+  console.log('⚠️  Trading disabled: No private key configured');
+}
 
 // MongoDB will be used for persistence instead of CSV
 
@@ -322,6 +338,19 @@ async function savePositionData(positionData) {
   try {
     const newPosition = new Position(positionData);
     await newPosition.save();
+
+    // Trigger trading bot if enabled and signal changed
+    if (tradingBot && positionData.status !== 'Monitoring') {
+      // Execute trading logic based on signal
+      await tradingBot.processSignal(
+        positionData.status,
+        positionData.weth_pct,
+        positionData.usdc_pct,
+        positionData.upper_range,
+        positionData.lower_range,
+        positionData.close
+      );
+    }
   } catch (error) {
     console.error('Error saving position:', error.message);
   }
@@ -718,6 +747,83 @@ app.get('/api/pg/table/:tableName/schema', async (req, res) => {
     res.json({ schema: result.rows });
   } catch (error) {
     console.error('Error fetching table schema:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Transaction API endpoints
+app.get('/api/transactions', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    const [transactions, totalCount] = await Promise.all([
+      Transaction.find()
+        .sort({ timestamp: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Transaction.countDocuments()
+    ]);
+
+    res.json({
+      data: transactions,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + transactions.length < totalCount
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/transactions/stats', async (req, res) => {
+  try {
+    const [totalCount, successCount, failedCount, lastTransaction] = await Promise.all([
+      Transaction.countDocuments(),
+      Transaction.countDocuments({ status: 'success' }),
+      Transaction.countDocuments({ status: 'failed' }),
+      Transaction.findOne().sort({ timestamp: -1 }).lean()
+    ]);
+
+    // Calculate total P&L
+    const pnlResult = await Transaction.aggregate([
+      { $match: { status: 'success', profitLoss: { $exists: true } } },
+      { $group: { _id: null, totalPnL: { $sum: '$profitLoss' } } }
+    ]);
+
+    const totalPnL = pnlResult.length > 0 ? pnlResult[0].totalPnL : 0;
+
+    // Get wallet balances if trading is enabled
+    let walletBalances = null;
+    if (tradingBot) {
+      try {
+        const balances = await tradingBot.getBalances();
+        walletBalances = {
+          weth: balances.wethFormatted,
+          usdc: balances.usdcFormatted,
+          walletAddress: tradingBot.wallet.address
+        };
+      } catch (error) {
+        console.error('Error fetching wallet balances:', error);
+      }
+    }
+
+    res.json({
+      totalTransactions: totalCount,
+      successfulTransactions: successCount,
+      failedTransactions: failedCount,
+      totalPnL,
+      lastTransaction,
+      walletBalances,
+      tradingEnabled: TRADING_ENABLED
+    });
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
