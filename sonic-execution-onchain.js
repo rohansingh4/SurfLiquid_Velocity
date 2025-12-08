@@ -30,7 +30,8 @@ const WETH_ADDRESS = '0x50c42deacd8fc9773493ed674b675be577f2634b';
 
 // Trading wallet configuration
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const TRADING_ENABLED = PRIVATE_KEY && PRIVATE_KEY.length > 10;
+const SWAP_HELPER_ADDRESS = process.env.SWAP_HELPER_ADDRESS;
+const TRADING_ENABLED = PRIVATE_KEY && PRIVATE_KEY.length > 10 && SWAP_HELPER_ADDRESS;
 
 // Pool ABI (only the functions we need)
 const POOL_ABI = [
@@ -69,10 +70,15 @@ const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 let tradingBot = null;
 if (TRADING_ENABLED) {
   const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-  tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS);
+  tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS, SWAP_HELPER_ADDRESS);
   console.log(`🤖 Trading Bot initialized with wallet: ${wallet.address}`);
 } else {
-  console.log('⚠️  Trading disabled: No private key configured');
+  if (!PRIVATE_KEY || PRIVATE_KEY.length < 10) {
+    console.log('⚠️  Trading disabled: No private key configured');
+  } else if (!SWAP_HELPER_ADDRESS) {
+    console.log('⚠️  Trading disabled: SwapHelper contract not deployed yet');
+    console.log('   Deploy SwapHelper and update SWAP_HELPER_ADDRESS in .env');
+  }
 }
 
 // MongoDB will be used for persistence instead of CSV
