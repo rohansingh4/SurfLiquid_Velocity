@@ -10,6 +10,7 @@
     "trade": "node trade-executor.js",
     "trade:dry": "DRY_RUN=true node trade-executor.js",
     "trade:live": "DRY_RUN=false node trade-executor.js",
+    "backtest": "node backtest.js",
     "migrate": "node migrate-csv-to-mongodb.js",
     "cleanup": "node cleanup-duplicates.js"
   },

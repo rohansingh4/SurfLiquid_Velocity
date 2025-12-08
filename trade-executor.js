@@ -10,7 +10,7 @@
 
 import { ethers } from 'ethers';
 import dotenv from 'dotenv';
-import { connectDB } from './db.js';
+import { connectDB, mongoose } from './db.js';
 import Position from './models/Position.js';
 
 dotenv.config();
@@ -393,9 +393,28 @@ async function processSignal(signal) {
 async function mainLoop() {
   const signal = await getLatestSignal();
   
-  if (signal) {
-    await processSignal(signal);
+  if (!signal) {
+    console.log(`⏳ ${new Date().toLocaleTimeString()} | No signals in database`);
+    return;
   }
+  
+  // Always log current status
+  const statusEmoji = {
+    'Monitoring': '🔵',
+    'Price-UP': '🟠⬆️',
+    'Price-DOWN': '🟠⬇️',
+    'Open-UP': '🟢⬆️',
+    'Open-DOWN': '🟢⬇️',
+  };
+  
+  const emoji = statusEmoji[signal.status] || '⚪';
+  const signalTime = new Date(signal.timestamp).toLocaleTimeString();
+  const price = signal.close?.toFixed(2) || 'N/A';
+  
+  console.log(`⏳ ${new Date().toLocaleTimeString()} | ${emoji} ${signal.status.padEnd(12)} | Price: $${price} | Signal: ${signalTime}`);
+  
+  // Process actionable signals
+  await processSignal(signal);
 }
 
 async function startTrading() {
@@ -434,6 +453,23 @@ async function startTrading() {
       tradingState.position = 'USDC';
     }
     console.log(`\n📍 Starting Position: ${tradingState.position}`);
+  }
+  
+  // Check database connection and signal count
+  const signalCount = await Position.countDocuments();
+  const latestSignal = await getLatestSignal();
+  
+  // Debug: List all collections in the database
+  const collections = await mongoose.connection.db.listCollections().toArray();
+  console.log(`\n📡 Database Status:`);
+  console.log(`   Database name: ${mongoose.connection.db.databaseName}`);
+  console.log(`   Collections: ${collections.map(c => c.name).join(', ') || 'none'}`);
+  console.log(`   Total signals in 'positions': ${signalCount}`);
+  if (latestSignal) {
+    console.log(`   Latest signal: ${latestSignal.status} @ ${new Date(latestSignal.timestamp).toLocaleString()}`);
+    console.log(`   Price: $${latestSignal.close?.toFixed(2) || 'N/A'}`);
+  } else {
+    console.log(`   ⚠️  No signals found in database!`);
   }
   
   console.log('\n' + '='.repeat(60));
