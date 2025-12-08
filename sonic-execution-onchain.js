@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './db.js';
 import Candle from './models/Candle.js';
 import Position from './models/Position.js';
+import { pgPool } from './pg-connection.js';
 
 dotenv.config();
 
@@ -627,6 +628,96 @@ app.get('/api/db/positions/range', async (req, res) => {
 
     res.json(positions);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PostgreSQL API endpoints
+app.get('/api/pg/tables', async (req, res) => {
+  try {
+    const result = await pgPool.query(`
+      SELECT table_name,
+             (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name = t.table_name) as column_count
+      FROM information_schema.tables t
+      WHERE table_schema = 'public'
+      ORDER BY table_name;
+    `);
+
+    // Get row counts for each table
+    const tablesWithCounts = await Promise.all(
+      result.rows.map(async (table) => {
+        try {
+          const countResult = await pgPool.query(`SELECT COUNT(*) as count FROM "${table.table_name}"`);
+          return {
+            name: table.table_name,
+            row_count: parseInt(countResult.rows[0].count),
+            column_count: parseInt(table.column_count)
+          };
+        } catch (err) {
+          return {
+            name: table.table_name,
+            row_count: 0,
+            column_count: parseInt(table.column_count)
+          };
+        }
+      })
+    );
+
+    res.json({ tables: tablesWithCounts });
+  } catch (error) {
+    console.error('Error fetching PostgreSQL tables:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/pg/table/:tableName', async (req, res) => {
+  try {
+    const { tableName } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const offset = (page - 1) * limit;
+
+    // Get total count
+    const countResult = await pgPool.query(`SELECT COUNT(*) as count FROM "${tableName}"`);
+    const totalCount = parseInt(countResult.rows[0].count);
+
+    // Get paginated data
+    const dataResult = await pgPool.query(`
+      SELECT * FROM "${tableName}"
+      ORDER BY evt_block_time DESC
+      LIMIT $1 OFFSET $2
+    `, [limit, offset]);
+
+    res.json({
+      data: dataResult.rows,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: offset + dataResult.rows.length < totalCount
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching table data:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/pg/table/:tableName/schema', async (req, res) => {
+  try {
+    const { tableName } = req.params;
+
+    const result = await pgPool.query(`
+      SELECT column_name, data_type, character_maximum_length, is_nullable
+      FROM information_schema.columns
+      WHERE table_schema = 'public' AND table_name = $1
+      ORDER BY ordinal_position;
+    `, [tableName]);
+
+    res.json({ schema: result.rows });
+  } catch (error) {
+    console.error('Error fetching table schema:', error);
     res.status(500).json({ error: error.message });
   }
 });
