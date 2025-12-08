@@ -315,16 +315,23 @@ class TradingBot {
         const sqrtPriceAX96 = this.getSqrtPriceAtTick(tickLower);
         const sqrtPriceBX96 = this.getSqrtPriceAtTick(tickUpper);
 
-        // Calculate liquidity amount properly (like test-liquidity-fix.js)
-        const liquidityAmount = this.getLiquidityForAmounts(
+        // Calculate liquidity amount
+        let liquidityAmount = this.getLiquidityForAmounts(
           sqrtPriceX96,
           sqrtPriceAX96,
           sqrtPriceBX96,
-          usdcWei, // amount0 (USDC)
-          wethWei  // amount1 (WETH)
+          usdcWei,
+          wethWei
         );
 
-        console.log(`   Calculated Liquidity: ${liquidityAmount.toString()}`);
+        // Cap at 1 trillion to avoid "transfer amount exceeds balance" errors
+        const MAX_LIQUIDITY = 1000000000000n; // 1 trillion
+        if (liquidityAmount > MAX_LIQUIDITY) {
+          console.log(`   Calculated liquidity ${liquidityAmount.toString()} exceeds max, capping at ${MAX_LIQUIDITY.toString()}`);
+          liquidityAmount = MAX_LIQUIDITY;
+        }
+
+        console.log(`   Using liquidity amount: ${liquidityAmount.toString()}`);
 
         // Estimate gas
         const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
@@ -664,24 +671,33 @@ class TradingBot {
         // Step 2: Add liquidity (use 99% of balance to avoid rounding errors)
         const finalBalances = await this.getBalances();
 
-        // DON'T use the narrow monitoring ranges!
-        // Calculate proper tick range for liquidity (±1000 ticks = ~10%)
-        const currentTick = this.priceToTick(currentPrice);
-        const tickRange = 1000; // Use same range as test script
+        // Use the tick ranges from the position signal (these are the strategic ranges)
         const tickSpacing = await this.getTickSpacing();
+        const tickLower = Math.floor(this.priceToTick(lowerRange) / tickSpacing) * tickSpacing;
+        const tickUpper = Math.ceil(this.priceToTick(upperRange) / tickSpacing) * tickSpacing;
 
-        const tickLower = Math.floor((currentTick - tickRange) / tickSpacing) * tickSpacing;
-        const tickUpper = Math.ceil((currentTick + tickRange) / tickSpacing) * tickSpacing;
+        const tickRangeWidth = tickUpper - tickLower;
+        console.log(`   Tick Range from position signal: ${tickLower} to ${tickUpper} (${tickRangeWidth} ticks)`);
+        console.log(`   Price Range: $${lowerRange.toFixed(2)} to $${upperRange.toFixed(2)}`);
 
-        console.log(`   Using wider tick range for liquidity:`);
-        console.log(`   Current Tick: ${currentTick}, Tick Spacing: ${tickSpacing}`);
-        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (±${tickRange} ticks = ~10%)`);
+        // For narrow ranges, use less capital to avoid exceeding liquidity cap
+        // Narrow ranges produce huge liquidity values, so we scale down the capital
+        let capitalPct = 0.99; // Default: use 99% of balance
 
-        // Use 99% of balance to leave buffer for rounding errors
-        const wethToAdd = finalBalances.wethFormatted * 0.99;
-        const usdcToAdd = finalBalances.usdcFormatted * 0.99;
+        if (tickRangeWidth < 100) {
+          // Very narrow range (< 100 ticks = ~1%) - use less capital
+          capitalPct = 0.50; // Use 50%
+          console.log(`   ⚠️  Narrow range detected (${tickRangeWidth} ticks) - using ${capitalPct * 100}% of balance`);
+        } else if (tickRangeWidth < 500) {
+          // Narrow range (< 500 ticks = ~5%) - use moderate capital
+          capitalPct = 0.75; // Use 75%
+          console.log(`   Narrow range detected (${tickRangeWidth} ticks) - using ${capitalPct * 100}% of balance`);
+        }
 
-        console.log(`   Using 99% of balance: ${wethToAdd.toFixed(6)} WETH, ${usdcToAdd.toFixed(2)} USDC`);
+        const wethToAdd = finalBalances.wethFormatted * capitalPct;
+        const usdcToAdd = finalBalances.usdcFormatted * capitalPct;
+
+        console.log(`   Using ${(capitalPct * 100).toFixed(0)}% of balance: ${wethToAdd.toFixed(6)} WETH, ${usdcToAdd.toFixed(2)} USDC`);
 
         try {
           const addResult = await this.addLiquidity(
