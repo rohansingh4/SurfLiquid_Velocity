@@ -78,8 +78,20 @@ class TradingBot {
   }
 
   // Convert price to sqrtPriceX96
+  // Price is USDC per WETH (e.g., 3162)
+  // Need to convert to sqrtPriceX96 format for Uniswap V3
   priceToSqrtPriceX96(price) {
-    return BigInt(Math.floor(Math.sqrt(price) * (2 ** 96)));
+    // Reverse the calculation from calculatePriceFromSqrtPriceX96
+    // usdcPerWeth = 1 / priceAdjusted
+    const priceAdjusted = 1 / price;
+    // priceAdjusted = priceRaw / (10 ** 12)
+    const priceRaw = priceAdjusted * (10 ** 12);
+    // priceRaw = sqrtPrice^2
+    const sqrtPrice = Math.sqrt(priceRaw);
+    // sqrtPriceX96 = sqrtPrice * 2^96
+    const sqrtPriceX96 = sqrtPrice * (2 ** 96);
+
+    return BigInt(Math.floor(sqrtPriceX96));
   }
 
   // Approve tokens once with high amount (MaxUint256)
@@ -125,18 +137,18 @@ class TradingBot {
   async executeSwap(zeroForOne, amountIn, currentPrice) {
     try {
       console.log(`\n💱 Executing Swap...`);
-      console.log(`   Direction: ${zeroForOne ? 'WETH → USDC' : 'USDC → WETH'}`);
-      console.log(`   Amount In: ${ethers.formatUnits(amountIn, zeroForOne ? 18 : 6)}`);
+      console.log(`   Direction: ${zeroForOne ? 'USDC → WETH' : 'WETH → USDC'}`);
+      console.log(`   Amount In: ${ethers.formatUnits(amountIn, zeroForOne ? 6 : 18)}`);
 
       // Calculate sqrt price limit (5% slippage)
       const slippage = 0.05;
       let sqrtPriceLimitX96;
       if (zeroForOne) {
-        // Selling WETH for USDC, price goes down
-        sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 - slippage));
-      } else {
-        // Buying WETH with USDC, price goes up
+        // Buying WETH with USDC (token0 → token1), price goes up
         sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 + slippage));
+      } else {
+        // Selling WETH for USDC (token1 → token0), price goes down
+        sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 - slippage));
       }
 
       // Estimate gas and add 50% buffer
@@ -418,10 +430,10 @@ class TradingBot {
 
         if (Math.abs(wethDiff) > 0.5) {
           if (wethDiff > 0) {
-            // Need more WETH, sell USDC
+            // Need more WETH, buy WETH with USDC (zeroForOne=true)
             const usdcToSell = Math.abs(wethDiff);
             const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
-            const swapResult = await this.executeSwap(false, usdcWei, currentPrice);
+            const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
             await Transaction.create({
               timestamp: new Date(),
@@ -437,10 +449,10 @@ class TradingBot {
               gasUsed: swapResult.gasUsed
             });
           } else {
-            // Need more USDC, sell WETH
+            // Need more USDC, sell WETH for USDC (zeroForOne=false)
             const wethToSell = Math.abs(wethDiff) / currentPrice;
             const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
-            const swapResult = await this.executeSwap(true, wethWei, currentPrice);
+            const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
             await Transaction.create({
               timestamp: new Date(),
@@ -546,10 +558,10 @@ class TradingBot {
 
         if (Math.abs(wethDiff) > 0.5) {
           if (wethDiff > 0) {
-            // Need more WETH
+            // Need more WETH, buy WETH with USDC (zeroForOne=true)
             const usdcToSell = Math.abs(wethDiff);
             const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
-            const swapResult = await this.executeSwap(false, usdcWei, currentPrice);
+            const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
             const balancesAfter = await this.getBalances();
             const portfolioValueAfter = this.calculatePortfolioValue(
@@ -577,10 +589,10 @@ class TradingBot {
               gasUsed: swapResult.gasUsed
             });
           } else {
-            // Need more USDC
+            // Need more USDC, sell WETH for USDC (zeroForOne=false)
             const wethToSell = Math.abs(wethDiff) / currentPrice;
             const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
-            const swapResult = await this.executeSwap(true, wethWei, currentPrice);
+            const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
             const balancesAfter = await this.getBalances();
             const portfolioValueAfter = this.calculatePortfolioValue(

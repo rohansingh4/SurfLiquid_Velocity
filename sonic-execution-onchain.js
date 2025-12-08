@@ -52,6 +52,7 @@ let currentCandle = null;
 let candles = [];
 let currentRanges = null; // Tracks current upper/lower ranges
 let lastPositionStatus = null; // Tracks last position status
+let lastPositionPercentages = { weth_pct: 50, usdc_pct: 50 }; // Tracks last weth/usdc percentages
 let positionHistory = [];
 let tickData = [];
 let outOfRangeDetectedAt = null; // Timestamp when out of range was first detected
@@ -339,6 +340,14 @@ async function savePositionData(positionData) {
     const newPosition = new Position(positionData);
     await newPosition.save();
 
+    // Update last position percentages for the Token Distribution card
+    if (positionData.weth_pct && positionData.usdc_pct) {
+      lastPositionPercentages = {
+        weth_pct: positionData.weth_pct,
+        usdc_pct: positionData.usdc_pct
+      };
+    }
+
     // Trigger trading bot if enabled and signal changed
     if (tradingBot && positionData.status !== 'Monitoring') {
       // Execute trading logic based on signal
@@ -412,7 +421,9 @@ app.get('/api/current', (req, res) => {
     status: lastPositionStatus || 'No Position',
     upper_range: currentRanges.upper,
     lower_range: currentRanges.lower,
-    rebalance_type: 'N/A'
+    rebalance_type: 'N/A',
+    weth_pct: lastPositionPercentages.weth_pct,
+    usdc_pct: lastPositionPercentages.usdc_pct
   } : null;
 
   res.json({
