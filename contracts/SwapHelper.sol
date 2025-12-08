@@ -46,6 +46,14 @@ interface IUniswapV3Pool {
         uint128 amount0Requested,
         uint128 amount1Requested
     ) external returns (uint128 amount0, uint128 amount1);
+
+    function positions(bytes32 key) external view returns (
+        uint128 liquidity,
+        uint256 feeGrowthInside0LastX128,
+        uint256 feeGrowthInside1LastX128,
+        uint128 tokensOwed0,
+        uint128 tokensOwed1
+    );
 }
 
 contract SwapHelper {
@@ -125,9 +133,9 @@ contract SwapHelper {
             );
         }
 
-        // Add liquidity
+        // Add liquidity - recipient must be this contract for position tracking
         (amount0, amount1) = IUniswapV3Pool(pool).mint(
-            owner, // recipient (for position NFT if needed)
+            address(this), // recipient - position is tracked by this contract
             0, // index
             tickLower,
             tickUpper,
@@ -143,6 +151,7 @@ contract SwapHelper {
 
     /**
      * @notice Remove liquidity from Uniswap V3 pool
+     * @dev If liquidityAmount is 0, removes 100% of the position's liquidity
      */
     function removeLiquidity(
         address pool,
@@ -150,6 +159,14 @@ contract SwapHelper {
         int24 tickUpper,
         uint128 liquidityAmount
     ) external onlyOwner returns (uint256 amount0, uint256 amount1) {
+        // If liquidityAmount is 0, get the full position liquidity
+        if (liquidityAmount == 0) {
+            bytes32 positionKey = keccak256(abi.encodePacked(address(this), uint256(0), tickLower, tickUpper));
+            (uint128 positionLiquidity, , , , ) = IUniswapV3Pool(pool).positions(positionKey);
+            require(positionLiquidity > 0, "No liquidity in position");
+            liquidityAmount = positionLiquidity;
+        }
+
         // Burn liquidity
         (amount0, amount1) = IUniswapV3Pool(pool).burn(
             0, // index
@@ -242,4 +259,17 @@ contract SwapHelper {
     function getTokenBalance(address token) external view returns (uint256) {
         return IERC20(token).balanceOf(address(this));
     }
+
+    /**
+     * @notice Get liquidity for a position
+     */
+    function getPositionLiquidity(
+        address pool,
+        int24 tickLower,
+        int24 tickUpper
+    ) external view returns (uint128 liquidity) {
+        bytes32 positionKey = keccak256(abi.encodePacked(address(this), uint256(0), tickLower, tickUpper));
+        (liquidity, , , , ) = IUniswapV3Pool(pool).positions(positionKey);
+    }
 }
+

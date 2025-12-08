@@ -14,6 +14,7 @@ const SWAP_HELPER_ABI = [
   'function executeSwap(address pool, address tokenIn, address tokenOut, bool zeroForOne, uint256 amountIn, uint160 sqrtPriceLimitX96) returns (int256 amount0, int256 amount1)',
   'function addLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount, uint256 amount0Max, uint256 amount1Max) returns (uint256 amount0, uint256 amount1)',
   'function removeLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount) returns (uint256 amount0, uint256 amount1)',
+  'function getPositionLiquidity(address pool, int24 tickLower, int24 tickUpper) view returns (uint128)',
   'function withdrawToken(address token, uint256 amount)',
   'function getTokenBalance(address token) view returns (uint256)',
   'function owner() view returns (address)',
@@ -290,64 +291,80 @@ class TradingBot {
     }
   }
 
-  // Remove liquidity with 150% gas limit
+  // Remove liquidity with 150% gas limit and retry logic
   async removeLiquidity() {
-    try {
-      if (!this.swapHelperContract) {
-        throw new Error('SwapHelper not configured - cannot remove liquidity');
+    const maxRetries = 3;
+    let lastError;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        if (!this.swapHelperContract) {
+          throw new Error('SwapHelper not configured - cannot remove liquidity');
+        }
+
+        if (!this.hasLiquidity) {
+          console.log('⚠️  No active liquidity position to remove');
+          return null;
+        }
+
+        console.log(`\n➖ Removing Liquidity via SwapHelper (Attempt ${attempt}/${maxRetries})...`);
+        console.log(`   Tick Range: ${this.currentTickLower} to ${this.currentTickUpper}`);
+
+        // Check actual position liquidity
+        const positionLiquidity = await this.swapHelperContract.getPositionLiquidity(
+          this.poolAddress,
+          this.currentTickLower,
+          this.currentTickUpper
+        );
+
+        if (positionLiquidity === 0n) {
+          console.log('⚠️  Position already empty');
+          this.hasLiquidity = false;
+          return null;
+        }
+
+        console.log(`   Liquidity to remove: ${positionLiquidity.toString()}`);
+
+        // Pass 0 to remove 100% of liquidity
+        const tx = await this.swapHelperContract.removeLiquidity(
+          this.poolAddress,
+          this.currentTickLower,
+          this.currentTickUpper,
+          0, // 0 = remove 100%
+          { gasLimit: 500000 } // Fixed gas to avoid estimation issues
+        );
+
+        console.log(`   TX Hash: ${tx.hash}`);
+        const receipt = await tx.wait();
+        console.log(`✅ Liquidity removed! Gas used: ${receipt.gasUsed.toString()}`);
+
+        const result = {
+          txHash: tx.hash,
+          gasUsed: receipt.gasUsed.toString(),
+          liquidity: positionLiquidity.toString()
+        };
+
+        // Clear position
+        this.currentLiquidity = null;
+        this.currentTickLower = null;
+        this.currentTickUpper = null;
+        this.hasLiquidity = false;
+
+        return result;
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Remove liquidity attempt ${attempt} failed:`, error.message);
+
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 2000; // 2s, 4s, 6s
+          console.log(`   Retrying in ${waitTime/1000}s...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
       }
-
-      if (!this.hasLiquidity || !this.currentLiquidity) {
-        console.log('⚠️  No active liquidity position to remove');
-        return null;
-      }
-
-      console.log(`\n➖ Removing Liquidity via SwapHelper...`);
-      console.log(`   Amount: ${this.currentLiquidity.toString()}`);
-      console.log(`   Tick Range: ${this.currentTickLower} to ${this.currentTickUpper}`);
-
-      // Estimate gas for remove liquidity (includes burn + collect)
-      const estimatedGas = await this.swapHelperContract.removeLiquidity.estimateGas(
-        this.poolAddress,
-        this.currentTickLower,
-        this.currentTickUpper,
-        this.currentLiquidity
-      );
-
-      const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
-      console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
-
-      // Remove liquidity via SwapHelper (handles burn + collect)
-      const tx = await this.swapHelperContract.removeLiquidity(
-        this.poolAddress,
-        this.currentTickLower,
-        this.currentTickUpper,
-        this.currentLiquidity,
-        { gasLimit }
-      );
-
-      console.log(`   TX Hash: ${tx.hash}`);
-      const receipt = await tx.wait();
-      console.log(`✅ Liquidity removed! Gas used: ${receipt.gasUsed.toString()}`);
-
-      const result = {
-        txHash: tx.hash,
-        gasUsed: receipt.gasUsed.toString(),
-        liquidity: this.currentLiquidity.toString()
-      };
-
-      // Clear position
-      this.currentLiquidity = null;
-      this.currentTickLower = null;
-      this.currentTickUpper = null;
-      this.hasLiquidity = false;
-
-      return result;
-    } catch (error) {
-      console.error('❌ Remove liquidity failed:', error.message);
-      console.error('   Error details:', error);
-      throw error;
     }
+
+    console.error('❌ Remove liquidity failed after all retries');
+    throw lastError;
   }
 
   // Main trading logic - CORRECTED FOR CONSECUTIVE SIGNALS
