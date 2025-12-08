@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 /**
  * @title SwapHelper
- * @notice Simple contract to execute Uniswap V3 swaps with callback handling
- * @dev Only the owner can execute swaps. Implements uniswapV3SwapCallback.
+ * @notice Helper contract for Uniswap V3 operations (swap, add/remove liquidity)
+ * @dev Implements callbacks required by Uniswap V3 pool
  */
 
 interface IERC20 {
@@ -21,22 +21,46 @@ interface IUniswapV3Pool {
         uint160 sqrtPriceLimitX96,
         bytes calldata data
     ) external returns (int256 amount0, int256 amount1);
+
+    function mint(
+        address recipient,
+        uint256 index,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount,
+        bytes calldata data
+    ) external returns (uint256 amount0, uint256 amount1);
+
+    function burn(
+        uint256 index,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount
+    ) external returns (uint256 amount0, uint256 amount1);
+
+    function collect(
+        address recipient,
+        uint256 index,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount0Requested,
+        uint128 amount1Requested
+    ) external returns (uint128 amount0, uint128 amount1);
 }
 
 contract SwapHelper {
     address public immutable owner;
+    address public immutable token0; // USDC
+    address public immutable token1; // WETH
 
-    event SwapExecuted(
-        address indexed pool,
-        address indexed tokenIn,
-        address indexed tokenOut,
-        uint256 amountIn,
-        int256 amount0,
-        int256 amount1
-    );
+    event SwapExecuted(address indexed pool, bool zeroForOne, uint256 amountIn);
+    event LiquidityAdded(address indexed pool, int24 tickLower, int24 tickUpper, uint128 liquidity);
+    event LiquidityRemoved(address indexed pool, int24 tickLower, int24 tickUpper, uint128 liquidity);
 
-    constructor() {
+    constructor(address _token0, address _token1) {
         owner = msg.sender;
+        token0 = _token0;
+        token1 = _token1;
     }
 
     modifier onlyOwner() {
@@ -46,14 +70,6 @@ contract SwapHelper {
 
     /**
      * @notice Execute a swap through Uniswap V3 pool
-     * @param pool The Uniswap V3 pool address
-     * @param tokenIn Token being sold
-     * @param tokenOut Token being bought
-     * @param zeroForOne Direction of swap (true = token0->token1, false = token1->token0)
-     * @param amountIn Amount of tokenIn to swap
-     * @param sqrtPriceLimitX96 Price limit in sqrtPriceX96 format
-     * @return amount0 Amount of token0 (negative = received, positive = sent)
-     * @return amount1 Amount of token1 (negative = received, positive = sent)
      */
     function executeSwap(
         address pool,
@@ -69,50 +85,106 @@ contract SwapHelper {
             "Transfer from owner failed"
         );
 
-        // Execute swap - output tokens will be sent directly to owner
+        // Execute swap - output tokens sent directly to owner
         (amount0, amount1) = IUniswapV3Pool(pool).swap(
-            owner, // recipient - send output tokens directly to owner
+            owner,
             zeroForOne,
             int256(amountIn),
             sqrtPriceLimitX96,
             abi.encode(tokenIn, amountIn)
         );
 
-        // Clean up any remaining tokens (shouldn't happen but safety measure)
-        uint256 balanceIn = IERC20(tokenIn).balanceOf(address(this));
-        if (balanceIn > 0) {
-            IERC20(tokenIn).transfer(owner, balanceIn);
-        }
+        // Clean up any remaining tokens
+        _cleanupTokens(tokenIn, tokenOut);
 
-        uint256 balanceOut = IERC20(tokenOut).balanceOf(address(this));
-        if (balanceOut > 0) {
-            IERC20(tokenOut).transfer(owner, balanceOut);
-        }
-
-        emit SwapExecuted(pool, tokenIn, tokenOut, amountIn, amount0, amount1);
+        emit SwapExecuted(pool, zeroForOne, amountIn);
     }
 
     /**
-     * @notice Callback function called by Uniswap V3 pool during swap
-     * @dev This is where we send the input tokens to the pool
-     * @param amount0Delta Amount of token0 (positive = we owe, negative = we receive)
-     * @param amount1Delta Amount of token1 (positive = we owe, negative = we receive)
-     * @param data Encoded data containing tokenIn and amountIn
+     * @notice Add liquidity to Uniswap V3 pool
+     */
+    function addLiquidity(
+        address pool,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 liquidityAmount,
+        uint256 amount0Max,
+        uint256 amount1Max
+    ) external onlyOwner returns (uint256 amount0, uint256 amount1) {
+        // Transfer max amounts from owner to this contract
+        if (amount0Max > 0) {
+            require(
+                IERC20(token0).transferFrom(owner, address(this), amount0Max),
+                "Transfer token0 failed"
+            );
+        }
+        if (amount1Max > 0) {
+            require(
+                IERC20(token1).transferFrom(owner, address(this), amount1Max),
+                "Transfer token1 failed"
+            );
+        }
+
+        // Add liquidity
+        (amount0, amount1) = IUniswapV3Pool(pool).mint(
+            owner, // recipient (for position NFT if needed)
+            0, // index
+            tickLower,
+            tickUpper,
+            liquidityAmount,
+            abi.encode(amount0Max, amount1Max)
+        );
+
+        // Return unused tokens to owner
+        _cleanupTokens(token0, token1);
+
+        emit LiquidityAdded(pool, tickLower, tickUpper, liquidityAmount);
+    }
+
+    /**
+     * @notice Remove liquidity from Uniswap V3 pool
+     */
+    function removeLiquidity(
+        address pool,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 liquidityAmount
+    ) external onlyOwner returns (uint256 amount0, uint256 amount1) {
+        // Burn liquidity
+        (amount0, amount1) = IUniswapV3Pool(pool).burn(
+            0, // index
+            tickLower,
+            tickUpper,
+            liquidityAmount
+        );
+
+        // Collect tokens
+        IUniswapV3Pool(pool).collect(
+            owner, // recipient
+            0, // index
+            tickLower,
+            tickUpper,
+            type(uint128).max,
+            type(uint128).max
+        );
+
+        emit LiquidityRemoved(pool, tickLower, tickUpper, liquidityAmount);
+    }
+
+    /**
+     * @notice Callback for Uniswap V3 swap
      */
     function uniswapV3SwapCallback(
         int256 amount0Delta,
         int256 amount1Delta,
         bytes calldata data
     ) external {
-        require(amount0Delta > 0 || amount1Delta > 0, "Invalid callback: no positive delta");
+        require(amount0Delta > 0 || amount1Delta > 0, "Invalid swap callback");
 
-        // Decode data
         (address tokenIn, ) = abi.decode(data, (address, uint256));
-
-        // Determine amount to pay (positive delta means we owe tokens to pool)
         uint256 amountToPay = amount0Delta > 0 ? uint256(amount0Delta) : uint256(amount1Delta);
 
-        // Transfer tokens to pool (msg.sender is the pool calling us back)
+        // Transfer tokens to pool
         require(
             IERC20(tokenIn).transfer(msg.sender, amountToPay),
             "Payment to pool failed"
@@ -120,18 +192,52 @@ contract SwapHelper {
     }
 
     /**
-     * @notice Emergency function to withdraw any stuck tokens
-     * @param token Token address to withdraw
-     * @param amount Amount to withdraw
+     * @notice Callback for Uniswap V3 mint (add liquidity)
+     */
+    function uniswapV3MintCallback(
+        uint256 amount0Owed,
+        uint256 amount1Owed,
+        bytes calldata /* data */
+    ) external {
+        // Transfer owed tokens to pool
+        if (amount0Owed > 0) {
+            require(
+                IERC20(token0).transfer(msg.sender, amount0Owed),
+                "Payment token0 failed"
+            );
+        }
+        if (amount1Owed > 0) {
+            require(
+                IERC20(token1).transfer(msg.sender, amount1Owed),
+                "Payment token1 failed"
+            );
+        }
+    }
+
+    /**
+     * @notice Clean up any remaining tokens and send to owner
+     */
+    function _cleanupTokens(address tokenA, address tokenB) private {
+        uint256 balanceA = IERC20(tokenA).balanceOf(address(this));
+        if (balanceA > 0) {
+            IERC20(tokenA).transfer(owner, balanceA);
+        }
+
+        uint256 balanceB = IERC20(tokenB).balanceOf(address(this));
+        if (balanceB > 0) {
+            IERC20(tokenB).transfer(owner, balanceB);
+        }
+    }
+
+    /**
+     * @notice Emergency withdraw function
      */
     function withdrawToken(address token, uint256 amount) external onlyOwner {
         IERC20(token).transfer(owner, amount);
     }
 
     /**
-     * @notice Get balance of any token held by this contract
-     * @param token Token address to check
-     * @return balance Token balance
+     * @notice Get token balance
      */
     function getTokenBalance(address token) external view returns (uint256) {
         return IERC20(token).balanceOf(address(this));

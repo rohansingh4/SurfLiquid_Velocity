@@ -24,6 +24,10 @@ const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
 const CANDLE_INTERVAL = 10000; // 10 seconds (candle period)
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
 
+// Webhook configuration for AI scientist
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const WEBHOOK_ENABLED = WEBHOOK_URL && WEBHOOK_URL.startsWith('http');
+
 // Token addresses (from the pool)
 const USDC_ADDRESS = '0x29219dd400f2bf60e5a23d13be72b486d4038894';
 const WETH_ADDRESS = '0x50c42deacd8fc9773493ed674b675be577f2634b';
@@ -340,6 +344,46 @@ async function streamPositionData(data) {
   }
 }
 
+// Send position data to webhook (AI scientist)
+async function sendWebhook(positionData) {
+  if (!WEBHOOK_ENABLED) return;
+
+  try {
+    const payload = {
+      timestamp: positionData.timestamp,
+      status: positionData.status,
+      upper_range: positionData.upper_range,
+      lower_range: positionData.lower_range,
+      open: positionData.open,
+      high: positionData.high,
+      low: positionData.low,
+      close: positionData.close,
+      weth_pct: positionData.weth_pct,
+      usdc_pct: positionData.usdc_pct,
+      rebalance_type: positionData.rebalance_type,
+      pool_address: POOL_ADDRESS,
+      network: 'sonic'
+    };
+
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(5000) // 5 second timeout
+    });
+
+    if (response.ok) {
+      console.log(`📡 Webhook sent: ${positionData.status} @ $${positionData.close.toFixed(2)}`);
+    } else {
+      console.log(`⚠️  Webhook failed: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error('❌ Webhook error:', error.message);
+  }
+}
+
 // Save position data to MongoDB
 async function savePositionData(positionData) {
   try {
@@ -353,6 +397,11 @@ async function savePositionData(positionData) {
         usdc_pct: positionData.usdc_pct
       };
     }
+
+    // Send to webhook (non-blocking)
+    sendWebhook(positionData).catch(err => {
+      console.error('Webhook failed silently:', err.message);
+    });
 
     // Trigger trading bot if enabled and signal changed
     if (tradingBot && positionData.status !== 'Monitoring') {
@@ -866,6 +915,14 @@ async function startApplication() {
   console.log(`Fetch Interval: ${FETCH_INTERVAL}ms (${FETCH_INTERVAL/1000} seconds)`);
   console.log(`Candle Period: ${CANDLE_INTERVAL}ms (10 seconds)`);
   console.log(`Range: ±${RANGE_PERCENTAGE}%`);
+  
+  // Webhook status
+  if (WEBHOOK_ENABLED) {
+    console.log(`📡 Webhook: ENABLED → ${WEBHOOK_URL.substring(0, 50)}...`);
+  } else {
+    console.log(`📡 Webhook: DISABLED (set WEBHOOK_URL in .env to enable)`);
+  }
+  
   console.log('='.repeat(60));
 
   // Initial fetch

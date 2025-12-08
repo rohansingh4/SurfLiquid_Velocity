@@ -8,7 +8,19 @@
     "start:api": "node sonic-execution.js",
     "dev": "node sonic-execution-onchain.js",
     "migrate": "node migrate-csv-to-mongodb.js",
-    "cleanup": "node cleanup-duplicates.js"
+    "cleanup": "node cleanup-duplicates.js",
+    "webhook:test": "node webhook-test-server.js",
+    "approve": "node approve-tokens.js",
+    "swap:buy": "node simple-swap.js buy",
+    "swap:sell": "node simple-swap.js sell",
+    "liq:add": "node liquidity-only.js add",
+    "liq:remove": "node liquidity-only.js remove",
+    "liq:list": "node liquidity-only.js positions",
+    "test:swap-buy": "node test-all-transactions.js swap-usdc-to-weth",
+    "test:swap-sell": "node test-all-transactions.js swap-weth-to-usdc",
+    "test:add-liq": "node test-all-transactions.js add-liquidity",
+    "test:positions": "node test-all-transactions.js positions",
+    "test:all": "node test-all-transactions.js all"
   },
   "dependencies": {
     "axios": "^1.6.0",

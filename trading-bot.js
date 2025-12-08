@@ -9,12 +9,16 @@ const ERC20_ABI = [
   'function allowance(address owner, address spender) view returns (uint256)'
 ];
 
-// SwapHelper ABI
+// SwapHelper ABI (updated with liquidity functions)
 const SWAP_HELPER_ABI = [
   'function executeSwap(address pool, address tokenIn, address tokenOut, bool zeroForOne, uint256 amountIn, uint160 sqrtPriceLimitX96) returns (int256 amount0, int256 amount1)',
+  'function addLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount, uint256 amount0Max, uint256 amount1Max) returns (uint256 amount0, uint256 amount1)',
+  'function removeLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount) returns (uint256 amount0, uint256 amount1)',
   'function withdrawToken(address token, uint256 amount)',
   'function getTokenBalance(address token) view returns (uint256)',
-  'function owner() view returns (address)'
+  'function owner() view returns (address)',
+  'function token0() view returns (address)',
+  'function token1() view returns (address)'
 ];
 
 // Pool ABI (provided by user)
@@ -221,65 +225,55 @@ class TradingBot {
     }
   }
 
-  // Add liquidity with 150% gas limit
+  // Add liquidity with 150% gas limit using SwapHelper
   async addLiquidity(tickLower, tickUpper, wethAmount, usdcAmount) {
     try {
-      console.log(`\n➕ Adding Liquidity...`);
+      if (!this.swapHelperContract) {
+        throw new Error('SwapHelper not configured - cannot add liquidity');
+      }
+
+      console.log(`\n➕ Adding Liquidity via SwapHelper...`);
       console.log(`   Tick Range: ${tickLower} to ${tickUpper}`);
       console.log(`   WETH: ${wethAmount.toFixed(6)}`);
       console.log(`   USDC: ${usdcAmount.toFixed(2)}`);
 
+      // Convert to wei
+      const wethWei = ethers.parseUnits(wethAmount.toFixed(18), 18);
+      const usdcWei = ethers.parseUnits(usdcAmount.toFixed(6), 6);
+
       // Calculate liquidity amount (rough estimation)
-      const liquidityAmount = ethers.parseUnits('1', 18);
+      const liquidityAmount = ethers.parseUnits('0.00001', 18); // Small amount for testing
 
       // Estimate gas
-      const estimatedGas = await this.poolContract.mint.estimateGas(
-        this.wallet.address,
-        0, // index
+      const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
+        this.poolAddress,
         tickLower,
         tickUpper,
         liquidityAmount,
-        '0x'
+        usdcWei, // amount0Max (USDC)
+        wethWei  // amount1Max (WETH)
       );
 
       const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
       console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
 
-      // Mint liquidity
-      const tx = await this.poolContract.mint(
-        this.wallet.address,
-        0, // index
+      // Add liquidity via SwapHelper
+      const tx = await this.swapHelperContract.addLiquidity(
+        this.poolAddress,
         tickLower,
         tickUpper,
         liquidityAmount,
-        '0x',
+        usdcWei, // amount0Max
+        wethWei, // amount1Max
         { gasLimit }
       );
 
       console.log(`   TX Hash: ${tx.hash}`);
       const receipt = await tx.wait();
-
-      // Parse Mint event to get actual liquidity added
-      const mintEvent = receipt.logs.find(log => {
-        try {
-          const parsed = this.poolContract.interface.parseLog(log);
-          return parsed && parsed.name === 'Mint';
-        } catch {
-          return false;
-        }
-      });
-
-      let actualLiquidity = liquidityAmount;
-      if (mintEvent) {
-        const parsed = this.poolContract.interface.parseLog(mintEvent);
-        actualLiquidity = parsed.args.amount;
-      }
-
-      console.log(`✅ Liquidity added! Amount: ${actualLiquidity.toString()}`);
-      console.log(`   Gas used: ${receipt.gasUsed.toString()}`);
+      console.log(`✅ Liquidity added! Gas used: ${receipt.gasUsed.toString()}`);
 
       // Store position info
-      this.currentLiquidity = actualLiquidity;
+      this.currentLiquidity = liquidityAmount;
       this.currentTickLower = tickLower;
       this.currentTickUpper = tickUpper;
       this.hasLiquidity = true;
@@ -287,10 +281,11 @@ class TradingBot {
       return {
         txHash: tx.hash,
         gasUsed: receipt.gasUsed.toString(),
-        liquidity: actualLiquidity.toString()
+        liquidity: liquidityAmount.toString()
       };
     } catch (error) {
       console.error('❌ Add liquidity failed:', error.message);
+      console.error('   Error details:', error);
       throw error;
     }
   }
@@ -298,28 +293,33 @@ class TradingBot {
   // Remove liquidity with 150% gas limit
   async removeLiquidity() {
     try {
+      if (!this.swapHelperContract) {
+        throw new Error('SwapHelper not configured - cannot remove liquidity');
+      }
+
       if (!this.hasLiquidity || !this.currentLiquidity) {
         console.log('⚠️  No active liquidity position to remove');
         return null;
       }
 
-      console.log(`\n➖ Removing Liquidity...`);
+      console.log(`\n➖ Removing Liquidity via SwapHelper...`);
       console.log(`   Amount: ${this.currentLiquidity.toString()}`);
       console.log(`   Tick Range: ${this.currentTickLower} to ${this.currentTickUpper}`);
 
-      // Estimate gas for burn
-      const estimatedGas = await this.poolContract.burn.estimateGas(
-        0, // index
+      // Estimate gas for remove liquidity (includes burn + collect)
+      const estimatedGas = await this.swapHelperContract.removeLiquidity.estimateGas(
+        this.poolAddress,
         this.currentTickLower,
         this.currentTickUpper,
         this.currentLiquidity
       );
 
       const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
+      console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
 
-      // Burn liquidity
-      const tx = await this.poolContract.burn(
-        0, // index
+      // Remove liquidity via SwapHelper (handles burn + collect)
+      const tx = await this.swapHelperContract.removeLiquidity(
+        this.poolAddress,
         this.currentTickLower,
         this.currentTickUpper,
         this.currentLiquidity,
@@ -327,34 +327,8 @@ class TradingBot {
       );
 
       console.log(`   TX Hash: ${tx.hash}`);
-      let receipt = await tx.wait();
-      console.log(`✅ Liquidity burned! Gas used: ${receipt.gasUsed.toString()}`);
-
-      // Collect tokens
-      console.log(`   Collecting tokens...`);
-      const collectGas = await this.poolContract.collect.estimateGas(
-        this.wallet.address,
-        0, // index
-        this.currentTickLower,
-        this.currentTickUpper,
-        ethers.MaxUint128,
-        ethers.MaxUint128
-      );
-
-      const collectGasLimit = (collectGas * 150n) / 100n;
-
-      const collectTx = await this.poolContract.collect(
-        this.wallet.address,
-        0, // index
-        this.currentTickLower,
-        this.currentTickUpper,
-        ethers.MaxUint128,
-        ethers.MaxUint128,
-        { gasLimit: collectGasLimit }
-      );
-
-      await collectTx.wait();
-      console.log(`✅ Tokens collected!`);
+      const receipt = await tx.wait();
+      console.log(`✅ Liquidity removed! Gas used: ${receipt.gasUsed.toString()}`);
 
       const result = {
         txHash: tx.hash,
@@ -371,6 +345,7 @@ class TradingBot {
       return result;
     } catch (error) {
       console.error('❌ Remove liquidity failed:', error.message);
+      console.error('   Error details:', error);
       throw error;
     }
   }

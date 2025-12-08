@@ -31,6 +31,40 @@ Real-time monitoring and position management system for the WETH/USDC pool on Sh
 npm install
 ```
 
+2. **Configure Environment**:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+Required variables:
+- `SONIC_RPC_URL`: Your Sonic RPC endpoint
+- `POOL_ADDRESS`: WETH/USDC pool address
+
+Optional variables:
+- `WEBHOOK_URL`: Real-time webhook for AI scientist/analysis
+- `PRIVATE_KEY`: For automated trading (Phase 2)
+- `SWAP_HELPER_ADDRESS`: Deployed swap helper contract
+
+## Testing Transactions
+
+Test swaps and liquidity operations with small amounts (~$0.50):
+
+```bash
+# Test a swap
+npm run test:swap-buy      # Swap USDC → WETH
+npm run test:swap-sell     # Swap WETH → USDC
+
+# Test liquidity
+npm run test:add-liq       # Add ~$0.50 liquidity
+npm run test:positions     # View all positions
+
+# Run all tests
+npm run test:all
+```
+
+See [TESTING_TRANSACTIONS.md](./TESTING_TRANSACTIONS.md) for complete guide.
+
 ## Usage
 
 1. **Start the Application**:
@@ -78,6 +112,35 @@ The backend provides the following endpoints:
 - `GET /api/candles` - Last 15 minutes of candles
 - `GET /api/positions` - Position history
 - `GET /api/all-data` - Complete dataset (last hour)
+
+## Webhook Integration
+
+Real-time position data can be sent to an external webhook (e.g., AI scientist endpoint) by configuring `WEBHOOK_URL` in `.env`.
+
+**Webhook Payload** (sent on every position update):
+```json
+{
+  "timestamp": 1234567890,
+  "status": "Monitoring|Price-UP|Price-DOWN|Open-UP|Open-DOWN",
+  "upper_range": 3100.5,
+  "lower_range": 3090.5,
+  "open": 3095.0,
+  "high": 3097.0,
+  "low": 3094.0,
+  "close": 3096.0,
+  "weth_pct": 51.2,
+  "usdc_pct": 48.8,
+  "rebalance_type": "N/A|Rebalance UP|Rebalance DOWN",
+  "pool_address": "0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40",
+  "network": "sonic"
+}
+```
+
+**Setup**:
+1. Add `WEBHOOK_URL=https://your-endpoint.com/api/positions` to `.env`
+2. Webhook will auto-send on every position update (every 10 seconds)
+3. 5-second timeout with error logging
+4. Non-blocking - won't stop data collection if webhook fails
 
 ## Dashboard Features
 
