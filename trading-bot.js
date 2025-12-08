@@ -94,6 +94,45 @@ class TradingBot {
     return Math.floor(Math.log(price) / Math.log(1.0001));
   }
 
+  // Helper functions for liquidity calculation (from test-liquidity-fix.js)
+  getSqrtPriceAtTick(tick) {
+    const Q96 = 2n ** 96n;
+    const ratio = 1.0001 ** tick;
+    return BigInt(Math.floor(Math.sqrt(ratio) * Number(Q96)));
+  }
+
+  getLiquidityForAmount0(sqrtPriceAX96, sqrtPriceBX96, amount0) {
+    if (sqrtPriceAX96 > sqrtPriceBX96) {
+      [sqrtPriceAX96, sqrtPriceBX96] = [sqrtPriceBX96, sqrtPriceAX96];
+    }
+    const intermediate = (sqrtPriceAX96 * sqrtPriceBX96) / (2n ** 96n);
+    return (amount0 * intermediate) / (sqrtPriceBX96 - sqrtPriceAX96);
+  }
+
+  getLiquidityForAmount1(sqrtPriceAX96, sqrtPriceBX96, amount1) {
+    if (sqrtPriceAX96 > sqrtPriceBX96) {
+      [sqrtPriceAX96, sqrtPriceBX96] = [sqrtPriceBX96, sqrtPriceAX96];
+    }
+    return (amount1 * (2n ** 96n)) / (sqrtPriceBX96 - sqrtPriceAX96);
+  }
+
+  getLiquidityForAmounts(sqrtPriceX96, sqrtPriceAX96, sqrtPriceBX96, amount0, amount1) {
+    if (sqrtPriceX96 <= sqrtPriceAX96) {
+      return this.getLiquidityForAmount0(sqrtPriceAX96, sqrtPriceBX96, amount0);
+    } else if (sqrtPriceX96 < sqrtPriceBX96) {
+      const liquidity0 = this.getLiquidityForAmount0(sqrtPriceX96, sqrtPriceBX96, amount0);
+      const liquidity1 = this.getLiquidityForAmount1(sqrtPriceAX96, sqrtPriceX96, amount1);
+      return liquidity0 < liquidity1 ? liquidity0 : liquidity1;
+    } else {
+      return this.getLiquidityForAmount1(sqrtPriceAX96, sqrtPriceBX96, amount1);
+    }
+  }
+
+  async getCurrentSqrtPriceX96() {
+    const slot0 = await this.poolContract.slot0();
+    return slot0[0];
+  }
+
   // Tick to price conversion
   tickToPrice(tick) {
     return Math.pow(1.0001, tick);
@@ -162,133 +201,174 @@ class TradingBot {
 
   // Execute swap with 150% gas limit using SwapHelper
   async executeSwap(zeroForOne, amountIn, currentPrice) {
-    try {
-      if (!this.swapHelperContract) {
-        throw new Error('SwapHelper not configured - cannot execute swap');
+    const maxRetries = 3;
+    let lastError;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        if (!this.swapHelperContract) {
+          throw new Error('SwapHelper not configured - cannot execute swap');
+        }
+
+        console.log(`\n💱 Executing Swap via SwapHelper (Attempt ${attempt}/${maxRetries})...`);
+        console.log(`   Direction: ${zeroForOne ? 'USDC → WETH' : 'WETH → USDC'}`);
+        console.log(`   Amount In: ${ethers.formatUnits(amountIn, zeroForOne ? 6 : 18)}`);
+
+        // Determine tokenIn and tokenOut
+        const tokenIn = zeroForOne ? this.usdcAddress : this.wethAddress;
+        const tokenOut = zeroForOne ? this.wethAddress : this.usdcAddress;
+
+        // Calculate sqrt price limit (5% slippage)
+        const slippage = 0.05;
+        let sqrtPriceLimitX96;
+        if (zeroForOne) {
+          // Buying WETH with USDC (token0 → token1), price goes up
+          sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 + slippage));
+        } else {
+          // Selling WETH for USDC (token1 → token0), price goes down
+          sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 - slippage));
+        }
+
+        console.log(`   Token In: ${tokenIn}`);
+        console.log(`   Token Out: ${tokenOut}`);
+        console.log(`   SqrtPriceLimit: ${sqrtPriceLimitX96.toString()}`);
+
+        // Estimate gas and add 50% buffer
+        const estimatedGas = await this.swapHelperContract.executeSwap.estimateGas(
+          this.poolAddress,
+          tokenIn,
+          tokenOut,
+          zeroForOne,
+          amountIn,
+          sqrtPriceLimitX96
+        );
+
+        const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
+        console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
+
+        // Execute swap via SwapHelper
+        const tx = await this.swapHelperContract.executeSwap(
+          this.poolAddress,
+          tokenIn,
+          tokenOut,
+          zeroForOne,
+          amountIn,
+          sqrtPriceLimitX96,
+          { gasLimit }
+        );
+
+        console.log(`   TX Hash: ${tx.hash}`);
+        const receipt = await tx.wait();
+        console.log(`✅ Swap completed! Gas used: ${receipt.gasUsed.toString()}`);
+
+        return { txHash: tx.hash, gasUsed: receipt.gasUsed.toString() };
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Swap attempt ${attempt} failed:`, error.message);
+
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 2000; // 2s, 4s, 6s
+          console.log(`   Retrying in ${waitTime/1000}s...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
       }
-
-      console.log(`\n💱 Executing Swap via SwapHelper...`);
-      console.log(`   Direction: ${zeroForOne ? 'USDC → WETH' : 'WETH → USDC'}`);
-      console.log(`   Amount In: ${ethers.formatUnits(amountIn, zeroForOne ? 6 : 18)}`);
-
-      // Determine tokenIn and tokenOut
-      const tokenIn = zeroForOne ? this.usdcAddress : this.wethAddress;
-      const tokenOut = zeroForOne ? this.wethAddress : this.usdcAddress;
-
-      // Calculate sqrt price limit (5% slippage)
-      const slippage = 0.05;
-      let sqrtPriceLimitX96;
-      if (zeroForOne) {
-        // Buying WETH with USDC (token0 → token1), price goes up
-        sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 + slippage));
-      } else {
-        // Selling WETH for USDC (token1 → token0), price goes down
-        sqrtPriceLimitX96 = this.priceToSqrtPriceX96(currentPrice * (1 - slippage));
-      }
-
-      console.log(`   Token In: ${tokenIn}`);
-      console.log(`   Token Out: ${tokenOut}`);
-      console.log(`   SqrtPriceLimit: ${sqrtPriceLimitX96.toString()}`);
-
-      // Estimate gas and add 50% buffer
-      const estimatedGas = await this.swapHelperContract.executeSwap.estimateGas(
-        this.poolAddress,
-        tokenIn,
-        tokenOut,
-        zeroForOne,
-        amountIn,
-        sqrtPriceLimitX96
-      );
-
-      const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
-      console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
-
-      // Execute swap via SwapHelper
-      const tx = await this.swapHelperContract.executeSwap(
-        this.poolAddress,
-        tokenIn,
-        tokenOut,
-        zeroForOne,
-        amountIn,
-        sqrtPriceLimitX96,
-        { gasLimit }
-      );
-
-      console.log(`   TX Hash: ${tx.hash}`);
-      const receipt = await tx.wait();
-      console.log(`✅ Swap completed! Gas used: ${receipt.gasUsed.toString()}`);
-
-      return { txHash: tx.hash, gasUsed: receipt.gasUsed.toString() };
-    } catch (error) {
-      console.error('❌ Swap failed:', error.message);
-      console.error('   Error details:', error);
-      throw error;
     }
+
+    console.error('❌ Swap failed after all retries');
+    throw lastError;
   }
 
-  // Add liquidity with 150% gas limit using SwapHelper
+  // Add liquidity with proper calculation and retry logic
   async addLiquidity(tickLower, tickUpper, wethAmount, usdcAmount) {
-    try {
-      if (!this.swapHelperContract) {
-        throw new Error('SwapHelper not configured - cannot add liquidity');
+    const maxRetries = 3;
+    let lastError;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        if (!this.swapHelperContract) {
+          throw new Error('SwapHelper not configured - cannot add liquidity');
+        }
+
+        console.log(`\n➕ Adding Liquidity via SwapHelper (Attempt ${attempt}/${maxRetries})...`);
+        console.log(`   Tick Range: ${tickLower} to ${tickUpper}`);
+        console.log(`   WETH: ${wethAmount.toFixed(6)}`);
+        console.log(`   USDC: ${usdcAmount.toFixed(2)}`);
+
+        // Convert to wei
+        const wethWei = ethers.parseUnits(wethAmount.toFixed(18), 18);
+        const usdcWei = ethers.parseUnits(usdcAmount.toFixed(6), 6);
+
+        // Get current sqrt price
+        const sqrtPriceX96 = await this.getCurrentSqrtPriceX96();
+
+        // Calculate sqrt prices at tick boundaries
+        const sqrtPriceAX96 = this.getSqrtPriceAtTick(tickLower);
+        const sqrtPriceBX96 = this.getSqrtPriceAtTick(tickUpper);
+
+        // Calculate liquidity amount properly (like test-liquidity-fix.js)
+        const liquidityAmount = this.getLiquidityForAmounts(
+          sqrtPriceX96,
+          sqrtPriceAX96,
+          sqrtPriceBX96,
+          usdcWei, // amount0 (USDC)
+          wethWei  // amount1 (WETH)
+        );
+
+        console.log(`   Calculated Liquidity: ${liquidityAmount.toString()}`);
+
+        // Estimate gas
+        const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
+          this.poolAddress,
+          tickLower,
+          tickUpper,
+          liquidityAmount,
+          usdcWei, // amount0Max (USDC)
+          wethWei  // amount1Max (WETH)
+        );
+
+        const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
+        console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
+
+        // Add liquidity via SwapHelper
+        const tx = await this.swapHelperContract.addLiquidity(
+          this.poolAddress,
+          tickLower,
+          tickUpper,
+          liquidityAmount,
+          usdcWei, // amount0Max
+          wethWei, // amount1Max
+          { gasLimit }
+        );
+
+        console.log(`   TX Hash: ${tx.hash}`);
+        const receipt = await tx.wait();
+        console.log(`✅ Liquidity added! Gas used: ${receipt.gasUsed.toString()}`);
+
+        // Store position info
+        this.currentLiquidity = liquidityAmount;
+        this.currentTickLower = tickLower;
+        this.currentTickUpper = tickUpper;
+        this.hasLiquidity = true;
+
+        return {
+          txHash: tx.hash,
+          gasUsed: receipt.gasUsed.toString(),
+          liquidity: liquidityAmount.toString()
+        };
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Add liquidity attempt ${attempt} failed:`, error.message);
+
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 2000; // 2s, 4s, 6s
+          console.log(`   Retrying in ${waitTime/1000}s...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
       }
-
-      console.log(`\n➕ Adding Liquidity via SwapHelper...`);
-      console.log(`   Tick Range: ${tickLower} to ${tickUpper}`);
-      console.log(`   WETH: ${wethAmount.toFixed(6)}`);
-      console.log(`   USDC: ${usdcAmount.toFixed(2)}`);
-
-      // Convert to wei
-      const wethWei = ethers.parseUnits(wethAmount.toFixed(18), 18);
-      const usdcWei = ethers.parseUnits(usdcAmount.toFixed(6), 6);
-
-      // Calculate liquidity amount (rough estimation)
-      const liquidityAmount = ethers.parseUnits('0.00001', 18); // Small amount for testing
-
-      // Estimate gas
-      const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
-        this.poolAddress,
-        tickLower,
-        tickUpper,
-        liquidityAmount,
-        usdcWei, // amount0Max (USDC)
-        wethWei  // amount1Max (WETH)
-      );
-
-      const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
-      console.log(`   Gas: Estimated ${estimatedGas.toString()}, Using ${gasLimit.toString()} (150%)`);
-
-      // Add liquidity via SwapHelper
-      const tx = await this.swapHelperContract.addLiquidity(
-        this.poolAddress,
-        tickLower,
-        tickUpper,
-        liquidityAmount,
-        usdcWei, // amount0Max
-        wethWei, // amount1Max
-        { gasLimit }
-      );
-
-      console.log(`   TX Hash: ${tx.hash}`);
-      const receipt = await tx.wait();
-      console.log(`✅ Liquidity added! Gas used: ${receipt.gasUsed.toString()}`);
-
-      // Store position info
-      this.currentLiquidity = liquidityAmount;
-      this.currentTickLower = tickLower;
-      this.currentTickUpper = tickUpper;
-      this.hasLiquidity = true;
-
-      return {
-        txHash: tx.hash,
-        gasUsed: receipt.gasUsed.toString(),
-        liquidity: liquidityAmount.toString()
-      };
-    } catch (error) {
-      console.error('❌ Add liquidity failed:', error.message);
-      console.error('   Error details:', error);
-      throw error;
     }
+
+    console.error('❌ Add liquidity failed after all retries');
+    throw lastError;
   }
 
   // Remove liquidity with 150% gas limit and retry logic
@@ -417,22 +497,54 @@ class TradingBot {
         // If we already have liquidity, we need to withdraw first
         if (this.hasLiquidity) {
           console.log(`   Already in liquidity → Need to withdraw first`);
-          const removeResult = await this.removeLiquidity();
 
-          if (removeResult) {
+          try {
+            const removeResult = await this.removeLiquidity();
+
+            if (removeResult) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'remove_liquidity',
+                txHash: removeResult.txHash,
+                status: 'success',
+                wethBalanceBefore: balancesBefore.wethFormatted,
+                usdcBalanceBefore: balancesBefore.usdcFormatted,
+                liquidityAmount: removeResult.liquidity,
+                price: currentPrice,
+                portfolioValueBefore,
+                gasUsed: removeResult.gasUsed
+              });
+              console.log(`   ✅ Remove liquidity recorded - TX: ${removeResult.txHash}`);
+            } else {
+              // Remove liquidity returned null (failed but didn't throw)
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'remove_liquidity',
+                status: 'failed',
+                error: 'Remove liquidity returned null',
+                wethBalanceBefore: balancesBefore.wethFormatted,
+                usdcBalanceBefore: balancesBefore.usdcFormatted,
+                price: currentPrice,
+                portfolioValueBefore
+              });
+              console.log(`   ❌ Remove liquidity failed - returned null`);
+            }
+          } catch (error) {
+            // Remove liquidity threw an error
             await Transaction.create({
               timestamp: new Date(),
               signal,
               txType: 'remove_liquidity',
-              txHash: removeResult.txHash,
-              status: 'success',
+              status: 'failed',
+              error: error.message,
               wethBalanceBefore: balancesBefore.wethFormatted,
               usdcBalanceBefore: balancesBefore.usdcFormatted,
-              liquidityAmount: removeResult.liquidity,
               price: currentPrice,
-              portfolioValueBefore,
-              gasUsed: removeResult.gasUsed
+              portfolioValueBefore
             });
+            console.error(`   ❌ Remove liquidity failed:`, error.message);
           }
 
           // Small delay
@@ -462,40 +574,78 @@ class TradingBot {
             // Need more WETH, buy WETH with USDC (zeroForOne=true)
             const usdcToSell = Math.abs(wethDiff);
             const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
-            const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
-            await Transaction.create({
-              timestamp: new Date(),
-              signal,
-              txType: 'swap',
-              txHash: swapResult.txHash,
-              status: 'success',
-              wethBalanceBefore: currentBalances.wethFormatted,
-              usdcBalanceBefore: currentBalances.usdcFormatted,
-              usdcAmount: -usdcToSell,
-              price: currentPrice,
-              portfolioValueBefore: totalValue,
-              gasUsed: swapResult.gasUsed
-            });
+            try {
+              const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
+
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                usdcAmount: -usdcToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swap recorded (Buy WETH) - TX: ${swapResult.txHash}`);
+            } catch (error) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                status: 'failed',
+                error: error.message,
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                usdcAmount: -usdcToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue
+              });
+              console.error(`   ❌ Swap failed (Buy WETH):`, error.message);
+              throw error; // Re-throw to prevent add liquidity from executing
+            }
           } else {
             // Need more USDC, sell WETH for USDC (zeroForOne=false)
             const wethToSell = Math.abs(wethDiff) / currentPrice;
             const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
-            const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
-            await Transaction.create({
-              timestamp: new Date(),
-              signal,
-              txType: 'swap',
-              txHash: swapResult.txHash,
-              status: 'success',
-              wethBalanceBefore: currentBalances.wethFormatted,
-              usdcBalanceBefore: currentBalances.usdcFormatted,
-              wethAmount: -wethToSell,
-              price: currentPrice,
-              portfolioValueBefore: totalValue,
-              gasUsed: swapResult.gasUsed
-            });
+            try {
+              const swapResult = await this.executeSwap(false, wethWei, currentPrice);
+
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethAmount: -wethToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swap recorded (Sell WETH) - TX: ${swapResult.txHash}`);
+            } catch (error) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                status: 'failed',
+                error: error.message,
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethAmount: -wethToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue
+              });
+              console.error(`   ❌ Swap failed (Sell WETH):`, error.message);
+              throw error; // Re-throw to prevent add liquidity from executing
+            }
           }
 
           await new Promise(resolve => setTimeout(resolve, 3000));
@@ -506,40 +656,77 @@ class TradingBot {
         const tickLower = this.priceToTick(lowerRange);
         const tickUpper = this.priceToTick(upperRange);
 
-        const addResult = await this.addLiquidity(
-          tickLower,
-          tickUpper,
-          finalBalances.wethFormatted,
-          finalBalances.usdcFormatted
-        );
+        try {
+          const addResult = await this.addLiquidity(
+            tickLower,
+            tickUpper,
+            finalBalances.wethFormatted,
+            finalBalances.usdcFormatted
+          );
 
-        const balancesAfter = await this.getBalances();
-        const portfolioValueAfter = this.calculatePortfolioValue(
-          balancesAfter.wethFormatted,
-          balancesAfter.usdcFormatted,
-          currentPrice
-        );
+          if (addResult) {
+            const balancesAfter = await this.getBalances();
+            const portfolioValueAfter = this.calculatePortfolioValue(
+              balancesAfter.wethFormatted,
+              balancesAfter.usdcFormatted,
+              currentPrice
+            );
 
-        await Transaction.create({
-          timestamp: new Date(),
-          signal,
-          txType: 'add_liquidity',
-          txHash: addResult.txHash,
-          status: 'success',
-          wethBalanceBefore: finalBalances.wethFormatted,
-          usdcBalanceBefore: finalBalances.usdcFormatted,
-          wethBalanceAfter: balancesAfter.wethFormatted,
-          usdcBalanceAfter: balancesAfter.usdcFormatted,
-          liquidityAmount: addResult.liquidity,
-          tickLower,
-          tickUpper,
-          price: currentPrice,
-          portfolioValueBefore: totalValue,
-          portfolioValueAfter,
-          profitLoss: portfolioValueAfter - this.initialPortfolioValue,
-          profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
-          gasUsed: addResult.gasUsed
-        });
+            await Transaction.create({
+              timestamp: new Date(),
+              signal,
+              txType: 'add_liquidity',
+              txHash: addResult.txHash,
+              status: 'success',
+              wethBalanceBefore: finalBalances.wethFormatted,
+              usdcBalanceBefore: finalBalances.usdcFormatted,
+              wethBalanceAfter: balancesAfter.wethFormatted,
+              usdcBalanceAfter: balancesAfter.usdcFormatted,
+              liquidityAmount: addResult.liquidity,
+              tickLower,
+              tickUpper,
+              price: currentPrice,
+              portfolioValueBefore: totalValue,
+              portfolioValueAfter,
+              profitLoss: portfolioValueAfter - this.initialPortfolioValue,
+              profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
+              gasUsed: addResult.gasUsed
+            });
+            console.log(`   ✅ Add liquidity recorded - TX: ${addResult.txHash}`);
+          } else {
+            // Add liquidity returned null (failed but didn't throw)
+            await Transaction.create({
+              timestamp: new Date(),
+              signal,
+              txType: 'add_liquidity',
+              status: 'failed',
+              error: 'Add liquidity returned null',
+              wethBalanceBefore: finalBalances.wethFormatted,
+              usdcBalanceBefore: finalBalances.usdcFormatted,
+              tickLower,
+              tickUpper,
+              price: currentPrice,
+              portfolioValueBefore: totalValue
+            });
+            console.log(`   ❌ Add liquidity failed - returned null`);
+          }
+        } catch (error) {
+          // Add liquidity threw an error
+          await Transaction.create({
+            timestamp: new Date(),
+            signal,
+            txType: 'add_liquidity',
+            status: 'failed',
+            error: error.message,
+            wethBalanceBefore: finalBalances.wethFormatted,
+            usdcBalanceBefore: finalBalances.usdcFormatted,
+            tickLower,
+            tickUpper,
+            price: currentPrice,
+            portfolioValueBefore: totalValue
+          });
+          console.error(`   ❌ Add liquidity failed:`, error.message);
+        }
       }
 
       // ============================================
@@ -551,22 +738,54 @@ class TradingBot {
         // If we have liquidity, withdraw it
         if (this.hasLiquidity) {
           console.log(`   Withdrawing liquidity...`);
-          const removeResult = await this.removeLiquidity();
 
-          if (removeResult) {
+          try {
+            const removeResult = await this.removeLiquidity();
+
+            if (removeResult) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'remove_liquidity',
+                txHash: removeResult.txHash,
+                status: 'success',
+                wethBalanceBefore: balancesBefore.wethFormatted,
+                usdcBalanceBefore: balancesBefore.usdcFormatted,
+                liquidityAmount: removeResult.liquidity,
+                price: currentPrice,
+                portfolioValueBefore,
+                gasUsed: removeResult.gasUsed
+              });
+              console.log(`   ✅ Remove liquidity recorded - TX: ${removeResult.txHash}`);
+            } else {
+              // Remove liquidity returned null (failed but didn't throw)
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'remove_liquidity',
+                status: 'failed',
+                error: 'Remove liquidity returned null',
+                wethBalanceBefore: balancesBefore.wethFormatted,
+                usdcBalanceBefore: balancesBefore.usdcFormatted,
+                price: currentPrice,
+                portfolioValueBefore
+              });
+              console.log(`   ❌ Remove liquidity failed - returned null`);
+            }
+          } catch (error) {
+            // Remove liquidity threw an error
             await Transaction.create({
               timestamp: new Date(),
               signal,
               txType: 'remove_liquidity',
-              txHash: removeResult.txHash,
-              status: 'success',
+              status: 'failed',
+              error: error.message,
               wethBalanceBefore: balancesBefore.wethFormatted,
               usdcBalanceBefore: balancesBefore.usdcFormatted,
-              liquidityAmount: removeResult.liquidity,
               price: currentPrice,
-              portfolioValueBefore,
-              gasUsed: removeResult.gasUsed
+              portfolioValueBefore
             });
+            console.error(`   ❌ Remove liquidity failed:`, error.message);
           }
 
           await new Promise(resolve => setTimeout(resolve, 3000));
@@ -590,64 +809,100 @@ class TradingBot {
             // Need more WETH, buy WETH with USDC (zeroForOne=true)
             const usdcToSell = Math.abs(wethDiff);
             const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
-            const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
-            const balancesAfter = await this.getBalances();
-            const portfolioValueAfter = this.calculatePortfolioValue(
-              balancesAfter.wethFormatted,
-              balancesAfter.usdcFormatted,
-              currentPrice
-            );
+            try {
+              const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
-            await Transaction.create({
-              timestamp: new Date(),
-              signal,
-              txType: 'swap',
-              txHash: swapResult.txHash,
-              status: 'success',
-              wethBalanceBefore: currentBalances.wethFormatted,
-              usdcBalanceBefore: currentBalances.usdcFormatted,
-              wethBalanceAfter: balancesAfter.wethFormatted,
-              usdcBalanceAfter: balancesAfter.usdcFormatted,
-              usdcAmount: -usdcToSell,
-              price: currentPrice,
-              portfolioValueBefore: totalValue,
-              portfolioValueAfter,
-              profitLoss: portfolioValueAfter - this.initialPortfolioValue,
-              profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
-              gasUsed: swapResult.gasUsed
-            });
+              const balancesAfter = await this.getBalances();
+              const portfolioValueAfter = this.calculatePortfolioValue(
+                balancesAfter.wethFormatted,
+                balancesAfter.usdcFormatted,
+                currentPrice
+              );
+
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                usdcAmount: -usdcToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                portfolioValueAfter,
+                profitLoss: portfolioValueAfter - this.initialPortfolioValue,
+                profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swap recorded (Buy WETH) - TX: ${swapResult.txHash}`);
+            } catch (error) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                status: 'failed',
+                error: error.message,
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                usdcAmount: -usdcToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue
+              });
+              console.error(`   ❌ Swap failed (Buy WETH):`, error.message);
+            }
           } else {
             // Need more USDC, sell WETH for USDC (zeroForOne=false)
             const wethToSell = Math.abs(wethDiff) / currentPrice;
             const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
-            const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
-            const balancesAfter = await this.getBalances();
-            const portfolioValueAfter = this.calculatePortfolioValue(
-              balancesAfter.wethFormatted,
-              balancesAfter.usdcFormatted,
-              currentPrice
-            );
+            try {
+              const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
-            await Transaction.create({
-              timestamp: new Date(),
-              signal,
-              txType: 'swap',
-              txHash: swapResult.txHash,
-              status: 'success',
-              wethBalanceBefore: currentBalances.wethFormatted,
-              usdcBalanceBefore: currentBalances.usdcFormatted,
-              wethBalanceAfter: balancesAfter.wethFormatted,
-              usdcBalanceAfter: balancesAfter.usdcFormatted,
-              wethAmount: -wethToSell,
-              price: currentPrice,
-              portfolioValueBefore: totalValue,
-              portfolioValueAfter,
-              profitLoss: portfolioValueAfter - this.initialPortfolioValue,
-              profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
-              gasUsed: swapResult.gasUsed
-            });
+              const balancesAfter = await this.getBalances();
+              const portfolioValueAfter = this.calculatePortfolioValue(
+                balancesAfter.wethFormatted,
+                balancesAfter.usdcFormatted,
+                currentPrice
+              );
+
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                wethAmount: -wethToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                portfolioValueAfter,
+                profitLoss: portfolioValueAfter - this.initialPortfolioValue,
+                profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swap recorded (Sell WETH) - TX: ${swapResult.txHash}`);
+            } catch (error) {
+              await Transaction.create({
+                timestamp: new Date(),
+                signal,
+                txType: 'swap',
+                status: 'failed',
+                error: error.message,
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethAmount: -wethToSell,
+                price: currentPrice,
+                portfolioValueBefore: totalValue
+              });
+              console.error(`   ❌ Swap failed (Sell WETH):`, error.message);
+            }
           }
         }
 
@@ -659,18 +914,10 @@ class TradingBot {
       console.log(`${'='.repeat(60)}\n`);
 
     } catch (error) {
-      console.error(`\n❌ Trading failed:`, error.message);
+      console.error(`\n❌ Trading cycle failed with unexpected error:`, error.message);
       console.error(error);
-
-      // Record failed transaction
-      await Transaction.create({
-        timestamp: new Date(),
-        signal,
-        txType: 'swap',
-        status: 'failed',
-        error: error.message,
-        price: currentPrice
-      });
+      // Note: Individual operations already record their own failures
+      // This catch block handles unexpected errors in the trading cycle itself
     } finally {
       this.isExecuting = false;
     }
