@@ -1087,15 +1087,17 @@
                 <table class="data-table">
                     <thead id="transactionTableHead">
                         <tr>
-                            <th>Timestamp</th>
+                            <th>Time</th>
                             <th>Signal</th>
                             <th>Type</th>
                             <th>Status</th>
+                            <th>Upper Range</th>
+                            <th>Lower Range</th>
                             <th>WETH</th>
                             <th>USDC</th>
-                            <th>Price</th>
-                            <th>P&L</th>
-                            <th>TX Hash</th>
+                            <th>Funds</th>
+                            <th>PnL</th>
+                            <th>TXID</th>
                         </tr>
                     </thead>
                     <tbody id="transactionTableBody">
@@ -2268,7 +2270,7 @@
                 const tbody = document.getElementById('transactionTableBody');
 
                 if (data.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px;">No transactions yet</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 40px;">No transactions yet</td></tr>';
                     return;
                 }
 
@@ -2296,17 +2298,52 @@
                     // Status badge
                     const statusBadge = `<span class="status-${tx.status}">${tx.status}</span>`;
 
-                    // Amounts
-                    const wethAmount = tx.wethAmount !== undefined && tx.wethAmount !== null ?
-                        (tx.wethAmount >= 0 ? `+${tx.wethAmount.toFixed(6)}` : tx.wethAmount.toFixed(6)) : '-';
-                    const usdcAmount = tx.usdcAmount !== undefined && tx.usdcAmount !== null ?
-                        (tx.usdcAmount >= 0 ? `+${tx.usdcAmount.toFixed(2)}` : tx.usdcAmount.toFixed(2)) : '-';
+                    // Range prices
+                    let upperRange = '';
+                    let lowerRange = '';
+                    if (tx.txType === 'add_liquidity' && tx.price) {
+                        // Calculate range from ticks if available, otherwise from stored values
+                        if (tx.tickUpper && tx.tickLower) {
+                            upperRange = `$${(Math.pow(1.0001, tx.tickUpper)).toFixed(2)}`;
+                            lowerRange = `$${(Math.pow(1.0001, tx.tickLower)).toFixed(2)}`;
+                        } else {
+                            upperRange = '-';
+                            lowerRange = '-';
+                        }
+                    }
 
-                    // Price
-                    const price = tx.price ? `$${tx.price.toFixed(2)}` : '-';
+                    // WETH and USDC display - different format based on transaction type
+                    let wethDisplay = '';
+                    let usdcDisplay = '';
+
+                    if (tx.txType === 'swap') {
+                        // For swaps: Show balance after with percentage
+                        const wethAfter = tx.wethBalanceAfter || 0;
+                        const usdcAfter = tx.usdcBalanceAfter || 0;
+                        const wethPct = tx.wethPctAfter || 0;
+                        const usdcPct = tx.usdcPctAfter || 0;
+                        wethDisplay = `${wethAfter.toFixed(2)} (${wethPct.toFixed(1)}%)`;
+                        usdcDisplay = `${usdcAfter.toFixed(2)} (${usdcPct.toFixed(2)}%)`;
+                    } else if (tx.txType === 'add_liquidity') {
+                        // For add liquidity: Show amounts added
+                        const wethAdded = tx.wethAmount || 0;
+                        const usdcAdded = tx.usdcAmount || 0;
+                        wethDisplay = wethAdded.toFixed(5);
+                        usdcDisplay = usdcAdded.toFixed(4);
+                    } else {
+                        // For remove liquidity: Leave empty
+                        wethDisplay = '';
+                        usdcDisplay = '';
+                    }
+
+                    // Funds - total portfolio value in USD after transaction
+                    let fundsDisplay = '';
+                    if (tx.portfolioValueAfter !== undefined && tx.portfolioValueAfter !== null) {
+                        fundsDisplay = `$${tx.portfolioValueAfter.toFixed(3)}`;
+                    }
 
                     // P&L
-                    let pnlHtml = '-';
+                    let pnlHtml = '';
                     if (tx.profitLoss !== undefined && tx.profitLoss !== null) {
                         const pnlClass = tx.profitLoss >= 0 ? 'pnl-positive' : 'pnl-negative';
                         const pnlSign = tx.profitLoss >= 0 ? '+' : '';
@@ -2316,7 +2353,7 @@
                     // TX Hash
                     const txHashHtml = tx.txHash ?
                         `<a href="https://sonicscan.org/tx/${tx.txHash}" target="_blank" class="tx-hash-link">${tx.txHash.substring(0, 8)}...</a>` :
-                        '-';
+                        '';
 
                     return `
                         <tr>
@@ -2324,9 +2361,11 @@
                             <td><span class="${signalClass}">${tx.signal}</span></td>
                             <td><span class="${typeClass}">${typeLabel}</span></td>
                             <td>${statusBadge}</td>
-                            <td>${wethAmount}</td>
-                            <td>${usdcAmount}</td>
-                            <td>${price}</td>
+                            <td>${upperRange}</td>
+                            <td>${lowerRange}</td>
+                            <td>${wethDisplay}</td>
+                            <td>${usdcDisplay}</td>
+                            <td>${fundsDisplay}</td>
                             <td>${pnlHtml}</td>
                             <td>${txHashHtml}</td>
                         </tr>

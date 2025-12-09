@@ -686,6 +686,13 @@ class TradingBot {
             try {
               const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
+              // Get balances after swap
+              const balancesAfter = await this.getBalances();
+              const totalValueAfter = balancesAfter.wethFormatted + (balancesAfter.usdcFormatted / currentPrice);
+              const totalUsdValueAfter = (balancesAfter.wethFormatted * currentPrice) + balancesAfter.usdcFormatted;
+              const wethPctAfter = (balancesAfter.wethFormatted / totalValueAfter) * 100;
+              const usdcPctAfter = (balancesAfter.usdcFormatted / totalUsdValueAfter) * 100;
+
               await Transaction.create({
                 timestamp: new Date(),
                 signal,
@@ -694,9 +701,14 @@ class TradingBot {
                 status: 'success',
                 wethBalanceBefore: currentBalances.wethFormatted,
                 usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                wethPctAfter: wethPctAfter,
+                usdcPctAfter: usdcPctAfter,
                 usdcAmount: -usdcToSell,
                 price: currentPrice,
                 portfolioValueBefore: totalValue,
+                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
                 gasUsed: swapResult.gasUsed
               });
               console.log(`   ✅ Swap recorded (Buy WETH) - TX: ${swapResult.txHash}`);
@@ -724,6 +736,13 @@ class TradingBot {
             try {
               const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
+              // Get balances after swap
+              const balancesAfter = await this.getBalances();
+              const totalValueAfter = balancesAfter.wethFormatted + (balancesAfter.usdcFormatted / currentPrice);
+              const totalUsdValueAfter = (balancesAfter.wethFormatted * currentPrice) + balancesAfter.usdcFormatted;
+              const wethPctAfter = (balancesAfter.wethFormatted / totalValueAfter) * 100;
+              const usdcPctAfter = (balancesAfter.usdcFormatted / totalUsdValueAfter) * 100;
+
               await Transaction.create({
                 timestamp: new Date(),
                 signal,
@@ -732,9 +751,14 @@ class TradingBot {
                 status: 'success',
                 wethBalanceBefore: currentBalances.wethFormatted,
                 usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                wethPctAfter: wethPctAfter,
+                usdcPctAfter: usdcPctAfter,
                 wethAmount: -wethToSell,
                 price: currentPrice,
                 portfolioValueBefore: totalValue,
+                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
                 gasUsed: swapResult.gasUsed
               });
               console.log(`   ✅ Swap recorded (Sell WETH) - TX: ${swapResult.txHash}`);
