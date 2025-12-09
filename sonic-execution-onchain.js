@@ -19,6 +19,7 @@ const __dirname = path.dirname(__filename);
 
 // Configuration from .env
 const RPC_URL = process.env.SONIC_RPC_URL;
+const WRITE_RPC_URL = process.env.SONIC_WRITE_RPC_URL; // Optional: separate RPC for write operations to avoid rate limiting
 const POOL_ADDRESS = process.env.POOL_ADDRESS || '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
 const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
 const CANDLE_INTERVAL = 10000; // 10 seconds (candle period)
@@ -75,8 +76,15 @@ const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 let tradingBot = null;
 if (TRADING_ENABLED) {
   const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-  tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS, SWAP_HELPER_ADDRESS);
+
+  // Create separate write provider if configured (reduces rate limiting)
+  const writeProvider = WRITE_RPC_URL ? new ethers.JsonRpcProvider(WRITE_RPC_URL) : null;
+
+  tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS, SWAP_HELPER_ADDRESS, writeProvider);
   console.log(`🤖 Trading Bot initialized with wallet: ${wallet.address}`);
+  if (WRITE_RPC_URL) {
+    console.log(`   📡 Using separate Write RPC to reduce rate limiting`);
+  }
 } else {
   if (!PRIVATE_KEY || PRIVATE_KEY.length < 10) {
     console.log('⚠️  Trading disabled: No private key configured');
