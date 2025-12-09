@@ -419,6 +419,9 @@ async function sendWebhook(positionData) {
       network: 'sonic'
     };
 
+    // Log the payload being sent
+    console.log(`📡 Webhook payload:`, JSON.stringify(payload, null, 2));
+
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: {
@@ -429,7 +432,7 @@ async function sendWebhook(positionData) {
     });
 
     if (response.ok) {
-      console.log(`📡 Webhook sent: ${positionData.status} @ $${positionData.close.toFixed(2)}`);
+      console.log(`✅ Webhook sent: ${positionData.status} @ $${positionData.close.toFixed(2)}`);
     } else {
       console.log(`⚠️  Webhook failed: ${response.status} ${response.statusText}`);
     }
