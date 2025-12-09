@@ -221,6 +221,11 @@ class TradingBot {
     return slot0[0];
   }
 
+  async getCurrentTick() {
+    const slot0 = await this.poolContract.slot0();
+    return Number(slot0[1]); // slot0[1] is the current tick
+  }
+
   async getTickSpacing() {
     try {
       const tickSpacing = await this.poolContract.tickSpacing();
@@ -786,24 +791,26 @@ class TradingBot {
         // Step 2: Add liquidity (use 99% of balance to avoid rounding errors)
         const finalBalances = await this.getBalances();
 
-        // Use the tick ranges from the position signal (these are the strategic ranges)
-        let tickLower, tickUpper;
-        if (tickLowerProvided !== undefined && tickUpperProvided !== undefined) {
-          // Use ticks provided by sonic-execution-onchain (exact 10-tick range)
-          tickLower = tickLowerProvided;
-          tickUpper = tickUpperProvided;
-          console.log(`   Using provided tick range: ${tickLower} to ${tickUpper}`);
-        } else {
-          // Fallback to price-based conversion (for backwards compatibility)
-          const tickSpacing = await this.getTickSpacing();
-          tickLower = Math.floor(this.priceToTick(lowerRange) / tickSpacing) * tickSpacing;
-          tickUpper = Math.ceil(this.priceToTick(upperRange) / tickSpacing) * tickSpacing;
-          console.log(`   Calculated tick range from prices: ${tickLower} to ${tickUpper}`);
-        }
+        // CRITICAL FIX: Always calculate FRESH tick ranges based on CURRENT price
+        // Using stale ticks from signal causes failures when price has moved
+        console.log(`   🔄 Calculating fresh tick range based on CURRENT pool state...`);
+        
+        const currentTickNow = await this.getCurrentTick();
+        const tickSpacing = await this.getTickSpacing();
+        
+        // Calculate tick range around CURRENT price (not old signal price)
+        const tickLower = Math.floor(currentTickNow / tickSpacing) * tickSpacing;
+        const tickUpper = tickLower + tickSpacing;
+        
+        // Calculate actual price boundaries from the fresh ticks
+        const actualLowerPrice = Math.pow(1.0001, tickLower);
+        const actualUpperPrice = Math.pow(1.0001, tickUpper);
 
         const tickRangeWidth = tickUpper - tickLower;
-        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickRangeWidth} ticks)`);
-        console.log(`   Price Range: $${lowerRange.toFixed(2)} to $${upperRange.toFixed(2)}`);
+        console.log(`   Current Tick from Pool: ${currentTickNow}`);
+        console.log(`   Fresh Tick Range: ${tickLower} to ${tickUpper} (${tickRangeWidth} ticks)`);
+        console.log(`   Fresh Price Range: $${actualLowerPrice.toFixed(2)} to $${actualUpperPrice.toFixed(2)}`);
+        console.log(`   (Ignoring stale signal ticks: ${tickLowerProvided || 'N/A'} to ${tickUpperProvided || 'N/A'})`);
 
         // Use 98% of balance with 2% safety buffer for gas and rounding
         const capitalPct = 0.98;
