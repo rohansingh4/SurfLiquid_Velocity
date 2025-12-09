@@ -19,7 +19,8 @@ const __dirname = path.dirname(__filename);
 
 // Configuration from .env
 const RPC_URL = process.env.SONIC_RPC_URL;
-const POOL_ADDRESS = process.env.POOL_ADDRESS || '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
+// SwapX Pool (WETH/USDC) - tick spacing: 5
+const POOL_ADDRESS = process.env.POOL_ADDRESS || '0xec4ee7d6988ab06f7a8daaf8c5fdffde6321be68';
 const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
 const CANDLE_INTERVAL = 10000; // 10 seconds (candle period)
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
@@ -225,10 +226,11 @@ async function updateCandle(data) {
           // Get tick spacing from pool
           const tickSpacing = await getPoolTickSpacing();
 
-          // Round down to get lower tick boundary that contains current price
-          const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
-          // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
-          const tickUpper = tickLower + tickSpacing;
+          // Round to nearest tick spacing multiple
+          const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
+          // Use ±5 ticks for ~0.1% range (10 ticks total with spacing=5)
+          const tickLower = roundedTick - 5;
+          const tickUpper = roundedTick + 5;
 
           // Calculate price boundaries from ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -369,10 +371,11 @@ async function streamPositionData(data) {
     const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
     const tickSpacing = await getPoolTickSpacing();
 
-    // Round down to get lower tick boundary that contains current price
-    const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
-    // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
-    const tickUpper = tickLower + tickSpacing;
+    // Round to nearest tick spacing multiple
+    const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
+    // Use ±5 ticks for ~0.1% range (10 ticks total with spacing=5)
+    const tickLower = roundedTick - 5;
+    const tickUpper = roundedTick + 5;
 
     // Calculate price boundaries from ticks
     const lowerRange = Math.pow(1.0001, tickLower);

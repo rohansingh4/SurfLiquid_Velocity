@@ -1,7 +1,10 @@
-# Why 100 Ticks is the Minimum Range (Technical Deep Dive)
+# Tick Spacing Explanation (Technical Deep Dive)
 
-## Executive Summary
-**Your pool's tickSpacing = 100** (hardcoded at pool creation). This means the **minimum possible range is 100 ticks ≈ 1%**. You cannot create tighter ranges due to Uniswap V3 protocol constraints enforced at the smart contract level.
+## ⚠️ DEPRECATED - Shadow DEX Pool (Old)
+**Old pool's tickSpacing = 100** (hardcoded at pool creation). This meant the **minimum possible range was 100 ticks ≈ 1%**.
+
+## ✅ CURRENT - SwapX Pool (New)
+**Current pool's tickSpacing = 5** - Allows **10 ticks = 0.1% range** - Perfect for concentrated liquidity!
 
 ---
 

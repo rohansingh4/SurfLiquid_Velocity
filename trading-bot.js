@@ -420,9 +420,10 @@ class TradingBot {
           wethWei
         );
 
-        // Let the contract enforce its own liquidity limits
-        // No artificial cap - if calculation is correct, contract will accept it
-        console.log(`   Calculated liquidity: ${liquidityAmount.toString()}`);
+        // Apply 1% safety buffer to handle rounding and precision issues
+        liquidityAmount = (liquidityAmount * 99n) / 100n;
+
+        console.log(`   Calculated liquidity (with 1% safety buffer): ${liquidityAmount.toString()}`);
 
         // Estimate gas
         const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
@@ -785,6 +786,16 @@ class TradingBot {
 
         // Step 2: Add liquidity (use 99% of balance to avoid rounding errors)
         const finalBalances = await this.getBalances();
+
+        // Check minimum balance requirement (prevent errors with tiny amounts)
+        const minBalanceUsd = 50; // Minimum $50 to add liquidity
+        const portfolioUsd = (finalBalances.wethFormatted * currentPrice) + finalBalances.usdcFormatted;
+
+        if (portfolioUsd < minBalanceUsd) {
+          console.log(`   ⚠️  Portfolio value ($${portfolioUsd.toFixed(2)}) below minimum ($${minBalanceUsd}) - skipping add liquidity`);
+          console.log(`   💡 Accumulate more funds before adding liquidity to avoid precision errors`);
+          return;
+        }
 
         // Use the tick ranges from the position signal (these are the strategic ranges)
         let tickLower, tickUpper;
