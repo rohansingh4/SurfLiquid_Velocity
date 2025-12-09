@@ -18,6 +18,12 @@ const positionSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  tickLower: {
+    type: Number
+  },
+  tickUpper: {
+    type: Number
+  },
   open: {
     type: Number,
     required: true

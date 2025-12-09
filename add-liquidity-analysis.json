@@ -1,0 +1,1708 @@
+{
+  "totalTransactions": 110,
+  "addLiquidityCount": 47,
+  "successfulAddLiquidity": 47,
+  "failedAddLiquidity": 0,
+  "addLiquidityDetails": [
+    {
+      "index": 1,
+      "timestamp": "12/9/2025, 12:57:56 AM",
+      "status": "success",
+      "price": 3111.2393701039005,
+      "balancesBefore": {
+        "weth": 0.004850823717457185,
+        "usdc": 13.922113,
+        "portfolioValue": 29.014986992836075
+      },
+      "balancesAfter": {
+        "weth": 0.00485054458460408,
+        "usdc": 13.922113,
+        "portfolioValue": 29.01331827806448
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3111.2393701039005
+      },
+      "pnl": {
+        "profitLoss": -0.0016687147715934714,
+        "profitLossPct": -0.005751216679867836
+      },
+      "txHash": "0x04b0494f44eae87a1ecf5bf712c5d37f46cd06b97ea9f4c18e0cc664ea29c1e5"
+    },
+    {
+      "index": 2,
+      "timestamp": "12/9/2025, 1:03:06 AM",
+      "status": "success",
+      "price": 3117.1076753427224,
+      "balancesBefore": {
+        "weth": 0.004850823717457184,
+        "usdc": 13.922113,
+        "portfolioValue": 29.042652841420306
+      },
+      "balancesAfter": {
+        "weth": 0.004850544584604079,
+        "usdc": 13.922113,
+        "portfolioValue": 29.04178275426145
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3117.1076753427224
+      },
+      "pnl": {
+        "profitLoss": 0.026795761425375986,
+        "profitLossPct": 0.09235145075885084
+      },
+      "txHash": "0xf1b73de0b242b5f7df3c35c32420feafd4a15034faa7c5249a75da65d4605412"
+    },
+    {
+      "index": 3,
+      "timestamp": "12/9/2025, 1:20:31 AM",
+      "status": "success",
+      "price": 3122.5063703517244,
+      "balancesBefore": {
+        "weth": 0.004681399063206768,
+        "usdc": 14.450515,
+        "portfolioValue": 29.068840959213286
+      },
+      "balancesAfter": {
+        "weth": 0.004681119930353663,
+        "usdc": 14.450515,
+        "portfolioValue": 29.06734180290973
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3122.5063703517244
+      },
+      "pnl": {
+        "profitLoss": 0.0523548100736555,
+        "profitLossPct": 0.18044057743876338
+      },
+      "txHash": "0xaff5ae11f225026bbcf76730bd6cc2af77983130286e419de3920e4360b8fd82"
+    },
+    {
+      "index": 4,
+      "timestamp": "12/9/2025, 1:31:07 AM",
+      "status": "success",
+      "price": 3123.1757827968468,
+      "balancesBefore": {
+        "weth": 0.004681399063206767,
+        "usdc": 14.450515,
+        "portfolioValue": 29.07134718381522
+      },
+      "balancesAfter": {
+        "weth": 0.004681119930353662,
+        "usdc": 14.450515,
+        "portfolioValue": 29.070475402848217
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3123.1757827968468
+      },
+      "pnl": {
+        "profitLoss": 0.055488410012142,
+        "profitLossPct": 0.19124051313840784
+      },
+      "txHash": "0x73a2eafdd7cd0f9d838212eb6924dec7e3fa9807d73b0719db445c4b2cf525af"
+    },
+    {
+      "index": 5,
+      "timestamp": "12/9/2025, 1:37:57 AM",
+      "status": "success",
+      "price": 3132.560814927102,
+      "balancesBefore": {
+        "weth": 0.004681399063206766,
+        "usdc": 14.450515,
+        "portfolioValue": 29.11528226443796
+      },
+      "balancesAfter": {
+        "weth": 0.004680839398411436,
+        "usdc": 14.450515,
+        "portfolioValue": 29.113529080430613
+      },
+      "amountsUsed": {
+        "weth": 5.596647953305667e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3132.560814927102
+      },
+      "pnl": {
+        "profitLoss": -0.0017531840073452543,
+        "profitLossPct": -0.006021525023944664
+      },
+      "txHash": "0xb806a582c887e72aeae1b0e855eb4c5f4f81c661b02f0b851f63484a56245a17"
+    },
+    {
+      "index": 6,
+      "timestamp": "12/9/2025, 1:56:15 AM",
+      "status": "success",
+      "price": 3132.3211241705944,
+      "balancesBefore": {
+        "weth": 0.004681399063206765,
+        "usdc": 14.450515,
+        "portfolioValue": 29.11416017635498
+      },
+      "balancesAfter": {
+        "weth": 0.004680839398411435,
+        "usdc": 14.450515,
+        "portfolioValue": 29.112407126494112
+      },
+      "amountsUsed": {
+        "weth": 5.596647953296993e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3132.3211241705944
+      },
+      "pnl": {
+        "profitLoss": -0.0028751379438460845,
+        "profitLossPct": -0.009875013121057187
+      },
+      "txHash": "0x55162cdbd60a84965546e25bfe6c3ee91ee6d561f939fbbac7e837cda4d90415"
+    },
+    {
+      "index": 7,
+      "timestamp": "12/9/2025, 2:17:27 AM",
+      "status": "success",
+      "price": 3129.8444978212083,
+      "balancesBefore": {
+        "weth": 0.004681399063206764,
+        "usdc": 14.450515,
+        "portfolioValue": 29.102566100083045
+      },
+      "balancesAfter": {
+        "weth": 0.004680839398411434,
+        "usdc": 14.450515,
+        "portfolioValue": 29.100814436302763
+      },
+      "amountsUsed": {
+        "weth": 5.596647953296993e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3129.8444978212083
+      },
+      "pnl": {
+        "profitLoss": -0.01446782813519576,
+        "profitLossPct": -0.04969152627061109
+      },
+      "txHash": "0x9b2c6ce2a7641e13bd0351e15fbda2224dab9798135faec1b957e26e5277a90a"
+    },
+    {
+      "index": 8,
+      "timestamp": "12/9/2025, 2:25:25 AM",
+      "status": "success",
+      "price": 3141.4696503027667,
+      "balancesBefore": {
+        "weth": 0.004392879208093271,
+        "usdc": 15.355637,
+        "portfolioValue": 29.15698807801985
+      },
+      "balancesAfter": {
+        "weth": 0.004392598676151046,
+        "usdc": 15.355637,
+        "portfolioValue": 29.15485242708862
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3141.4696503027667
+      },
+      "pnl": {
+        "profitLoss": 0.039570162650662155,
+        "profitLossPct": 0.13590856613124447
+      },
+      "txHash": "0xcc0db1955f7a3d48afe6b74355f2d2691dd19698247af70692bd94d9d93c976e"
+    },
+    {
+      "index": 9,
+      "timestamp": "12/9/2025, 2:36:06 AM",
+      "status": "success",
+      "price": 3137.780106750312,
+      "balancesBefore": {
+        "weth": 0.00439287920809327,
+        "usdc": 15.355637,
+        "portfolioValue": 29.139525990512126
+      },
+      "balancesAfter": {
+        "weth": 0.004392598676151045,
+        "usdc": 15.355637,
+        "portfolioValue": 29.138645742964506
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3137.780106750312
+      },
+      "pnl": {
+        "profitLoss": 0.023363478526547965,
+        "profitLossPct": 0.08024472616940632
+      },
+      "txHash": "0x419a8a98891dde2165f64061e10722c2054ca48002b5e94aeb98284594cf39f0"
+    },
+    {
+      "index": 10,
+      "timestamp": "12/9/2025, 2:59:16 AM",
+      "status": "success",
+      "price": 3134.5440840586575,
+      "balancesBefore": {
+        "weth": 0.004555386219289632,
+        "usdc": 14.846339,
+        "portfolioValue": 29.12539792427665
+      },
+      "balancesAfter": {
+        "weth": 0.004554826554494302,
+        "usdc": 14.846339,
+        "portfolioValue": 29.12364363030339
+      },
+      "amountsUsed": {
+        "weth": 5.596647953305667e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3134.5440840586575
+      },
+      "pnl": {
+        "profitLoss": 0.008361365865432902,
+        "profitLossPct": 0.02871813430998626
+      },
+      "txHash": "0x7c0bc6c9294e42347ec526740873bca6fb37461a1f9774d625d98be0e6ecf8de"
+    },
+    {
+      "index": 11,
+      "timestamp": "12/9/2025, 3:02:01 AM",
+      "status": "success",
+      "price": 3150.7925685812834,
+      "balancesBefore": {
+        "weth": 0.00425343702256322,
+        "usdc": 15.795732,
+        "portfolioValue": 29.19941604675536
+      },
+      "balancesAfter": {
+        "weth": 0.004253156490620995,
+        "usdc": 15.795732,
+        "portfolioValue": 29.196545863661882
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3150.7925685812834
+      },
+      "pnl": {
+        "profitLoss": 0.08126359922392368,
+        "profitLossPct": 0.27910977639114565
+      },
+      "txHash": "0xe344338b50cf8195fa65556ecb4d617335f70bf9b1681e03c4f07251bc224b1a"
+    },
+    {
+      "index": 12,
+      "timestamp": "12/9/2025, 3:16:06 AM",
+      "status": "success",
+      "price": 3141.5020926225297,
+      "balancesBefore": {
+        "weth": 0.004439077972720588,
+        "usdc": 15.212319,
+        "portfolioValue": 29.157691740616304
+      },
+      "balancesAfter": {
+        "weth": 0.004438797440778363,
+        "usdc": 15.212319,
+        "portfolioValue": 29.15681044893276
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3141.5020926225297
+      },
+      "pnl": {
+        "profitLoss": 0.041528184494801224,
+        "profitLossPct": 0.14263363177325145
+      },
+      "txHash": "0xf5f1f7b6998d9192944a1f2bbd084e6af3a9ecfa19604dcf295d0bd2a443e5d0"
+    },
+    {
+      "index": 13,
+      "timestamp": "12/9/2025, 3:24:24 AM",
+      "status": "success",
+      "price": 3145.7435760935205,
+      "balancesBefore": {
+        "weth": 0.004439077972720587,
+        "usdc": 15.212319,
+        "portfolioValue": 29.176520016464035
+      },
+      "balancesAfter": {
+        "weth": 0.004438797440778362,
+        "usdc": 15.212319,
+        "portfolioValue": 29.175637534908894
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3145.7435760935205
+      },
+      "pnl": {
+        "profitLoss": 0.06035527047093581,
+        "profitLossPct": 0.20729756257474122
+      },
+      "txHash": "0x62b4684b46ed02b5cca047ed99d3ce0f54f666ee587297f35936db980f7dacd7"
+    },
+    {
+      "index": 14,
+      "timestamp": "12/9/2025, 4:18:17 AM",
+      "status": "success",
+      "price": 3129.076139905394,
+      "balancesBefore": {
+        "weth": 0.004641514905420446,
+        "usdc": 14.579002,
+        "portfolioValue": 29.102655543566357
+      },
+      "balancesAfter": {
+        "weth": 0.004641235772567341,
+        "usdc": 14.579002,
+        "portfolioValue": 29.101782115615844
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3129.076139905394
+      },
+      "pnl": {
+        "profitLoss": -0.013500148822114255,
+        "profitLossPct": -0.04636791324741382
+      },
+      "txHash": "0x2edeefb4f06b054adc7235276154a3bb4f1045320da3895e947e339c0c35097c"
+    },
+    {
+      "index": 15,
+      "timestamp": "12/9/2025, 4:19:24 AM",
+      "status": "success",
+      "price": 3133.1980203502744,
+      "balancesBefore": {
+        "weth": 0.004641514905420445,
+        "usdc": 14.579002,
+        "portfolioValue": 29.121787313089627
+      },
+      "balancesAfter": {
+        "weth": 0.004640955240625115,
+        "usdc": 14.579002,
+        "portfolioValue": 29.120033772460843
+      },
+      "amountsUsed": {
+        "weth": 5.596647953296993e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3133.1980203502744
+      },
+      "pnl": {
+        "profitLoss": 0.0047515080228848205,
+        "profitLossPct": 0.016319635783467627
+      },
+      "txHash": "0xaa4ed4c9d9c1917a094e23efdd7471da171c2eca10ec925c690232b1fbce249e"
+    },
+    {
+      "index": 16,
+      "timestamp": "12/9/2025, 4:35:26 AM",
+      "status": "success",
+      "price": 3134.47483754132,
+      "balancesBefore": {
+        "weth": 0.004641514905420444,
+        "usdc": 14.579002,
+        "portfolioValue": 29.12771367911336
+      },
+      "balancesAfter": {
+        "weth": 0.004640955240625114,
+        "usdc": 14.579002,
+        "portfolioValue": 29.12595942389494
+      },
+      "amountsUsed": {
+        "weth": 5.596647953296993e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3134.47483754132
+      },
+      "pnl": {
+        "profitLoss": 0.01067715945698211,
+        "profitLossPct": 0.036672010801775484
+      },
+      "txHash": "0x16967c74a8e4b9c49333b262f201912f97ab91f34b5f2bd8c75c5cf218833e95"
+    },
+    {
+      "index": 17,
+      "timestamp": "12/9/2025, 4:59:26 AM",
+      "status": "success",
+      "price": 3122.042900547084,
+      "balancesBefore": {
+        "weth": 0.004641514905420443,
+        "usdc": 14.579002,
+        "portfolioValue": 29.070010658251363
+      },
+      "balancesAfter": {
+        "weth": 0.004641235772567338,
+        "usdc": 14.579002,
+        "portfolioValue": 29.069139193509017
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3122.042900547084
+      },
+      "pnl": {
+        "profitLoss": -0.046143070928941654,
+        "profitLossPct": -0.15848402399073358
+      },
+      "txHash": "0x0b3731a3bf06b6be29c9c7904009bb41bd6f9ae48b396b67f2f01d4465e5530e"
+    },
+    {
+      "index": 18,
+      "timestamp": "12/9/2025, 5:01:04 AM",
+      "status": "success",
+      "price": 3125.4801464286193,
+      "balancesBefore": {
+        "weth": 0.004641514905420442,
+        "usdc": 14.579002,
+        "portfolioValue": 29.0859646862441
+      },
+      "balancesAfter": {
+        "weth": 0.004641235772567337,
+        "usdc": 14.579002,
+        "portfolioValue": 29.085092262053507
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3125.4801464286193
+      },
+      "pnl": {
+        "profitLoss": -0.03019000238445102,
+        "profitLossPct": -0.103691257774017
+      },
+      "txHash": "0xf029b84458cacf7aca92dae680a947f65912aeb22adb2a8e6a608f7c6475de66"
+    },
+    {
+      "index": 19,
+      "timestamp": "12/9/2025, 5:45:57 AM",
+      "status": "success",
+      "price": 3129.4435982159885,
+      "balancesBefore": {
+        "weth": 0.004641514905420441,
+        "usdc": 14.579002,
+        "portfolioValue": 29.104361106792087
+      },
+      "balancesAfter": {
+        "weth": 0.004641235772567336,
+        "usdc": 14.579002,
+        "portfolioValue": 29.10348757627189
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3129.4435982159885
+      },
+      "pnl": {
+        "profitLoss": -0.011794688166069989,
+        "profitLossPct": -0.04051029991378884
+      },
+      "txHash": "0xc3727e721fea6203672e76d34695b2da00a5c8e0e8cc86937cccc3df0cde8236"
+    },
+    {
+      "index": 20,
+      "timestamp": "12/9/2025, 5:48:27 AM",
+      "status": "success",
+      "price": 3132.696110242168,
+      "balancesBefore": {
+        "weth": 0.00464151490542044,
+        "usdc": 14.579002,
+        "portfolioValue": 29.119457689841656
+      },
+      "balancesAfter": {
+        "weth": 0.00464095524062511,
+        "usdc": 14.579002,
+        "portfolioValue": 29.117704430114284
+      },
+      "amountsUsed": {
+        "weth": 5.596647953305667e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80600,
+        "tickRange": 200,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3132.696110242168
+      },
+      "pnl": {
+        "profitLoss": 0.0024221656763252497,
+        "profitLossPct": 0.008319224434529133
+      },
+      "txHash": "0x3b038d763981860c3bc350eb2d13ba4d5a067676b9b746955f91c7108b21c721"
+    },
+    {
+      "index": 21,
+      "timestamp": "12/9/2025, 5:49:34 AM",
+      "status": "success",
+      "price": 3136.0205276552238,
+      "balancesBefore": {
+        "weth": 0.004458948345804361,
+        "usdc": 15.15091,
+        "portfolioValue": 29.13488802281619
+      },
+      "balancesAfter": {
+        "weth": 0.004458667813862136,
+        "usdc": 15.15091,
+        "portfolioValue": 29.1333837902673
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3136.0205276552238
+      },
+      "pnl": {
+        "profitLoss": 0.01810152582934066,
+        "profitLossPct": 0.06217190568490644
+      },
+      "txHash": "0x107deaba99b30eeeb1e70f753815f00d1ace17626eea88cb6a93defd3115d730"
+    },
+    {
+      "index": 22,
+      "timestamp": "12/9/2025, 5:52:25 AM",
+      "status": "success",
+      "price": 3140.6317377690452,
+      "balancesBefore": {
+        "weth": 0.00445894834580436,
+        "usdc": 15.15091,
+        "portfolioValue": 29.154824691905958
+      },
+      "balancesAfter": {
+        "weth": 0.004458667813862135,
+        "usdc": 15.15091,
+        "portfolioValue": 29.153943644384746
+      },
+      "amountsUsed": {
+        "weth": 2.8053194222471545e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80500,
+        "tickUpper": 80600,
+        "tickRange": 100,
+        "priceLower": 3132.533956672657,
+        "priceUpper": 3164.0148644316755,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3140.6317377690452
+      },
+      "pnl": {
+        "profitLoss": 0.03866137994678809,
+        "profitLossPct": 0.13278724072000478
+      },
+      "txHash": "0x51cd5eea8ff9ef9a49966ef57e8b7b05adede67484d425d59c35b5b671b0361a"
+    },
+    {
+      "index": 23,
+      "timestamp": "12/9/2025, 6:36:26 AM",
+      "status": "success",
+      "price": 3119.5784510627986,
+      "balancesBefore": {
+        "weth": 0.004667177967290832,
+        "usdc": 14.499957,
+        "portfolioValue": 29.059584814035556
+      },
+      "balancesAfter": {
+        "weth": 0.004666898834437727,
+        "usdc": 14.499957,
+        "portfolioValue": 29.058714037202027
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3119.5784510627986
+      },
+      "pnl": {
+        "profitLoss": -0.0565682272359318,
+        "profitLossPct": -0.1942904991342827
+      },
+      "txHash": "0x5588e9a5f9842ddb753ac873e00044414ae80171e40aea5a0e87414b36d2342f"
+    },
+    {
+      "index": 24,
+      "timestamp": "12/9/2025, 6:54:18 AM",
+      "status": "success",
+      "price": 3119.1873855480785,
+      "balancesBefore": {
+        "weth": 0.004667177967290831,
+        "usdc": 14.499957,
+        "portfolioValue": 29.057759641681486
+      },
+      "balancesAfter": {
+        "weth": 0.004666898834437726,
+        "usdc": 14.499957,
+        "portfolioValue": 29.056888974007187
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310585123e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3119.1873855480785
+      },
+      "pnl": {
+        "profitLoss": -0.05839329043077157,
+        "profitLossPct": -0.20055890202409066
+      },
+      "txHash": "0x07384c6679b42f39aac4eb84ddf187e7d63e307927f1f892a7d988357032e5dd"
+    },
+    {
+      "index": 25,
+      "timestamp": "12/9/2025, 7:25:36 AM",
+      "status": "success",
+      "price": 3105.8131360154357,
+      "balancesBefore": {
+        "weth": 0.004886219137696772,
+        "usdc": 13.8182,
+        "portfolioValue": 28.99388358330865
+      },
+      "balancesAfter": {
+        "weth": 0.004885940004843667,
+        "usdc": 13.8182,
+        "portfolioValue": 28.99301664882678
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3105.8131360154357
+      },
+      "pnl": {
+        "profitLoss": -0.12226561561117677,
+        "profitLossPct": -0.419936219407753
+      },
+      "txHash": "0xb3062836858925750ebadfe55eb5fea64a704bca3d7f1ce318b5a60147583c67"
+    },
+    {
+      "index": 26,
+      "timestamp": "12/9/2025, 7:33:53 AM",
+      "status": "success",
+      "price": 3111.2409355769564,
+      "balancesBefore": {
+        "weth": 0.004886219137696771,
+        "usdc": 13.8182,
+        "portfolioValue": 29.02040500140173
+      },
+      "balancesAfter": {
+        "weth": 0.004885940004843666,
+        "usdc": 13.8182,
+        "portfolioValue": 29.019536551842684
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3111.2409355769564
+      },
+      "pnl": {
+        "profitLoss": -0.09574571259527431,
+        "profitLossPct": -0.32885036705352577
+      },
+      "txHash": "0xd28dfcdd84f104914c9386cedec902b408c4a6fc89f99c370db886c50018f479"
+    },
+    {
+      "index": 27,
+      "timestamp": "12/9/2025, 7:49:06 AM",
+      "status": "success",
+      "price": 3110.3743980473755,
+      "balancesBefore": {
+        "weth": 0.00488621913769677,
+        "usdc": 13.8182,
+        "portfolioValue": 29.016170909141156
+      },
+      "balancesAfter": {
+        "weth": 0.004885940004843665,
+        "usdc": 13.8182,
+        "portfolioValue": 29.015302701461202
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3110.3743980473755
+      },
+      "pnl": {
+        "profitLoss": -0.09997956297675614,
+        "profitLossPct": -0.34339204431781645
+      },
+      "txHash": "0x074c036455658579b1e572d2a926ff274f347dd8ad24b8d20be24d8beb806191"
+    },
+    {
+      "index": 28,
+      "timestamp": "12/9/2025, 8:19:45 AM",
+      "status": "success",
+      "price": 3111.657998328233,
+      "balancesBefore": {
+        "weth": 0.004886219137696769,
+        "usdc": 13.8182,
+        "portfolioValue": 29.02244286139863
+      },
+      "balancesAfter": {
+        "weth": 0.004885940004843664,
+        "usdc": 13.8182,
+        "portfolioValue": 29.021574295423672
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3111.657998328233
+      },
+      "pnl": {
+        "profitLoss": -0.09370796901428591,
+        "profitLossPct": -0.3218514873501428
+      },
+      "txHash": "0xc5a120298ee2fbc1f09773551d39919f54c2460924e5491c42a1bf3c59396e42"
+    },
+    {
+      "index": 29,
+      "timestamp": "12/9/2025, 8:32:57 AM",
+      "status": "success",
+      "price": 3102.978040136478,
+      "balancesBefore": {
+        "weth": 0.004886219137696768,
+        "usdc": 13.8182,
+        "portfolioValue": 28.980030683567666
+      },
+      "balancesAfter": {
+        "weth": 0.004885662264102041,
+        "usdc": 13.8182,
+        "portfolioValue": 28.9783027170321
+      },
+      "amountsUsed": {
+        "weth": 5.568735947265868e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80300,
+        "tickUpper": 80500,
+        "tickRange": 200,
+        "priceLower": 3070.508698721385,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3102.978040136478
+      },
+      "pnl": {
+        "profitLoss": -0.13697954740585772,
+        "profitLossPct": -0.4704730188144785
+      },
+      "txHash": "0x4a01e29da33bc1e9c35ddc24566a82fce034e98362121c92b16bd3638eeba93a"
+    },
+    {
+      "index": 30,
+      "timestamp": "12/9/2025, 8:54:45 AM",
+      "status": "success",
+      "price": 3101.3446011799033,
+      "balancesBefore": {
+        "weth": 0.00509288194142656,
+        "usdc": 13.177653,
+        "portfolioValue": 28.972434913489884
+      },
+      "balancesAfter": {
+        "weth": 0.005092325067831833,
+        "usdc": 13.177653,
+        "portfolioValue": 28.97070785657334
+      },
+      "amountsUsed": {
+        "weth": 5.568735947265868e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80300,
+        "tickUpper": 80500,
+        "tickRange": 200,
+        "priceLower": 3070.508698721385,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "2.00%",
+        "currentPrice": 3101.3446011799033
+      },
+      "pnl": {
+        "profitLoss": -0.14457440786461717,
+        "profitLossPct": -0.4965584965020363
+      },
+      "txHash": "0x37baa8035d9ee76392049e48acaa5bbff971a8a078631c542b19dfbf30e75895"
+    },
+    {
+      "index": 31,
+      "timestamp": "12/9/2025, 9:03:22 AM",
+      "status": "success",
+      "price": 3105.2057305746725,
+      "balancesBefore": {
+        "weth": 0.004852730503508004,
+        "usdc": 13.922437,
+        "portfolioValue": 28.992099189658013
+      },
+      "balancesAfter": {
+        "weth": 0.004852451370654899,
+        "usdc": 13.922437,
+        "portfolioValue": 28.99029680349252
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3105.2057305746725
+      },
+      "pnl": {
+        "profitLoss": -0.12498546094543883,
+        "profitLossPct": -0.42927786105683335
+      },
+      "txHash": "0x28ab8fdda0b1af3346df9ba82e2592599c32a6a806a0c313c8f07d7daee005c4"
+    },
+    {
+      "index": 32,
+      "timestamp": "12/9/2025, 9:04:16 AM",
+      "status": "success",
+      "price": 3108.6432109444977,
+      "balancesBefore": {
+        "weth": 0.004852730503508003,
+        "usdc": 13.922437,
+        "portfolioValue": 29.007844734273426
+      },
+      "balancesAfter": {
+        "weth": 0.004852451370654898,
+        "usdc": 13.922437,
+        "portfolioValue": 29.006977009824674
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3108.6432109444977
+      },
+      "pnl": {
+        "profitLoss": -0.10830525461328477,
+        "profitLossPct": -0.37198765112289905
+      },
+      "txHash": "0x7f125adf8e2a7ca932cb324624a5e74a7901373c8bd941442449565eb6483220"
+    },
+    {
+      "index": 33,
+      "timestamp": "12/9/2025, 9:04:54 AM",
+      "status": "success",
+      "price": 3114.963597398981,
+      "balancesBefore": {
+        "weth": 0.004852730503508002,
+        "usdc": 13.922437,
+        "portfolioValue": 29.038515866415054
+      },
+      "balancesAfter": {
+        "weth": 0.004852451370654897,
+        "usdc": 13.922437,
+        "portfolioValue": 29.037646377738795
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3114.963597398981
+      },
+      "pnl": {
+        "profitLoss": -0.07763588669916288,
+        "profitLossPct": -0.2666499537735516
+      },
+      "txHash": "0xdbfdef3b85179228f717ea743e7014b0400860f4ee4fe4bf7b12458d3da1d9a2"
+    },
+    {
+      "index": 34,
+      "timestamp": "12/9/2025, 9:05:15 AM",
+      "status": "success",
+      "price": 3118.911296660627,
+      "balancesBefore": {
+        "weth": 0.004852730503508001,
+        "usdc": 13.922437,
+        "portfolioValue": 29.057672987040718
+      },
+      "balancesAfter": {
+        "weth": 0.004852451370654896,
+        "usdc": 13.922437,
+        "portfolioValue": 29.056802396431898
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3118.911296660627
+      },
+      "pnl": {
+        "profitLoss": -0.05847986800606009,
+        "profitLossPct": -0.20085626330158807
+      },
+      "txHash": "0x4bbe890ea10e87a869bc42db3e3c267433f4b46c362330f211bc95be5cdb11fd"
+    },
+    {
+      "index": 35,
+      "timestamp": "12/9/2025, 9:21:05 AM",
+      "status": "success",
+      "price": 3122.2473410559373,
+      "balancesBefore": {
+        "weth": 0.004680585302547174,
+        "usdc": 14.459241,
+        "portfolioValue": 29.07386191143889
+      },
+      "balancesAfter": {
+        "weth": 0.004680306169694069,
+        "usdc": 14.459241,
+        "portfolioValue": 29.072314493655007
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3122.2473410559373
+      },
+      "pnl": {
+        "profitLoss": -0.04296777078295122,
+        "profitLossPct": -0.14757806705323614
+      },
+      "txHash": "0xc9fbd9540c3ee712081144cfa5f80c9c5ad0ca3c79bbf221df296f3c58713011"
+    },
+    {
+      "index": 36,
+      "timestamp": "12/9/2025, 9:30:26 AM",
+      "status": "success",
+      "price": 3128.4406854147032,
+      "balancesBefore": {
+        "weth": 0.004680585302547173,
+        "usdc": 14.459241,
+        "portfolioValue": 29.102174492042664
+      },
+      "balancesAfter": {
+        "weth": 0.004680306169694068,
+        "usdc": 14.459241,
+        "portfolioValue": 29.101301241468377
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3128.4406854147032
+      },
+      "pnl": {
+        "profitLoss": -0.013981022969581147,
+        "profitLossPct": -0.048019534355185946
+      },
+      "txHash": "0x9f44167f082859c6bf007c71e4be60dabc9261f205fa369784d6cda27b49d275"
+    },
+    {
+      "index": 37,
+      "timestamp": "12/9/2025, 10:49:15 AM",
+      "status": "success",
+      "price": 3105.4680605836297,
+      "balancesBefore": {
+        "weth": 0.004958815595938255,
+        "usdc": 13.59271,
+        "portfolioValue": 28.992153451510227
+      },
+      "balancesAfter": {
+        "weth": 0.00495853646308515,
+        "usdc": 13.59271,
+        "portfolioValue": 28.99128661335025
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3105.4680605836297
+      },
+      "pnl": {
+        "profitLoss": -0.12399565108770716,
+        "profitLossPct": -0.4258782379697488
+      },
+      "txHash": "0xe7c3c601e4aa28a433bfb3f4c10dea580185ee649bb24ca2251ab827a4dc1642"
+    },
+    {
+      "index": 38,
+      "timestamp": "12/9/2025, 11:05:23 AM",
+      "status": "success",
+      "price": 3110.7600837340387,
+      "balancesBefore": {
+        "weth": 0.004958815595938254,
+        "usdc": 13.59271,
+        "portfolioValue": 29.01839561844254
+      },
+      "balancesAfter": {
+        "weth": 0.004958536463085149,
+        "usdc": 13.59271,
+        "portfolioValue": 29.01752730310504
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3110.7600837340387
+      },
+      "pnl": {
+        "profitLoss": -0.09775496133291739,
+        "profitLossPct": -0.3357513777303043
+      },
+      "txHash": "0xdafbe57cd287d66e46ec7b7a87dfd6a7eb3893a1e27272255a3dab90c1cc9d2d"
+    },
+    {
+      "index": 39,
+      "timestamp": "12/9/2025, 11:07:24 AM",
+      "status": "success",
+      "price": 3114.7203240952936,
+      "balancesBefore": {
+        "weth": 0.004777996488997861,
+        "usdc": 14.155243,
+        "portfolioValue": 29.038033720109592
+      },
+      "balancesAfter": {
+        "weth": 0.004777717356144756,
+        "usdc": 14.155243,
+        "portfolioValue": 29.036496351966903
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3114.7203240952936
+      },
+      "pnl": {
+        "profitLoss": -0.07878591247105504,
+        "profitLossPct": -0.2705998580246837
+      },
+      "txHash": "0xec27308b7a0158382566303da9f99db28100db234447c453610b58282df9b1b2"
+    },
+    {
+      "index": 40,
+      "timestamp": "12/9/2025, 11:35:45 AM",
+      "status": "success",
+      "price": 3113.311026911686,
+      "balancesBefore": {
+        "weth": 0.00477799648899786,
+        "usdc": 14.155243,
+        "portfolioValue": 29.03063215574236
+      },
+      "balancesAfter": {
+        "weth": 0.004777717356144755,
+        "usdc": 14.155243,
+        "portfolioValue": 29.029763128352812
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3113.311026911686
+      },
+      "pnl": {
+        "profitLoss": -0.08551913608514639,
+        "profitLossPct": -0.29372593852404905
+      },
+      "txHash": "0x38d1c4c785d0556d2a9b7847e13a872503cc5844f20a8505965f9d1477f9c2d1"
+    },
+    {
+      "index": 41,
+      "timestamp": "12/9/2025, 12:18:06 PM",
+      "status": "success",
+      "price": 3105.097040440906,
+      "balancesBefore": {
+        "weth": 0.00483574900620418,
+        "usdc": 13.975518,
+        "portfolioValue": 28.99165853282612
+      },
+      "balancesAfter": {
+        "weth": 0.004835469873351075,
+        "usdc": 13.975518,
+        "portfolioValue": 28.990121192883585
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3105.097040440906
+      },
+      "pnl": {
+        "profitLoss": -0.1251610715543734,
+        "profitLossPct": -0.42988101718405064
+      },
+      "txHash": "0x067cb88920e1e89ccbbb8f78aa138b71cda9fe76ac024740d79b44425f89c1aa"
+    },
+    {
+      "index": 42,
+      "timestamp": "12/9/2025, 12:22:04 PM",
+      "status": "success",
+      "price": 3108.2872206491743,
+      "balancesBefore": {
+        "weth": 0.004835749006204179,
+        "usdc": 13.975518,
+        "portfolioValue": 29.006414838251395
+      },
+      "balancesAfter": {
+        "weth": 0.004835469873351074,
+        "usdc": 13.975518,
+        "portfolioValue": 29.005547213171223
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3108.2872206491743
+      },
+      "pnl": {
+        "profitLoss": -0.10973505126673544,
+        "profitLossPct": -0.3768984627044754
+      },
+      "txHash": "0x4bc86f214bff21abd203ea3f559f4d003c6ac2f1973cf182e7db3d91975e5c79"
+    },
+    {
+      "index": 43,
+      "timestamp": "12/9/2025, 12:31:34 PM",
+      "status": "success",
+      "price": 3111.4445640968415,
+      "balancesBefore": {
+        "weth": 0.004835749006204178,
+        "usdc": 13.975518,
+        "portfolioValue": 29.021682958690693
+      },
+      "balancesAfter": {
+        "weth": 0.004835469873351073,
+        "usdc": 13.975518,
+        "portfolioValue": 29.02081445229224
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3111.4445640968415
+      },
+      "pnl": {
+        "profitLoss": -0.09446781214571942,
+        "profitLossPct": -0.3244612615729454
+      },
+      "txHash": "0xce8f23cfd0c8ba7c38eb516e6cb69930083142429566dd75c7e07bdeada10f93"
+    },
+    {
+      "index": 44,
+      "timestamp": "12/9/2025, 12:32:34 PM",
+      "status": "success",
+      "price": 3117.880958203002,
+      "balancesBefore": {
+        "weth": 0.004835749006204177,
+        "usdc": 13.975518,
+        "portfolioValue": 29.052807745093094
+      },
+      "balancesAfter": {
+        "weth": 0.004835469873351072,
+        "usdc": 13.975518,
+        "portfolioValue": 29.05193744208559
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3117.880958203002
+      },
+      "pnl": {
+        "profitLoss": -0.06334482235237004,
+        "profitLossPct": -0.21756554436616538
+      },
+      "txHash": "0xf2cf01ae3828d201c9f1fa4829db10b7b0f68738f0ebaa86bd9e6f3c345d8319"
+    },
+    {
+      "index": 45,
+      "timestamp": "12/9/2025, 12:37:26 PM",
+      "status": "success",
+      "price": 3117.31642348544,
+      "balancesBefore": {
+        "weth": 0.004835749006204176,
+        "usdc": 13.975518,
+        "portfolioValue": 29.050077796893675
+      },
+      "balancesAfter": {
+        "weth": 0.004835469873351071,
+        "usdc": 13.975518,
+        "portfolioValue": 29.049207651466354
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3117.31642348544
+      },
+      "pnl": {
+        "profitLoss": -0.06607461297160455,
+        "profitLossPct": -0.22694134431356527
+      },
+      "txHash": "0x8534de584d633cabe8d7912eee0f7381b8a562b75700315092fbe3f517056ed7"
+    },
+    {
+      "index": 46,
+      "timestamp": "12/9/2025, 12:52:38 PM",
+      "status": "success",
+      "price": 3119.171505060199,
+      "balancesBefore": {
+        "weth": 0.004835749006204175,
+        "usdc": 13.975518,
+        "portfolioValue": 29.059048505775237
+      },
+      "balancesAfter": {
+        "weth": 0.00483546987335107,
+        "usdc": 13.975518,
+        "portfolioValue": 29.058177842533702
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3119.171505060199
+      },
+      "pnl": {
+        "profitLoss": -0.05710442190425624,
+        "profitLossPct": -0.1961321253409411
+      },
+      "txHash": "0x3651f719ddf4bfc3079c3b0df62de3fb0c39c25d49a8b4d48c985546a9e0bca6"
+    },
+    {
+      "index": 47,
+      "timestamp": "12/9/2025, 12:57:11 PM",
+      "status": "success",
+      "price": 3122.3575834086146,
+      "balancesBefore": {
+        "weth": 0.004658265598413507,
+        "usdc": 14.529032,
+        "portfolioValue": 29.074455580982274
+      },
+      "balancesAfter": {
+        "weth": 0.004657986465560402,
+        "usdc": 14.529032,
+        "portfolioValue": 29.072931364157213
+      },
+      "amountsUsed": {
+        "weth": 2.7913285310498387e-7,
+        "usdc": 0,
+        "wethPctUsed": "0.01%",
+        "usdcPctUsed": "0.00%"
+      },
+      "tickInfo": {
+        "tickLower": 80400,
+        "tickUpper": 80500,
+        "tickRange": 100,
+        "priceLower": 3101.366273596769,
+        "priceUpper": 3132.533956672657,
+        "priceRangePct": "1.00%",
+        "currentPrice": 3122.3575834086146
+      },
+      "pnl": {
+        "profitLoss": -0.04235090028074495,
+        "profitLossPct": -0.14545934982218348
+      },
+      "txHash": "0xb942283aa6a34d295a38dab812f4a241d843b147fe745457257fa73e026e4816"
+    }
+  ],
+  "summary": {
+    "totalPnL": -1.8375619440875397,
+    "negativePnLCount": 33,
+    "positivePnLCount": 14,
+    "zeroPnLCount": 0,
+    "avgPnL": -0.03909706264016042,
+    "avgPnLPct": -0.1342500575049252
+  }
+}

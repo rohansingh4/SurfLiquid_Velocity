@@ -42,7 +42,8 @@ const POOL_ABI = [
   'function slot0() external view returns (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex, uint16 observationCardinality, uint16 observationCardinalityNext, uint8 feeProtocol, bool unlocked)',
   'function liquidity() external view returns (uint128)',
   'function token0() external view returns (address)',
-  'function token1() external view returns (address)'
+  'function token1() external view returns (address)',
+  'function tickSpacing() external view returns (int24)'
 ];
 
 // ERC20 ABI for token info
@@ -105,6 +106,18 @@ function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
   const usdcPerWeth = 1 / priceAdjusted;
 
   return usdcPerWeth;
+}
+
+// Get pool tick spacing
+async function getPoolTickSpacing() {
+  try {
+    const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
+    const tickSpacing = await poolContract.tickSpacing();
+    return Number(tickSpacing);
+  } catch (error) {
+    console.error('Error getting tick spacing:', error);
+    return 1; // Default fallback
+  }
 }
 
 // Calculate distribution percentage
@@ -205,10 +218,29 @@ async function updateCandle(data) {
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
-          // Update ranges based on new price
+          // Update ranges based on new price using tick-based calculation
+          // Get current tick from pool price
+          const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+
+          // Get tick spacing from pool
+          const tickSpacing = await getPoolTickSpacing();
+
+          // Round current tick to nearest tick spacing
+          const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
+
+          // Define range as ±5 tick spacing units (10 total range)
+          const tickLower = roundedTick - (5 * tickSpacing);
+          const tickUpper = roundedTick + (5 * tickSpacing);
+
+          // Calculate price boundaries from ticks
+          const lowerRange = Math.pow(1.0001, tickLower);
+          const upperRange = Math.pow(1.0001, tickUpper);
+
           currentRanges = {
-            upper: openPrice * (1 + RANGE_PERCENTAGE / 100),
-            lower: openPrice * (1 - RANGE_PERCENTAGE / 100)
+            upper: upperRange,
+            lower: lowerRange,
+            tickLower: tickLower,
+            tickUpper: tickUpper
           };
 
           const status = isUpRebalance ? 'Open-UP' : 'Open-DOWN';
@@ -216,6 +248,7 @@ async function updateCandle(data) {
 
           console.log(`\n🔄 REBALANCE: ${status}`);
           console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
 
           // Save rebalance position
           await savePositionData({
@@ -223,6 +256,8 @@ async function updateCandle(data) {
             status: status,
             upper_range: currentRanges.upper,
             lower_range: currentRanges.lower,
+            tickLower: currentRanges.tickLower,
+            tickUpper: currentRanges.tickUpper,
             open: data.price,
             high: data.price,
             low: data.price,
@@ -243,12 +278,14 @@ async function updateCandle(data) {
         const status = isAbove ? 'Price-UP' : 'Price-DOWN';
         
         console.log(`\n⚠️  ${status}: $${currentPrice.toFixed(2)} ${isAbove ? '>' : '<'} ${isAbove ? currentRanges.upper.toFixed(2) : currentRanges.lower.toFixed(2)}`);
-        
+
         await savePositionData({
           timestamp: data.timestamp,
           status: status,
           upper_range: currentRanges.upper,
           lower_range: currentRanges.lower,
+          tickLower: currentRanges.tickLower,
+          tickUpper: currentRanges.tickUpper,
           open: currentCandle.open,
           high: currentCandle.high,
           low: currentCandle.low,
@@ -268,6 +305,8 @@ async function updateCandle(data) {
           status: 'Monitoring',
           upper_range: currentRanges.upper,
           lower_range: currentRanges.lower,
+          tickLower: currentRanges.tickLower,
+          tickUpper: currentRanges.tickUpper,
           open: currentCandle.open,
           high: currentCandle.high,
           low: currentCandle.low,
@@ -327,12 +366,29 @@ async function streamPositionData(data) {
   // Initialize ranges on first run
   if (!currentRanges) {
     const openPrice = currentCandle.open;
+
+    // Calculate tick-based range
+    const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+    const tickSpacing = await getPoolTickSpacing();
+    const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
+
+    // Define range as ±5 tick spacing units (10 total range)
+    const tickLower = roundedTick - (5 * tickSpacing);
+    const tickUpper = roundedTick + (5 * tickSpacing);
+
+    // Calculate price boundaries from ticks
+    const lowerRange = Math.pow(1.0001, tickLower);
+    const upperRange = Math.pow(1.0001, tickUpper);
+
     currentRanges = {
-      upper: openPrice * (1 + RANGE_PERCENTAGE / 100),
-      lower: openPrice * (1 - RANGE_PERCENTAGE / 100)
+      upper: upperRange,
+      lower: lowerRange,
+      tickLower: tickLower,
+      tickUpper: tickUpper
     };
     lastPositionStatus = 'Monitoring';
     console.log(`\n🎯 Initial Ranges Set: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
   }
 
   // Just log current status, don't save (saving happens on candle close only)
@@ -412,7 +468,9 @@ async function savePositionData(positionData) {
         positionData.usdc_pct,
         positionData.upper_range,
         positionData.lower_range,
-        positionData.close
+        positionData.close,
+        positionData.tickLower,
+        positionData.tickUpper
       );
     }
   } catch (error) {

@@ -27,6 +27,12 @@ const transactionSchema = new mongoose.Schema({
   tickLower: { type: Number },
   tickUpper: { type: Number },
 
+  // LP position tracking
+  lpAmount0: { type: Number },    // USDC value in LP
+  lpAmount1: { type: Number },    // WETH value in LP
+  lpPositionValueBefore: { type: Number },  // LP value before transaction
+  lpPositionValueAfter: { type: Number },   // LP value after transaction
+
   // P&L tracking
   portfolioValueBefore: { type: Number },
   portfolioValueAfter: { type: Number },

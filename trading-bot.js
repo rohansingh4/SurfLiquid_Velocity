@@ -83,8 +83,18 @@ class TradingBot {
   }
 
   // Calculate portfolio value in USDC
-  calculatePortfolioValue(wethAmount, usdcAmount, wethPrice) {
-    return (wethAmount * wethPrice) + usdcAmount;
+  async calculatePortfolioValue(wethAmount, usdcAmount, wethPrice, includeLPPosition = true) {
+    let walletValue = (wethAmount * wethPrice) + usdcAmount;
+
+    if (includeLPPosition) {
+      const lpValue = await this.getLPPositionValue(wethPrice);
+      const totalValue = walletValue + lpValue;
+
+      console.log(`   Portfolio: Wallet=$${walletValue.toFixed(2)}, LP=$${lpValue.toFixed(2)}, Total=$${totalValue.toFixed(2)}`);
+      return totalValue;
+    }
+
+    return walletValue;
   }
 
   // Price to tick conversion
@@ -125,6 +135,84 @@ class TradingBot {
       return liquidity0 < liquidity1 ? liquidity0 : liquidity1;
     } else {
       return this.getLiquidityForAmount1(sqrtPriceAX96, sqrtPriceBX96, amount1);
+    }
+  }
+
+  // Convert liquidity back to token amounts (reverse of getLiquidityForAmounts)
+  getAmountsForLiquidity(sqrtPriceX96, sqrtPriceAX96, sqrtPriceBX96, liquidity) {
+    if (sqrtPriceAX96 > sqrtPriceBX96) {
+      [sqrtPriceAX96, sqrtPriceBX96] = [sqrtPriceBX96, sqrtPriceAX96];
+    }
+
+    let amount0 = 0n;
+    let amount1 = 0n;
+
+    // If current price is below range, all liquidity is in token0 (USDC)
+    if (sqrtPriceX96 <= sqrtPriceAX96) {
+      amount0 = (liquidity * (sqrtPriceBX96 - sqrtPriceAX96)) / ((sqrtPriceAX96 * sqrtPriceBX96) / (2n ** 96n));
+      amount1 = 0n;
+    }
+    // If current price is above range, all liquidity is in token1 (WETH)
+    else if (sqrtPriceX96 >= sqrtPriceBX96) {
+      amount0 = 0n;
+      amount1 = (liquidity * (sqrtPriceBX96 - sqrtPriceAX96)) / (2n ** 96n);
+    }
+    // If current price is in range, liquidity is split
+    else {
+      amount0 = (liquidity * (sqrtPriceBX96 - sqrtPriceX96)) / ((sqrtPriceX96 * sqrtPriceBX96) / (2n ** 96n));
+      amount1 = (liquidity * (sqrtPriceX96 - sqrtPriceAX96)) / (2n ** 96n);
+    }
+
+    return { amount0, amount1 };
+  }
+
+  // Get current LP position value in USDC
+  async getLPPositionValue(wethPrice) {
+    if (!this.currentTickLower || !this.currentTickUpper) {
+      return 0; // No active position
+    }
+
+    try {
+      // Get current liquidity from contract
+      const liquidity = await this.swapHelperContract.getPositionLiquidity(
+        this.poolAddress,
+        this.currentTickLower,
+        this.currentTickUpper
+      );
+
+      if (liquidity === 0n) {
+        return 0; // Position closed or empty
+      }
+
+      // Get current pool state
+      const slot0 = await this.poolContract.slot0();
+      const sqrtPriceX96 = slot0[0];
+
+      // Calculate sqrt prices at tick boundaries
+      const sqrtPriceAX96 = this.getSqrtPriceAtTick(this.currentTickLower);
+      const sqrtPriceBX96 = this.getSqrtPriceAtTick(this.currentTickUpper);
+
+      // Convert liquidity to token amounts
+      const { amount0, amount1 } = this.getAmountsForLiquidity(
+        sqrtPriceX96,
+        sqrtPriceAX96,
+        sqrtPriceBX96,
+        liquidity
+      );
+
+      // Convert to formatted amounts
+      const usdcAmount = Number(amount0) / 1e6;  // USDC has 6 decimals
+      const wethAmount = Number(amount1) / 1e18; // WETH has 18 decimals
+
+      // Calculate total value in USDC
+      const lpValue = usdcAmount + (wethAmount * wethPrice);
+
+      console.log(`   LP Position Value: $${lpValue.toFixed(2)} (${usdcAmount.toFixed(2)} USDC + ${wethAmount.toFixed(6)} WETH)`);
+
+      return lpValue;
+    } catch (error) {
+      console.error('   Error getting LP position value:', error.message);
+      return 0;
     }
   }
 
@@ -315,6 +403,14 @@ class TradingBot {
         const sqrtPriceAX96 = this.getSqrtPriceAtTick(tickLower);
         const sqrtPriceBX96 = this.getSqrtPriceAtTick(tickUpper);
 
+        // DEBUG: Liquidity calculation inputs
+        console.log(`   DEBUG: Liquidity calculation inputs:`);
+        console.log(`     Current sqrt price: ${sqrtPriceX96.toString()}`);
+        console.log(`     Lower sqrt price: ${sqrtPriceAX96.toString()}`);
+        console.log(`     Upper sqrt price: ${sqrtPriceBX96.toString()}`);
+        console.log(`     WETH to add: ${wethAmount.toFixed(6)} (${wethWei.toString()} wei)`);
+        console.log(`     USDC to add: ${usdcAmount.toFixed(2)} (${usdcWei.toString()} wei)`);
+
         // Calculate liquidity amount
         let liquidityAmount = this.getLiquidityForAmounts(
           sqrtPriceX96,
@@ -324,14 +420,9 @@ class TradingBot {
           wethWei
         );
 
-        // Cap at 1 trillion to avoid "transfer amount exceeds balance" errors
-        const MAX_LIQUIDITY = 1000000000000n; // 1 trillion
-        if (liquidityAmount > MAX_LIQUIDITY) {
-          console.log(`   Calculated liquidity ${liquidityAmount.toString()} exceeds max, capping at ${MAX_LIQUIDITY.toString()}`);
-          liquidityAmount = MAX_LIQUIDITY;
-        }
-
-        console.log(`   Using liquidity amount: ${liquidityAmount.toString()}`);
+        // Let the contract enforce its own liquidity limits
+        // No artificial cap - if calculation is correct, contract will accept it
+        console.log(`   Calculated liquidity: ${liquidityAmount.toString()}`);
 
         // Estimate gas
         const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
@@ -465,7 +556,7 @@ class TradingBot {
   }
 
   // Main trading logic - CORRECTED FOR CONSECUTIVE SIGNALS
-  async processSignal(signal, targetWethPct, targetUsdcPct, upperRange, lowerRange, currentPrice) {
+  async processSignal(signal, targetWethPct, targetUsdcPct, upperRange, lowerRange, currentPrice, tickLowerProvided, tickUpperProvided) {
     if (this.isExecuting) {
       console.log('⏳ Already executing a trade, skipping...');
       return;
@@ -490,7 +581,7 @@ class TradingBot {
 
       // Get current balances
       const balancesBefore = await this.getBalances();
-      const portfolioValueBefore = this.calculatePortfolioValue(
+      const portfolioValueBefore = await this.calculatePortfolioValue(
         balancesBefore.wethFormatted,
         balancesBefore.usdcFormatted,
         currentPrice
@@ -570,7 +661,7 @@ class TradingBot {
 
         // Get fresh balances after potential withdraw
         const currentBalances = await this.getBalances();
-        const totalValue = this.calculatePortfolioValue(
+        const totalValue = await this.calculatePortfolioValue(
           currentBalances.wethFormatted,
           currentBalances.usdcFormatted,
           currentPrice
@@ -672,27 +763,26 @@ class TradingBot {
         const finalBalances = await this.getBalances();
 
         // Use the tick ranges from the position signal (these are the strategic ranges)
-        const tickSpacing = await this.getTickSpacing();
-        const tickLower = Math.floor(this.priceToTick(lowerRange) / tickSpacing) * tickSpacing;
-        const tickUpper = Math.ceil(this.priceToTick(upperRange) / tickSpacing) * tickSpacing;
+        let tickLower, tickUpper;
+        if (tickLowerProvided !== undefined && tickUpperProvided !== undefined) {
+          // Use ticks provided by sonic-execution-onchain (exact 10-tick range)
+          tickLower = tickLowerProvided;
+          tickUpper = tickUpperProvided;
+          console.log(`   Using provided tick range: ${tickLower} to ${tickUpper}`);
+        } else {
+          // Fallback to price-based conversion (for backwards compatibility)
+          const tickSpacing = await this.getTickSpacing();
+          tickLower = Math.floor(this.priceToTick(lowerRange) / tickSpacing) * tickSpacing;
+          tickUpper = Math.ceil(this.priceToTick(upperRange) / tickSpacing) * tickSpacing;
+          console.log(`   Calculated tick range from prices: ${tickLower} to ${tickUpper}`);
+        }
 
         const tickRangeWidth = tickUpper - tickLower;
-        console.log(`   Tick Range from position signal: ${tickLower} to ${tickUpper} (${tickRangeWidth} ticks)`);
+        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickRangeWidth} ticks)`);
         console.log(`   Price Range: $${lowerRange.toFixed(2)} to $${upperRange.toFixed(2)}`);
 
-        // For narrow ranges, use less capital to avoid exceeding liquidity cap
-        // Narrow ranges produce huge liquidity values, so we scale down the capital
-        let capitalPct = 0.99; // Default: use 99% of balance
-
-        if (tickRangeWidth < 100) {
-          // Very narrow range (< 100 ticks = ~1%) - use less capital
-          capitalPct = 0.50; // Use 50%
-          console.log(`   ⚠️  Narrow range detected (${tickRangeWidth} ticks) - using ${capitalPct * 100}% of balance`);
-        } else if (tickRangeWidth < 500) {
-          // Narrow range (< 500 ticks = ~5%) - use moderate capital
-          capitalPct = 0.75; // Use 75%
-          console.log(`   Narrow range detected (${tickRangeWidth} ticks) - using ${capitalPct * 100}% of balance`);
-        }
+        // Use 98% of balance with 2% safety buffer for gas and rounding
+        const capitalPct = 0.98;
 
         const wethToAdd = finalBalances.wethFormatted * capitalPct;
         const usdcToAdd = finalBalances.usdcFormatted * capitalPct;
@@ -709,11 +799,14 @@ class TradingBot {
 
           if (addResult) {
             const balancesAfter = await this.getBalances();
-            const portfolioValueAfter = this.calculatePortfolioValue(
+            const portfolioValueAfter = await this.calculatePortfolioValue(
               balancesAfter.wethFormatted,
               balancesAfter.usdcFormatted,
               currentPrice
             );
+
+            // Get LP position value after adding liquidity
+            const lpValueAfter = await this.getLPPositionValue(currentPrice);
 
             await Transaction.create({
               timestamp: new Date(),
@@ -729,6 +822,10 @@ class TradingBot {
               tickLower,
               tickUpper,
               price: currentPrice,
+              lpAmount0: addResult.amount0 ? Number(addResult.amount0) / 1e6 : null,
+              lpAmount1: addResult.amount1 ? Number(addResult.amount1) / 1e18 : null,
+              lpPositionValueBefore: 0,  // No LP position before add
+              lpPositionValueAfter: lpValueAfter,
               portfolioValueBefore: totalValue,
               portfolioValueAfter,
               profitLoss: portfolioValueAfter - this.initialPortfolioValue,
@@ -836,7 +933,7 @@ class TradingBot {
 
         // Now swap to target ratio (whether we had liquidity or not)
         const currentBalances = await this.getBalances();
-        const totalValue = this.calculatePortfolioValue(
+        const totalValue = await this.calculatePortfolioValue(
           currentBalances.wethFormatted,
           currentBalances.usdcFormatted,
           currentPrice
@@ -857,7 +954,7 @@ class TradingBot {
               const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
               const balancesAfter = await this.getBalances();
-              const portfolioValueAfter = this.calculatePortfolioValue(
+              const portfolioValueAfter = await this.calculatePortfolioValue(
                 balancesAfter.wethFormatted,
                 balancesAfter.usdcFormatted,
                 currentPrice
