@@ -228,9 +228,9 @@ async function updateCandle(data) {
           // Round current tick to nearest tick spacing
           const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
 
-          // Define range as ±5 tick spacing units (10 total range)
-          const tickLower = roundedTick - (5 * tickSpacing);
-          const tickUpper = roundedTick + (5 * tickSpacing);
+          // Define range as ±1 tick spacing unit (2 total, best we can do with tickSpacing=100)
+          const tickLower = roundedTick - tickSpacing;
+          const tickUpper = roundedTick + tickSpacing;
 
           // Calculate price boundaries from ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -372,9 +372,9 @@ async function streamPositionData(data) {
     const tickSpacing = await getPoolTickSpacing();
     const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
 
-    // Define range as ±5 tick spacing units (10 total range)
-    const tickLower = roundedTick - (5 * tickSpacing);
-    const tickUpper = roundedTick + (5 * tickSpacing);
+    // Define range as ±1 tick spacing unit (2 total, best we can do with tickSpacing=100)
+    const tickLower = roundedTick - tickSpacing;
+    const tickUpper = roundedTick + tickSpacing;
 
     // Calculate price boundaries from ticks
     const lowerRange = Math.pow(1.0001, tickLower);
