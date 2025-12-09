@@ -225,12 +225,10 @@ async function updateCandle(data) {
           // Get tick spacing from pool
           const tickSpacing = await getPoolTickSpacing();
 
-          // Round current tick to nearest tick spacing
-          const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
-
-          // Define range as ±1 tick spacing unit (2 total, best we can do with tickSpacing=100)
-          const tickLower = roundedTick - tickSpacing;
-          const tickUpper = roundedTick + tickSpacing;
+          // Round down to get lower tick boundary that contains current price
+          const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
+          // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
+          const tickUpper = tickLower + tickSpacing;
 
           // Calculate price boundaries from ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -370,11 +368,11 @@ async function streamPositionData(data) {
     // Calculate tick-based range
     const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
     const tickSpacing = await getPoolTickSpacing();
-    const roundedTick = Math.round(currentTick / tickSpacing) * tickSpacing;
 
-    // Define range as ±1 tick spacing unit (2 total, best we can do with tickSpacing=100)
-    const tickLower = roundedTick - tickSpacing;
-    const tickUpper = roundedTick + tickSpacing;
+    // Round down to get lower tick boundary that contains current price
+    const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
+    // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
+    const tickUpper = tickLower + tickSpacing;
 
     // Calculate price boundaries from ticks
     const lowerRange = Math.pow(1.0001, tickLower);
