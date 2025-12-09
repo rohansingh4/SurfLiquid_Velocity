@@ -6,9 +6,8 @@ pragma solidity ^0.8.0;
  * @notice Helper contract for Uniswap V3 operations (swap, add/remove liquidity)
  * @dev Implements callbacks required by Uniswap V3 pool
  */
-
 interface IERC20 {
-    function transfer(address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) externar al returns (bool);
     function transferFrom(address from, address to, uint256 amount) external returns (bool);
     function balanceOf(address account) external view returns (uint256);
 }
