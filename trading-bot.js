@@ -646,13 +646,14 @@ class TradingBot {
         return;
       }
 
-      // CASE 2: Price out of range downward → Remove LP, Swap, HOLD (no add LP)
-      if (currentPrice < lowerRange && this.hasLiquidity) {
-        console.log(`\n⚠️  OUT OF RANGE DOWN: Remove LP → Swap → HOLD`);
+      // CASE 2: Price out of range downward → Remove LP (if exists), Swap, HOLD (no add LP)
+      if (currentPrice < lowerRange) {
+        console.log(`\n⚠️  OUT OF RANGE DOWN: ${this.hasLiquidity ? 'Remove LP → ' : ''}Swap → HOLD`);
 
-        // Remove LP first
-        try {
-          const removeResult = await this.removeLiquidity();
+        // Remove LP first (if we have any)
+        if (this.hasLiquidity) {
+          try {
+            const removeResult = await this.removeLiquidity();
           if (removeResult) {
             await Transaction.create({
               timestamp: new Date(),
@@ -672,82 +673,83 @@ class TradingBot {
         } catch (error) {
           console.error(`   ❌ Remove liquidity failed:`, error.message);
         }
+      } // End of if (this.hasLiquidity)
 
-        // Swap to latest ratio
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        const currentBalances = await this.getBalances();
-        const totalValue = await this.calculatePortfolioValue(
-          currentBalances.wethFormatted,
-          currentBalances.usdcFormatted,
-          currentPrice
-        );
+      // Swap to latest ratio (happens regardless of whether we had LP)
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      const currentBalances = await this.getBalances();
+      const totalValue = await this.calculatePortfolioValue(
+        currentBalances.wethFormatted,
+        currentBalances.usdcFormatted,
+        currentPrice
+      );
 
-        console.log(`\n   Swapping to latest ratio: ${targetWethPct}% WETH, ${targetUsdcPct}% USDC`);
-        const currentWethPct = (currentBalances.wethFormatted * currentPrice / totalValue) * 100;
+      console.log(`\n   Swapping to latest ratio: ${targetWethPct}% WETH, ${targetUsdcPct}% USDC`);
+      const currentWethPct = (currentBalances.wethFormatted * currentPrice / totalValue) * 100;
 
-        const targetWethValue = totalValue * (targetWethPct / 100);
-        const currentWethValue = currentBalances.wethFormatted * currentPrice;
-        const wethDiff = targetWethValue - currentWethValue;
+      const targetWethValue = totalValue * (targetWethPct / 100);
+      const currentWethValue = currentBalances.wethFormatted * currentPrice;
+      const wethDiff = targetWethValue - currentWethValue;
 
-        if (Math.abs(wethDiff) > 0.5) {
-          try {
-            if (wethDiff > 0) {
-              // Buy WETH
-              const usdcToSell = Math.abs(wethDiff);
-              const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
-              const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
+      if (Math.abs(wethDiff) > 0.5) {
+        try {
+          if (wethDiff > 0) {
+            // Buy WETH
+            const usdcToSell = Math.abs(wethDiff);
+            const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
+            const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
 
-              const balancesAfter = await this.getBalances();
-              await Transaction.create({
-                timestamp: new Date(),
-                signal: 'Out-of-Range-Down',
-                txType: 'swap',
-                txHash: swapResult.txHash,
-                status: 'success',
-                wethBalanceBefore: currentBalances.wethFormatted,
-                usdcBalanceBefore: currentBalances.usdcFormatted,
-                wethBalanceAfter: balancesAfter.wethFormatted,
-                usdcBalanceAfter: balancesAfter.usdcFormatted,
-                price: currentPrice,
-                portfolioValueBefore: totalValue,
-                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
-                gasUsed: swapResult.gasUsed
-              });
-              console.log(`   ✅ Swapped to latest ratio`);
-            } else {
-              // Sell WETH
-              const wethToSell = Math.abs(wethDiff) / currentPrice;
-              const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
-              const swapResult = await this.executeSwap(false, wethWei, currentPrice);
+            const balancesAfter = await this.getBalances();
+            await Transaction.create({
+              timestamp: new Date(),
+              signal: 'Out-of-Range-Down',
+              txType: 'swap',
+              txHash: swapResult.txHash,
+              status: 'success',
+              wethBalanceBefore: currentBalances.wethFormatted,
+              usdcBalanceBefore: currentBalances.usdcFormatted,
+              wethBalanceAfter: balancesAfter.wethFormatted,
+              usdcBalanceAfter: balancesAfter.usdcFormatted,
+              price: currentPrice,
+              portfolioValueBefore: totalValue,
+              portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
+              gasUsed: swapResult.gasUsed
+            });
+            console.log(`   ✅ Swapped to latest ratio`);
+          } else {
+            // Sell WETH
+            const wethToSell = Math.abs(wethDiff) / currentPrice;
+            const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
+            const swapResult = await this.executeSwap(false, wethWei, currentPrice);
 
-              const balancesAfter = await this.getBalances();
-              await Transaction.create({
-                timestamp: new Date(),
-                signal: 'Out-of-Range-Down',
-                txType: 'swap',
-                txHash: swapResult.txHash,
-                status: 'success',
-                wethBalanceBefore: currentBalances.wethFormatted,
-                usdcBalanceBefore: currentBalances.usdcFormatted,
-                wethBalanceAfter: balancesAfter.wethFormatted,
-                usdcBalanceAfter: balancesAfter.usdcFormatted,
-                price: currentPrice,
-                portfolioValueBefore: totalValue,
-                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
-                gasUsed: swapResult.gasUsed
-              });
-              console.log(`   ✅ Swapped to latest ratio`);
-            }
-          } catch (error) {
-            console.error(`   ❌ Swap failed:`, error.message);
+            const balancesAfter = await this.getBalances();
+            await Transaction.create({
+              timestamp: new Date(),
+              signal: 'Out-of-Range-Down',
+              txType: 'swap',
+              txHash: swapResult.txHash,
+              status: 'success',
+              wethBalanceBefore: currentBalances.wethFormatted,
+              usdcBalanceBefore: currentBalances.usdcFormatted,
+              wethBalanceAfter: balancesAfter.wethFormatted,
+              usdcBalanceAfter: balancesAfter.usdcFormatted,
+              price: currentPrice,
+              portfolioValueBefore: totalValue,
+              portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
+              gasUsed: swapResult.gasUsed
+            });
+            console.log(`   ✅ Swapped to latest ratio`);
           }
+        } catch (error) {
+          console.error(`   ❌ Swap failed:`, error.message);
         }
-
-        console.log(`\n   💰 HOLDING - Not adding LP back (price out of range down)`);
-        this.lastSignal = 'Out-of-Range-Down';
-        this.isExecuting = false;
-        return;
       }
+
+      console.log(`\n   💰 HOLDING - Not adding LP back (price out of range down)`);
+      this.lastSignal = 'Out-of-Range-Down';
+      this.isExecuting = false;
+      return;
+    }
 
       // CASE 3: Signal changed OR price out of range up → Rebalance
       console.log(`\n🔄 REBALANCE: ${signalChanged ? 'Signal changed' : 'Price out of range up'}`);
