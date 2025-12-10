@@ -969,14 +969,9 @@ app.get('/api/transactions/stats', async (req, res) => {
           walletAddress: tradingBot.wallet.address
         };
         
-        // Try to get current price
-        try {
-          currentPrice = await tradingBot.getCurrentPrice();
-        } catch (priceError) {
-          console.error('Error fetching price:', priceError.message);
-          // Use price from last transaction if available
-          currentPrice = lastTransaction?.price || 0;
-        }
+        // Get current price from last transaction or position data
+        // (tradingBot doesn't have getCurrentPrice method)
+        currentPrice = lastTransaction?.price || 0;
 
         // Calculate Current Balance = Current WETH × current price + Current USDC
         if (currentPrice > 0) {
