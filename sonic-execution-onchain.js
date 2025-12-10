@@ -262,6 +262,12 @@ async function updateCandle(data) {
           console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
           console.log(`  Target Allocation: ${targetPercentages.weth_pct}% WETH, ${targetPercentages.usdc_pct}% USDC`);
 
+          // Prevent duplicate saves - only save once per rebalance
+          if (positionSavedThisCycle) {
+            console.log(`  ⏭️  Already saved this rebalance - skipping duplicate`);
+            return;
+          }
+
           // Save rebalance position
           await savePositionData({
             timestamp: data.timestamp,
