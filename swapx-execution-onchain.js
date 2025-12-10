@@ -54,9 +54,11 @@ const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 
 // Calculate price from sqrtPriceX96 (Algebra uses same format as Uniswap V3)
 function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
+  // Convert to BigInt if it's not already
+  const sqrtPrice = BigInt(sqrtPriceX96.toString());
   const Q96 = 2n ** 96n;
-  const price = (sqrtPriceX96 * sqrtPriceX96 * (10n ** 12n)) / (Q96 * Q96);
-  return parseFloat(price.toString()) / 1e12;
+  const price = (sqrtPrice * sqrtPrice * (10n ** 12n)) / (Q96 * Q96);
+  return Number(price) / 1e12;
 }
 
 // Calculate percentages of pool composition
