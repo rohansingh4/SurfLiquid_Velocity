@@ -252,15 +252,17 @@ async function updateCandle(data) {
           const status = isUpRebalance ? 'Open-UP' : 'Open-DOWN';
           const rebalanceType = isUpRebalance ? 'Rebalance UP' : 'Rebalance DOWN';
 
-          // Define strategic target percentages based on signal type
-          const targetPercentages = status === 'Open-UP'
-            ? { weth_pct: 70, usdc_pct: 30 }  // Bullish: more WETH exposure
-            : { weth_pct: 30, usdc_pct: 70 }; // Bearish: more USDC (cash)
+          // Use CURRENT pool composition (fetched every 3s) - NOT hardcoded percentages!
+          // This ensures we match the pool's actual ratio when adding liquidity
+          const targetPercentages = {
+            weth_pct: data.weth_pct,  // Current pool composition from latest fetch
+            usdc_pct: data.usdc_pct   // Current pool composition from latest fetch
+          };
 
           console.log(`\n🔄 REBALANCE: ${status}`);
           console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
           console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
-          console.log(`  Target Allocation: ${targetPercentages.weth_pct}% WETH, ${targetPercentages.usdc_pct}% USDC`);
+          console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC (latest pool composition)`);
 
           // Prevent duplicate saves - only save once per rebalance
           if (positionSavedThisCycle) {
@@ -280,8 +282,8 @@ async function updateCandle(data) {
             high: data.price,
             low: data.price,
             close: data.price,
-            weth_pct: targetPercentages.weth_pct,  // Strategic target, not current pool composition
-            usdc_pct: targetPercentages.usdc_pct,  // Strategic target, not current pool composition
+            weth_pct: targetPercentages.weth_pct,  // Current pool composition (updated every 3s)
+            usdc_pct: targetPercentages.usdc_pct,  // Current pool composition (updated every 3s)
             rebalance_type: rebalanceType
           });
 

@@ -810,6 +810,8 @@ class TradingBot {
         if (this.hasLiquidity) {
           console.log(`   Removing existing liquidity first`);
 
+          let withdrawSuccess = false;
+
           try {
             const removeResult = await this.removeLiquidity();
 
@@ -828,6 +830,7 @@ class TradingBot {
                 gasUsed: removeResult.gasUsed
               });
               console.log(`   ✅ Remove liquidity recorded - TX: ${removeResult.txHash}`);
+              withdrawSuccess = true;
             } else {
               // Remove liquidity returned null (failed but didn't throw)
               await Transaction.create({
@@ -857,6 +860,15 @@ class TradingBot {
               portfolioValueBefore
             });
             console.error(`   ❌ Remove liquidity failed:`, error.message);
+          }
+
+          // CRITICAL: If withdraw failed, SKIP entire rebalance
+          if (!withdrawSuccess) {
+            console.error(`\n⚠️  SKIPPING ${signal} REBALANCE - Withdraw failed after retries`);
+            console.error(`   Cannot swap or add LP without removing existing position first!`);
+            this.lastSignal = signal;
+            this.isExecuting = false;
+            return; // Exit early - skip swap and add LP
           }
 
           // Small delay
