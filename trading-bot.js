@@ -590,30 +590,58 @@ class TradingBot {
         return;
       }
 
-      // Query actual on-chain position liquidity
-      const positionLiquidity = await this.swapHelperContract.getPositionLiquidity(
-        this.poolAddress,
-        tickLower,
-        tickUpper
-      );
+      // CRITICAL FIX: Check CURRENT stored ticks first (for existing position)
+      // Then check NEW provided ticks (for potential new position)
+      let hasActualLP = false;
+      let foundAtTicks = null;
 
-      const hasActualLP = positionLiquidity > 0n;
+      // First, check if we have stored ticks from a previous position
+      if (this.currentTickLower !== null && this.currentTickUpper !== null) {
+        const currentPositionLiquidity = await this.swapHelperContract.getPositionLiquidity(
+          this.poolAddress,
+          this.currentTickLower,
+          this.currentTickUpper
+        );
+        
+        if (currentPositionLiquidity > 0n) {
+          hasActualLP = true;
+          foundAtTicks = { lower: this.currentTickLower, upper: this.currentTickUpper, liquidity: currentPositionLiquidity };
+          console.log(`   🔍 Found existing LP at stored ticks [${this.currentTickLower}, ${this.currentTickUpper}]: ${currentPositionLiquidity.toString()}`);
+        }
+      }
+
+      // If no liquidity at stored ticks, check the new provided ticks (handles bot restart)
+      if (!hasActualLP && tickLower !== undefined && tickUpper !== undefined) {
+        const newTicksLiquidity = await this.swapHelperContract.getPositionLiquidity(
+          this.poolAddress,
+          tickLower,
+          tickUpper
+        );
+        
+        if (newTicksLiquidity > 0n) {
+          hasActualLP = true;
+          foundAtTicks = { lower: tickLower, upper: tickUpper, liquidity: newTicksLiquidity };
+          console.log(`   🔍 Found LP at new ticks [${tickLower}, ${tickUpper}]: ${newTicksLiquidity.toString()}`);
+        }
+      }
 
       // Sync state if it doesn't match reality
       if (hasActualLP !== this.hasLiquidity) {
         console.log(`🔄 Syncing LP state: Memory=${this.hasLiquidity}, On-chain=${hasActualLP}`);
         this.hasLiquidity = hasActualLP;
-        if (hasActualLP) {
-          this.currentTickLower = tickLower;
-          this.currentTickUpper = tickUpper;
-          this.currentLiquidity = positionLiquidity;
-          console.log(`   ✅ Found on-chain LP position: ${positionLiquidity.toString()}`);
+        if (hasActualLP && foundAtTicks) {
+          this.currentTickLower = foundAtTicks.lower;
+          this.currentTickUpper = foundAtTicks.upper;
+          this.currentLiquidity = foundAtTicks.liquidity;
+          console.log(`   ✅ LP position synced: ticks [${foundAtTicks.lower}, ${foundAtTicks.upper}]`);
         } else {
           this.currentTickLower = null;
           this.currentTickUpper = null;
           this.currentLiquidity = null;
           console.log(`   ✅ Confirmed no on-chain LP position`);
         }
+      } else if (hasActualLP) {
+        console.log(`   ✅ LP state matches on-chain: hasLiquidity=${this.hasLiquidity}`);
       }
     } catch (error) {
       console.error('⚠️  Failed to sync liquidity state:', error.message);
@@ -893,10 +921,25 @@ class TradingBot {
             console.error(`   ❌ Remove liquidity failed:`, error.message);
           }
 
-          // CRITICAL: If withdraw failed, SKIP entire rebalance
+          // CRITICAL: If withdraw failed, SKIP entire rebalance and notify UI
           if (!withdrawSuccess) {
-            console.error(`\n⚠️  SKIPPING ${signal} REBALANCE - Withdraw failed after retries`);
+            console.error(`\n🚨 CRITICAL: SKIPPING ${signal} REBALANCE - Withdraw failed!`);
             console.error(`   Cannot swap or add LP without removing existing position first!`);
+            console.error(`   Existing liquidity still in pool at ticks [${this.currentTickLower}, ${this.currentTickUpper}]`);
+            
+            // Record critical error in database so UI can display it
+            await Transaction.create({
+              timestamp: new Date(),
+              signal,
+              txType: 'add_liquidity', // Mark as failed add_liquidity since we couldn't proceed
+              status: 'failed',
+              error: `🚨 CRITICAL: Rebalance skipped - existing LP at [${this.currentTickLower}, ${this.currentTickUpper}] could not be withdrawn. Cannot proceed with swap/add without removing old position.`,
+              wethBalanceBefore: balancesBefore.wethFormatted,
+              usdcBalanceBefore: balancesBefore.usdcFormatted,
+              price: currentPrice,
+              portfolioValueBefore
+            });
+            
             this.lastSignal = signal;
             this.isExecuting = false;
             return; // Exit early - skip swap and add LP
