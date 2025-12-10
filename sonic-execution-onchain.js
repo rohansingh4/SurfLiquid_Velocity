@@ -949,14 +949,19 @@ app.get('/api/transactions/stats', async (req, res) => {
     if (tradingBot) {
       try {
         const balances = await tradingBot.getBalances();
+        
+        // Get current price from pool
+        currentPrice = await tradingBot.getCurrentPrice();
+        
+        // Always set wallet balances so UI can show them
         walletBalances = {
           weth: balances.wethFormatted,
           usdc: balances.usdcFormatted,
           walletAddress: tradingBot.wallet.address
         };
 
-        // Get current price from pool
-        currentPrice = await tradingBot.getCurrentPrice();
+        // Calculate Current Balance = Current WETH × current price + Current USDC
+        currentBalance = (balances.wethFormatted * currentPrice) + balances.usdcFormatted;
 
         // Calculate Starting Fund from first transaction
         // Starting Fund = WETH at start × price at start + USDC at start
@@ -965,13 +970,14 @@ app.get('/api/transactions/stats', async (req, res) => {
           const startUsdc = firstTransaction.usdcBalanceBefore || 0;
           const startPrice = firstTransaction.price || currentPrice;
           startingFund = (startWeth * startPrice) + startUsdc;
+          
+          // P&L = Current Balance - Starting Fund
+          totalPnL = currentBalance - startingFund;
+        } else {
+          // No transactions yet - show current balance as starting fund, P&L is 0
+          startingFund = currentBalance;
+          totalPnL = 0;
         }
-
-        // Calculate Current Balance = Current WETH × current price + Current USDC
-        currentBalance = (balances.wethFormatted * currentPrice) + balances.usdcFormatted;
-
-        // P&L = Current Balance - Starting Fund
-        totalPnL = currentBalance - startingFund;
 
       } catch (error) {
         console.error('Error fetching wallet balances:', error);
