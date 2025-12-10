@@ -945,7 +945,16 @@ class TradingBot {
           await new Promise(resolve => setTimeout(resolve, 3000));
         }
 
-        // Step 2: Add liquidity (use 99% of balance to avoid rounding errors)
+        // Check if this is Open-DOWN signal → HOLD (don't add LP)
+        if (signal === 'Open-DOWN') {
+          console.log(`\n   💰 HOLDING - Open-DOWN signal (bearish) → No LP added`);
+          this.lastSignal = signal;
+          this.isExecuting = false;
+          return;
+        }
+
+        // Step 2: Add liquidity (only for Open-UP signal)
+        console.log(`\n   📈 Open-UP signal (bullish) → Adding LP`);
         const finalBalances = await this.getBalances();
 
         // Use the tick ranges from the position signal (these are the strategic ranges)
