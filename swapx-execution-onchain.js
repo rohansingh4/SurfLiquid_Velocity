@@ -95,7 +95,7 @@ async function fetchPoolData() {
     return {
       timestamp: new Date(),
       price,
-      tick,
+      tick: Number(tick),  // Convert BigInt to Number
       sqrtPriceX96: sqrtPriceX96.toString(),
       liquidity: liquidity.toString(),
       usdc_pct,
