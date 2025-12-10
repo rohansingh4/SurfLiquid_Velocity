@@ -2258,12 +2258,15 @@
         // SwapX Data Management
         async function loadSwapXData() {
             try {
+                // Use current hostname with port 3001 (works for both localhost and AWS)
+                const apiBaseUrl = `http://${window.location.hostname}:3001`;
+
                 // Fetch current data
-                const currentResponse = await fetch('http://localhost:3001/api/swapx/current');
+                const currentResponse = await fetch(`${apiBaseUrl}/api/swapx/current`);
                 const currentData = await currentResponse.json();
 
                 // Fetch positions
-                const positionsResponse = await fetch('http://localhost:3001/api/swapx/positions');
+                const positionsResponse = await fetch(`${apiBaseUrl}/api/swapx/positions`);
                 const positions = await positionsResponse.json();
 
                 // Update current price and stats
