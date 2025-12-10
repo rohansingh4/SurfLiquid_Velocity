@@ -53,12 +53,23 @@ const token0Contract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
 const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 
 // Calculate price from sqrtPriceX96 (Algebra uses same format as Uniswap V3)
+// IMPORTANT: SwapX pool has token0=USDC, token1=WETH
+// sqrtPriceX96 represents price of token0 in terms of token1 (USDC/WETH)
+// We need to INVERT to get WETH/USDC price
 function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
   // Convert to BigInt if it's not already
   const sqrtPrice = BigInt(sqrtPriceX96.toString());
   const Q96 = 2n ** 96n;
-  const price = (sqrtPrice * sqrtPrice * (10n ** 12n)) / (Q96 * Q96);
-  return Number(price) / 1e12;
+
+  // Calculate token0/token1 price (USDC/WETH)
+  // Adjust for decimals: USDC (6 decimals) / WETH (18 decimals) = need to multiply by 10^12
+  const priceToken0PerToken1 = (sqrtPrice * sqrtPrice * (10n ** 12n)) / (Q96 * Q96);
+  const token0PerToken1 = Number(priceToken0PerToken1) / 1e12;
+
+  // Invert to get WETH/USDC price (what we actually want to display)
+  const wethPrice = 1 / token0PerToken1;
+
+  return wethPrice;
 }
 
 // Calculate percentages of pool composition
