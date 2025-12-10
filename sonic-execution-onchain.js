@@ -252,9 +252,15 @@ async function updateCandle(data) {
           const status = isUpRebalance ? 'Open-UP' : 'Open-DOWN';
           const rebalanceType = isUpRebalance ? 'Rebalance UP' : 'Rebalance DOWN';
 
+          // Define strategic target percentages based on signal type
+          const targetPercentages = status === 'Open-UP'
+            ? { weth_pct: 70, usdc_pct: 30 }  // Bullish: more WETH exposure
+            : { weth_pct: 30, usdc_pct: 70 }; // Bearish: more USDC (cash)
+
           console.log(`\n🔄 REBALANCE: ${status}`);
           console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
           console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+          console.log(`  Target Allocation: ${targetPercentages.weth_pct}% WETH, ${targetPercentages.usdc_pct}% USDC`);
 
           // Save rebalance position
           await savePositionData({
@@ -268,8 +274,8 @@ async function updateCandle(data) {
             high: data.price,
             low: data.price,
             close: data.price,
-            weth_pct: data.weth_pct,
-            usdc_pct: data.usdc_pct,
+            weth_pct: targetPercentages.weth_pct,  // Strategic target, not current pool composition
+            usdc_pct: targetPercentages.usdc_pct,  // Strategic target, not current pool composition
             rebalance_type: rebalanceType
           });
 
