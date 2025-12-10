@@ -702,23 +702,39 @@ class TradingBot {
       const priceInRange = (currentPrice >= lowerRange && currentPrice <= upperRange);
       const priceOutOfRangeDown = (currentPrice < lowerRange);
       const priceOutOfRangeUp = (currentPrice > upperRange);
+      
+      // Check if the range has changed (even if signal direction is same)
+      const rangeChanged = (
+        this.currentTickLower !== tickLowerProvided || 
+        this.currentTickUpper !== tickUpperProvided
+      );
 
       console.log(`\n🔍 Decision Factors:`);
       console.log(`   Current Signal: ${signal}`);
       console.log(`   Last Signal: ${this.lastSignal || 'None'}`);
       console.log(`   Signal Changed: ${signalChanged}`);
+      console.log(`   Range Changed: ${rangeChanged}`);
+      console.log(`   Current LP Ticks: [${this.currentTickLower}, ${this.currentTickUpper}]`);
+      console.log(`   New Signal Ticks: [${tickLowerProvided}, ${tickUpperProvided}]`);
       console.log(`   Price: $${currentPrice.toFixed(2)}`);
       console.log(`   Range: $${lowerRange.toFixed(2)} - $${upperRange.toFixed(2)}`);
       console.log(`   Price In Range: ${priceInRange}`);
       console.log(`   Price Out Down: ${priceOutOfRangeDown}`);
       console.log(`   Price Out Up: ${priceOutOfRangeUp}`);
 
-      // CASE 1: Signal unchanged, price in range, have liquidity → HOLD
-      if (!signalChanged && priceInRange && this.hasLiquidity) {
-        console.log(`\n✅ HOLD: Signal unchanged & price in range → Keep earning fees`);
+      // CASE 1: Signal unchanged, RANGE unchanged, price in range, have liquidity → HOLD
+      // Only HOLD if both signal AND range are the same (true duplicate signal)
+      if (!signalChanged && !rangeChanged && priceInRange && this.hasLiquidity) {
+        console.log(`\n✅ HOLD: Signal & range unchanged → Keep earning fees`);
         this.lastSignal = signal;
         this.isExecuting = false;
         return;
+      }
+      
+      // If range changed (even with same signal direction), we need to rebalance
+      if (rangeChanged && this.hasLiquidity) {
+        console.log(`\n🔄 RANGE CHANGED: ${this.currentTickLower}-${this.currentTickUpper} → ${tickLowerProvided}-${tickUpperProvided}`);
+        console.log(`   Will rebalance to new range even though signal direction is same`);
       }
 
       // CASE 2: Price out of range downward → Remove LP (if exists), Swap, HOLD (no add LP)
