@@ -36,8 +36,16 @@ const transactionSchema = new mongoose.Schema({
   // P&L tracking
   portfolioValueBefore: { type: Number },
   portfolioValueAfter: { type: Number },
-  profitLoss: { type: Number },
-  profitLossPct: { type: Number },
+  profitLoss: { type: Number }, // DEPRECATED - use totalPnL instead
+  profitLossPct: { type: Number }, // DEPRECATED - use totalPnLPct instead
+
+  // NEW: Total P&L (cumulative from start)
+  initialPortfolioValue: { type: Number }, // Starting value (set once)
+  totalPnL: { type: Number }, // Total profit/loss from start
+  totalPnLPct: { type: Number }, // Total P&L as percentage
+
+  // NEW: Rebalance fees (fees earned/lost in this rebalance cycle)
+  rebalanceFees: { type: Number }, // Fees from this specific rebalance
 
   // Error handling
   error: { type: String },

@@ -63,7 +63,8 @@ class TradingBot {
     this.currentTickLower = null;
     this.currentTickUpper = null;
     this.isExecuting = false;
-    this.initialPortfolioValue = null;
+    this.initialPortfolioValue = null; // Portfolio value at very start (never changes)
+    this.rebalanceStartValue = null; // Portfolio value at start of current rebalance cycle
     this.tokensApproved = false;
 
     console.log(`\n🤖 Trading Bot Configuration:`);
@@ -610,12 +611,14 @@ class TradingBot {
 
       if (!this.initialPortfolioValue) {
         this.initialPortfolioValue = portfolioValueBefore;
+        console.log(`   📍 Initial Portfolio Value Set: $${this.initialPortfolioValue.toFixed(2)}`);
       }
 
       console.log(`\n📊 Current Portfolio:`);
       console.log(`   WETH: ${balancesBefore.wethFormatted.toFixed(6)}`);
       console.log(`   USDC: ${balancesBefore.usdcFormatted.toFixed(2)}`);
       console.log(`   Total Value: $${portfolioValueBefore.toFixed(2)}`);
+      console.log(`   Total P&L: $${(portfolioValueBefore - this.initialPortfolioValue).toFixed(2)} (${((portfolioValueBefore - this.initialPortfolioValue) / this.initialPortfolioValue * 100).toFixed(2)}%)`);
 
       // ============================================
       // DECISION LOGIC: Should we rebalance?
@@ -748,6 +751,10 @@ class TradingBot {
 
       // CASE 3: Signal changed OR price out of range up → Rebalance
       console.log(`\n🔄 REBALANCE: ${signalChanged ? 'Signal changed' : 'Price out of range up'}`);
+
+      // Track portfolio value at start of rebalance cycle (for calculating fees earned)
+      this.rebalanceStartValue = portfolioValueBefore;
+      console.log(`   💰 Rebalance Start Value: $${this.rebalanceStartValue.toFixed(2)}`);
 
       // ============================================
       // REBALANCING LOGIC
@@ -986,6 +993,11 @@ class TradingBot {
             // Get LP position value after adding liquidity
             const lpValueAfter = await this.getLPPositionValue(currentPrice);
 
+            // Calculate P&L metrics
+            const totalPnL = portfolioValueAfter - this.initialPortfolioValue;
+            const totalPnLPct = (totalPnL / this.initialPortfolioValue) * 100;
+            const rebalanceFees = this.rebalanceStartValue ? (portfolioValueAfter - this.rebalanceStartValue) : 0;
+
             await Transaction.create({
               timestamp: new Date(),
               signal,
@@ -1006,11 +1018,19 @@ class TradingBot {
               lpPositionValueAfter: lpValueAfter,
               portfolioValueBefore: totalValue,
               portfolioValueAfter,
-              profitLoss: portfolioValueAfter - this.initialPortfolioValue,
-              profitLossPct: ((portfolioValueAfter - this.initialPortfolioValue) / this.initialPortfolioValue) * 100,
+              // Old P&L (deprecated but kept for compatibility)
+              profitLoss: totalPnL,
+              profitLossPct: totalPnLPct,
+              // New P&L tracking
+              initialPortfolioValue: this.initialPortfolioValue,
+              totalPnL,
+              totalPnLPct,
+              rebalanceFees,
               gasUsed: addResult.gasUsed
             });
             console.log(`   ✅ Add liquidity recorded - TX: ${addResult.txHash}`);
+            console.log(`   📊 Total P&L: $${totalPnL.toFixed(2)} (${totalPnLPct.toFixed(2)}%)`);
+            console.log(`   💰 Rebalance Fees: $${rebalanceFees.toFixed(2)}`);
           } else {
             // Add liquidity returned null (failed but didn't throw)
             await Transaction.create({
