@@ -618,14 +618,146 @@ class TradingBot {
       console.log(`   Total Value: $${portfolioValueBefore.toFixed(2)}`);
 
       // ============================================
-      // OPEN-UP SIGNAL
+      // DECISION LOGIC: Should we rebalance?
       // ============================================
-      if (signal === 'Open-UP') {
-        console.log(`\n🟢 Open-UP Signal!`);
+      const signalChanged = (this.lastSignal !== signal && this.lastSignal !== null);
+      const priceInRange = (currentPrice >= lowerRange && currentPrice <= upperRange);
+      const priceOutOfRangeDown = (currentPrice < lowerRange);
+      const priceOutOfRangeUp = (currentPrice > upperRange);
+
+      console.log(`\n🔍 Decision Factors:`);
+      console.log(`   Current Signal: ${signal}`);
+      console.log(`   Last Signal: ${this.lastSignal || 'None'}`);
+      console.log(`   Signal Changed: ${signalChanged}`);
+      console.log(`   Price: $${currentPrice.toFixed(2)}`);
+      console.log(`   Range: $${lowerRange.toFixed(2)} - $${upperRange.toFixed(2)}`);
+      console.log(`   Price In Range: ${priceInRange}`);
+      console.log(`   Price Out Down: ${priceOutOfRangeDown}`);
+      console.log(`   Price Out Up: ${priceOutOfRangeUp}`);
+
+      // CASE 1: Signal unchanged, price in range, have liquidity → HOLD
+      if (!signalChanged && priceInRange && this.hasLiquidity) {
+        console.log(`\n✅ HOLD: Signal unchanged & price in range → Keep earning fees`);
+        this.lastSignal = signal;
+        this.isExecuting = false;
+        return;
+      }
+
+      // CASE 2: Price out of range downward → Remove LP, Swap, HOLD (no add LP)
+      if (currentPrice < lowerRange && this.hasLiquidity) {
+        console.log(`\n⚠️  OUT OF RANGE DOWN: Remove LP → Swap → HOLD`);
+
+        // Remove LP first
+        try {
+          const removeResult = await this.removeLiquidity();
+          if (removeResult) {
+            await Transaction.create({
+              timestamp: new Date(),
+              signal: 'Out-of-Range-Down',
+              txType: 'remove_liquidity',
+              txHash: removeResult.txHash,
+              status: 'success',
+              wethBalanceBefore: balancesBefore.wethFormatted,
+              usdcBalanceBefore: balancesBefore.usdcFormatted,
+              liquidityAmount: removeResult.liquidity,
+              price: currentPrice,
+              portfolioValueBefore,
+              gasUsed: removeResult.gasUsed
+            });
+            console.log(`   ✅ Remove liquidity recorded`);
+          }
+        } catch (error) {
+          console.error(`   ❌ Remove liquidity failed:`, error.message);
+        }
+
+        // Swap to latest ratio
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        const currentBalances = await this.getBalances();
+        const totalValue = await this.calculatePortfolioValue(
+          currentBalances.wethFormatted,
+          currentBalances.usdcFormatted,
+          currentPrice
+        );
+
+        console.log(`\n   Swapping to latest ratio: ${targetWethPct}% WETH, ${targetUsdcPct}% USDC`);
+        const currentWethPct = (currentBalances.wethFormatted * currentPrice / totalValue) * 100;
+
+        const targetWethValue = totalValue * (targetWethPct / 100);
+        const currentWethValue = currentBalances.wethFormatted * currentPrice;
+        const wethDiff = targetWethValue - currentWethValue;
+
+        if (Math.abs(wethDiff) > 0.5) {
+          try {
+            if (wethDiff > 0) {
+              // Buy WETH
+              const usdcToSell = Math.abs(wethDiff);
+              const usdcWei = ethers.parseUnits(usdcToSell.toFixed(6), 6);
+              const swapResult = await this.executeSwap(true, usdcWei, currentPrice);
+
+              const balancesAfter = await this.getBalances();
+              await Transaction.create({
+                timestamp: new Date(),
+                signal: 'Out-of-Range-Down',
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swapped to latest ratio`);
+            } else {
+              // Sell WETH
+              const wethToSell = Math.abs(wethDiff) / currentPrice;
+              const wethWei = ethers.parseUnits(wethToSell.toFixed(18), 18);
+              const swapResult = await this.executeSwap(false, wethWei, currentPrice);
+
+              const balancesAfter = await this.getBalances();
+              await Transaction.create({
+                timestamp: new Date(),
+                signal: 'Out-of-Range-Down',
+                txType: 'swap',
+                txHash: swapResult.txHash,
+                status: 'success',
+                wethBalanceBefore: currentBalances.wethFormatted,
+                usdcBalanceBefore: currentBalances.usdcFormatted,
+                wethBalanceAfter: balancesAfter.wethFormatted,
+                usdcBalanceAfter: balancesAfter.usdcFormatted,
+                price: currentPrice,
+                portfolioValueBefore: totalValue,
+                portfolioValueAfter: await this.calculatePortfolioValue(balancesAfter.wethFormatted, balancesAfter.usdcFormatted, currentPrice),
+                gasUsed: swapResult.gasUsed
+              });
+              console.log(`   ✅ Swapped to latest ratio`);
+            }
+          } catch (error) {
+            console.error(`   ❌ Swap failed:`, error.message);
+          }
+        }
+
+        console.log(`\n   💰 HOLDING - Not adding LP back (price out of range down)`);
+        this.lastSignal = 'Out-of-Range-Down';
+        this.isExecuting = false;
+        return;
+      }
+
+      // CASE 3: Signal changed OR price out of range up → Rebalance
+      console.log(`\n🔄 REBALANCE: ${signalChanged ? 'Signal changed' : 'Price out of range up'}`);
+
+      // ============================================
+      // REBALANCING LOGIC
+      // ============================================
+      if (signal === 'Open-UP' || signal === 'Open-DOWN') {
+        console.log(`\n${signal === 'Open-UP' ? '🟢' : '🔴'} ${signal} Signal!`);
 
         // If we already have liquidity, we need to withdraw first
         if (this.hasLiquidity) {
-          console.log(`   Already in liquidity → Need to withdraw first`);
+          console.log(`   Removing existing liquidity first`);
 
           try {
             const removeResult = await this.removeLiquidity();
