@@ -899,23 +899,20 @@
                 <span class="badge badge-live">● LIVE</span>
             </h1>
             <div class="pool-info">
-                <span><strong>Pool:</strong> 0x6fb3...0b40</span>
-                <span><strong>DEX:</strong> Shadow</span>
                 <span><strong>Network:</strong> Sonic</span>
                 <span><strong>Interval:</strong> 10s</span>
-                <span><strong>Range:</strong> ~1% (100 ticks)</span>
                 <span><strong>Source:</strong> On-Chain RPC</span>
             </div>
         </header>
 
         <!-- Tab Navigation -->
         <div class="tabs-container">
-            <button class="tab-btn active" data-tab="sonic">🎯 Sonic Data</button>
-            <button class="tab-btn" data-tab="postgres">🐘 PostgreSQL Data</button>
+            <button class="tab-btn active" data-tab="shadow">🌑 Shadow DEX (1%)</button>
+            <button class="tab-btn" data-tab="swapx">⚡ SwapX (0.1%)</button>
         </div>
 
-        <!-- Sonic Data Tab -->
-        <div class="tab-content active" id="sonic-tab">
+        <!-- Shadow DEX Tab -->
+        <div class="tab-content active" id="shadow-tab">
         <div class="main-grid">
             <div class="sidebar">
                 <div class="card">
@@ -1123,49 +1120,93 @@
         </div>
         <!-- End Sonic Data Tab -->
 
-        <!-- PostgreSQL Data Tab -->
-        <div class="tab-content" id="postgres-tab">
-            <div class="pg-container">
-                <div class="pg-header">
-                    <h2 class="pg-title">🐘 PostgreSQL Database Explorer</h2>
-                    <p class="pg-subtitle">Browse DEX event data from Base and BNB chains</p>
-                </div>
+        <!-- SwapX Tab -->
+        <div class="tab-content" id="swapx-tab">
+            <div class="main-grid">
+                <div class="sidebar">
+                    <div class="card">
+                        <h2>💰 Current Price</h2>
+                        <div class="price-large" id="swapx-currentPrice">$0.00</div>
+                        <div class="price-change" id="swapx-priceChange">+$0.00 (+0.00%)</div>
+                    </div>
 
-                <div class="pg-tables-grid" id="pgTablesGrid">
-                    <div class="loading-state">Loading tables...</div>
-                </div>
-
-                <div class="pg-table-viewer" id="pgTableViewer" style="display: none;">
-                    <div class="pg-viewer-header">
-                        <button class="back-btn" onclick="backToTablesList()">← Back to Tables</button>
-                        <h3 id="pgTableName">Table Name</h3>
-                        <div class="pg-table-info">
-                            <span id="pgTableRowCount">0 rows</span>
-                            <span id="pgTableColumnCount">0 columns</span>
+                    <div class="card">
+                        <h2>📊 Pool Info</h2>
+                        <div class="stat">
+                            <span class="stat-label">Pool</span>
+                            <span class="stat-value">0xec4e...be68</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">DEX</span>
+                            <span class="stat-value">SwapX</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Range</span>
+                            <span class="stat-value">0.1% (10 ticks)</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value" id="swapx-status">Monitoring</span>
                         </div>
                     </div>
 
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead id="pgTableHead"></thead>
-                            <tbody id="pgTableBody"></tbody>
-                        </table>
+                    <div class="card">
+                        <h2>📈 Range Info</h2>
+                        <div class="stat">
+                            <span class="stat-label">Upper Range</span>
+                            <span class="stat-value" id="swapx-upperRange">$0.00</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Lower Range</span>
+                            <span class="stat-value" id="swapx-lowerRange">$0.00</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Range Width</span>
+                            <span class="stat-value" id="swapx-rangeWidth">$0.00</span>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="pagination-controls">
-                        <div class="pagination-info" id="pgPaginationInfo">
-                            Page 1 of 1
-                        </div>
-                        <div class="pagination-buttons">
-                            <button class="page-btn" id="pgPrevPage" onclick="changePgPage(-1)">← Previous</button>
-                            <div class="page-numbers" id="pgPageNumbers"></div>
-                            <button class="page-btn" id="pgNextPage" onclick="changePgPage(1)">Next →</button>
-                        </div>
+                <div class="chart-section">
+                    <div class="card" style="height: 500px;">
+                        <h2>📊 SwapX Price Chart (0.1% Range)</h2>
+                        <div id="swapx-chart" style="height: 450px;"></div>
                     </div>
                 </div>
             </div>
+
+            <!-- Positions Data Table -->
+            <div class="data-table-section">
+                <div class="data-table-header">
+                    <h2 class="data-table-title">📋 SwapX Position History</h2>
+                    <div class="data-table-controls">
+                        <span class="data-count" id="swapx-positionCount">0 positions</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Price</th>
+                                <th>Upper Range</th>
+                                <th>Lower Range</th>
+                                <th>WETH %</th>
+                                <th>USDC %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="swapx-positionsTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading positions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <!-- End PostgreSQL Data Tab -->
+        <!-- End SwapX Tab -->
 
         <div class="last-update">
             Last updated: <span id="lastUpdate">Never</span>
@@ -2021,6 +2062,12 @@
         let pgTables = [];
         let pgRefreshInterval = null;
 
+        // SwapX variables
+        let swapxRefreshInterval = null;
+        let swapxChart = null;
+        let swapxCandlestickSeries = null;
+        let swapxRangeSeries = null;
+
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -2034,15 +2081,18 @@
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(`${tabName}-tab`).classList.add('active');
 
-                // Load PostgreSQL tables when switching to that tab
-                if (tabName === 'postgres' && pgTables.length === 0) {
-                    loadPgTables();
+                // Load SwapX data when switching to that tab
+                if (tabName === 'swapx') {
+                    loadSwapXData();
+                    if (!swapxRefreshInterval) {
+                        swapxRefreshInterval = setInterval(loadSwapXData, 10000); // Refresh every 10s
+                    }
                 }
 
-                // Clear PostgreSQL refresh interval when switching away
-                if (tabName !== 'postgres' && pgRefreshInterval) {
-                    clearInterval(pgRefreshInterval);
-                    pgRefreshInterval = null;
+                // Clear SwapX refresh interval when switching away
+                if (tabName !== 'swapx' && swapxRefreshInterval) {
+                    clearInterval(swapxRefreshInterval);
+                    swapxRefreshInterval = null;
                 }
             });
         });
@@ -2203,6 +2253,140 @@
             document.getElementById('pgTablesGrid').style.display = 'grid';
 
             currentPgTable = null;
+        }
+
+        // SwapX Data Management
+        async function loadSwapXData() {
+            try {
+                // Fetch current data
+                const currentResponse = await fetch('http://localhost:3001/api/swapx/current');
+                const currentData = await currentResponse.json();
+
+                // Fetch positions
+                const positionsResponse = await fetch('http://localhost:3001/api/swapx/positions');
+                const positions = await positionsResponse.json();
+
+                // Update current price and stats
+                if (currentData.currentRanges) {
+                    const upperRange = currentData.currentRanges.upper || 0;
+                    const lowerRange = currentData.currentRanges.lower || 0;
+                    const rangeWidth = upperRange - lowerRange;
+
+                    document.getElementById('swapx-upperRange').textContent = '$' + upperRange.toFixed(2);
+                    document.getElementById('swapx-lowerRange').textContent = '$' + lowerRange.toFixed(2);
+                    document.getElementById('swapx-rangeWidth').textContent = '$' + rangeWidth.toFixed(2);
+                }
+
+                if (currentData.lastPositionStatus) {
+                    document.getElementById('swapx-status').textContent = currentData.lastPositionStatus;
+                }
+
+                // Update price from latest position
+                if (positions && positions.length > 0) {
+                    const latestPosition = positions[0];
+                    const price = latestPosition.close || 0;
+                    document.getElementById('swapx-currentPrice').textContent = '$' + price.toFixed(2);
+                }
+
+                // Update position count
+                document.getElementById('swapx-positionCount').textContent = positions.length + ' positions';
+
+                // Update positions table
+                updateSwapXPositionsTable(positions);
+
+                // Initialize or update chart
+                if (!swapxChart) {
+                    initSwapXChart(positions);
+                } else {
+                    updateSwapXChart(positions);
+                }
+            } catch (error) {
+                console.error('Error loading SwapX data:', error);
+            }
+        }
+
+        function initSwapXChart(positions) {
+            const chartContainer = document.getElementById('swapx-chart');
+            if (!chartContainer) return;
+
+            swapxChart = LightweightCharts.createChart(chartContainer, {
+                width: chartContainer.clientWidth,
+                height: 450,
+                layout: {
+                    background: { color: '#16213e' },
+                    textColor: '#d1d4dc',
+                },
+                grid: {
+                    vertLines: { color: '#2a2a3e' },
+                    horzLines: { color: '#2a2a3e' },
+                },
+                timeScale: {
+                    timeVisible: true,
+                    secondsVisible: true,
+                },
+            });
+
+            swapxCandlestickSeries = swapxChart.addCandlestickSeries({
+                upColor: '#00ff88',
+                downColor: '#ff3366',
+                borderVisible: false,
+                wickUpColor: '#00ff88',
+                wickDownColor: '#ff3366',
+            });
+
+            updateSwapXChart(positions);
+        }
+
+        function updateSwapXChart(positions) {
+            if (!swapxCandlestickSeries || !positions || positions.length === 0) return;
+
+            // Convert positions to candlestick format
+            const candles = positions
+                .slice(0, 100)
+                .reverse()
+                .map(pos => ({
+                    time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
+                    open: pos.open || pos.close,
+                    high: pos.high || pos.close,
+                    low: pos.low || pos.close,
+                    close: pos.close
+                }));
+
+            swapxCandlestickSeries.setData(candles);
+            swapxChart.timeScale().fitContent();
+        }
+
+        function updateSwapXPositionsTable(positions) {
+            const tbody = document.getElementById('swapx-positionsTableBody');
+            if (!tbody || !positions || positions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No positions yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = positions.slice(0, 50).map(pos => {
+                const statusColors = {
+                    'Open-UP': '#00ff88',
+                    'Open-DOWN': '#ff3366',
+                    'Monitoring': '#00d4ff',
+                    'Price-UP': '#ffaa00',
+                    'Price-DOWN': '#ff6600'
+                };
+
+                const statusColor = statusColors[pos.status] || '#8e8ea9';
+                const time = new Date(pos.timestamp).toLocaleString();
+
+                return `
+                    <tr>
+                        <td>${time}</td>
+                        <td><span style="color: ${statusColor}; font-weight: 600;">${pos.status}</span></td>
+                        <td>$${pos.close.toFixed(2)}</td>
+                        <td>$${pos.upper_range.toFixed(2)}</td>
+                        <td>$${pos.lower_range.toFixed(2)}</td>
+                        <td>${pos.weth_pct.toFixed(1)}%</td>
+                        <td>${pos.usdc_pct.toFixed(1)}%</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         // Trading Transactions Management
