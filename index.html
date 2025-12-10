@@ -2548,12 +2548,13 @@
                         fundsDisplay = `$${tx.portfolioValueAfter.toFixed(3)}`;
                     }
 
-                    // P&L
+                    // P&L = portfolioValueAfter - initialPortfolioValue (simple formula)
                     let pnlHtml = '';
-                    if (tx.profitLoss !== undefined && tx.profitLoss !== null) {
-                        const pnlClass = tx.profitLoss >= 0 ? 'pnl-positive' : 'pnl-negative';
-                        const pnlSign = tx.profitLoss >= 0 ? '+' : '';
-                        pnlHtml = `<span class="${pnlClass}">${pnlSign}$${tx.profitLoss.toFixed(2)}</span>`;
+                    if (tx.portfolioValueAfter !== undefined && tx.initialPortfolioValue !== undefined) {
+                        const pnlValue = tx.portfolioValueAfter - tx.initialPortfolioValue;
+                        const pnlClass = pnlValue >= 0 ? 'pnl-positive' : 'pnl-negative';
+                        const pnlSign = pnlValue >= 0 ? '+' : '';
+                        pnlHtml = `<span class="${pnlClass}">${pnlSign}$${pnlValue.toFixed(2)}</span>`;
                     }
 
                     // TX Hash
