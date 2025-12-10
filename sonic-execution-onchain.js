@@ -65,6 +65,7 @@ let tickData = [];
 let outOfRangeDetectedAt = null; // Timestamp when out of range was first detected
 let positionSavedThisCycle = false; // Prevent duplicate saves in same candle cycle
 let justSavedRebalance = false; // Flag to prevent duplicate saves after rebalance
+let isProcessingCandle = false; // Lock to prevent race condition in candle processing
 
 // Web3 setup
 const provider = new ethers.JsonRpcProvider(RPC_URL);
@@ -204,6 +205,14 @@ async function updateCandle(data) {
   const candleStart = Math.floor(now / CANDLE_INTERVAL) * CANDLE_INTERVAL;
 
   if (!currentCandle || currentCandle.timestamp !== candleStart) {
+    // Prevent race condition - only one fetch processes candle close at a time
+    if (isProcessingCandle) {
+      console.log('⏳ Candle processing already in progress, skipping...');
+      return;
+    }
+    isProcessingCandle = true;
+
+    try {
     // Close previous candle
     if (currentCandle) {
       candles.push(currentCandle);
@@ -355,6 +364,10 @@ async function updateCandle(data) {
     positionSavedThisCycle = false;
 
     console.log(`\n=== New 10s Candle Started at ${new Date(candleStart).toISOString()} ===`);
+    } finally {
+      // Always release the lock
+      isProcessingCandle = false;
+    }
   } else {
     // Update current candle
     currentCandle.high = Math.max(currentCandle.high, data.price);
