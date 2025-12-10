@@ -235,17 +235,16 @@ async function updateCandle(data) {
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
-          // Update ranges based on new price using tick-based calculation
-          // Get current tick from pool price
-          const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+          // Update ranges based on OPEN price: +50 ticks above, -50 ticks below
+          // Get current tick from open price
+          const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
 
-          // Get tick spacing from pool
+          // Get tick spacing from pool (for rounding to valid tick boundaries)
           const tickSpacing = await getPoolTickSpacing();
 
-          // Round down to get lower tick boundary that contains current price
-          const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
-          // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
-          const tickUpper = tickLower + tickSpacing;
+          // Calculate +50/-50 from open tick, rounded to valid tick boundaries
+          const tickLower = Math.floor((openTick - 50) / tickSpacing) * tickSpacing;
+          const tickUpper = Math.ceil((openTick + 50) / tickSpacing) * tickSpacing;
 
           // Calculate price boundaries from ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -269,8 +268,9 @@ async function updateCandle(data) {
           };
 
           console.log(`\n🔄 REBALANCE: ${status}`);
+          console.log(`  Open Price: $${openPrice.toFixed(2)} (tick ${openTick})`);
           console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, ±50 from open, spacing=${tickSpacing})`);
           console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC (latest pool composition)`);
 
           // Prevent duplicate saves - only save once per rebalance
@@ -400,14 +400,13 @@ async function streamPositionData(data) {
   if (!currentRanges) {
     const openPrice = currentCandle.open;
 
-    // Calculate tick-based range
-    const currentTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+    // Calculate tick-based range: +50/-50 from open price
+    const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
     const tickSpacing = await getPoolTickSpacing();
 
-    // Round down to get lower tick boundary that contains current price
-    const tickLower = Math.floor(currentTick / tickSpacing) * tickSpacing;
-    // Use minimum range width (1 tick spacing unit = 100 ticks, tightest possible)
-    const tickUpper = tickLower + tickSpacing;
+    // Calculate +50/-50 from open tick, rounded to valid tick boundaries
+    const tickLower = Math.floor((openTick - 50) / tickSpacing) * tickSpacing;
+    const tickUpper = Math.ceil((openTick + 50) / tickSpacing) * tickSpacing;
 
     // Calculate price boundaries from ticks
     const lowerRange = Math.pow(1.0001, tickLower);
@@ -420,8 +419,9 @@ async function streamPositionData(data) {
       tickUpper: tickUpper
     };
     lastPositionStatus = 'Monitoring';
-    console.log(`\n🎯 Initial Ranges Set: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+    console.log(`\n🎯 Initial Ranges Set: Open=$${openPrice.toFixed(2)} (tick ${openTick})`);
+    console.log(`   Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, ±50 from open, spacing=${tickSpacing})`);
   }
 
   // Just log current status, don't save (saving happens on candle close only)
