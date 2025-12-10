@@ -67,6 +67,11 @@ class TradingBot {
     this.rebalanceStartValue = null; // Portfolio value at start of current rebalance cycle
     this.tokensApproved = false;
 
+    // LP Fee Tracking (only counted on withdrawal)
+    this.depositedWETH = 0; // WETH amount deposited when adding LP
+    this.depositedUSDC = 0; // USDC amount deposited when adding LP
+    this.totalFeesEarned = 0; // Cumulative fees earned from LP (sum of all withdrawals)
+
     console.log(`\n🤖 Trading Bot Configuration:`);
     console.log(`   Wallet: ${wallet.address}`);
     console.log(`   Pool: ${poolAddress}`);
@@ -816,6 +821,28 @@ class TradingBot {
             const removeResult = await this.removeLiquidity();
 
             if (removeResult) {
+              // Get balances after withdrawal to calculate fees
+              const balancesAfterWithdraw = await this.getBalances();
+
+              // Calculate fees earned: (Amount received) - (Amount deposited)
+              const wethReceived = balancesAfterWithdraw.wethFormatted - balancesBefore.wethFormatted;
+              const usdcReceived = balancesAfterWithdraw.usdcFormatted - balancesBefore.usdcFormatted;
+
+              // Fee in USDC terms
+              const feesEarnedWETH = wethReceived - this.depositedWETH;
+              const feesEarnedUSDC = usdcReceived - this.depositedUSDC;
+              const totalFeesThisCycle = (feesEarnedWETH * currentPrice) + feesEarnedUSDC;
+
+              // Add to cumulative total
+              this.totalFeesEarned += totalFeesThisCycle;
+
+              console.log(`\n💰 LP FEES EARNED THIS CYCLE:`);
+              console.log(`   Deposited: ${this.depositedWETH.toFixed(6)} WETH + ${this.depositedUSDC.toFixed(2)} USDC`);
+              console.log(`   Received:  ${wethReceived.toFixed(6)} WETH + ${usdcReceived.toFixed(2)} USDC`);
+              console.log(`   Fees:      ${feesEarnedWETH.toFixed(6)} WETH + ${feesEarnedUSDC.toFixed(2)} USDC`);
+              console.log(`   Value:     $${totalFeesThisCycle.toFixed(4)}`);
+              console.log(`   Total P&L: $${this.totalFeesEarned.toFixed(4)} (cumulative)`);
+
               await Transaction.create({
                 timestamp: new Date(),
                 signal,
@@ -824,9 +851,13 @@ class TradingBot {
                 status: 'success',
                 wethBalanceBefore: balancesBefore.wethFormatted,
                 usdcBalanceBefore: balancesBefore.usdcFormatted,
+                wethBalanceAfter: balancesAfterWithdraw.wethFormatted,
+                usdcBalanceAfter: balancesAfterWithdraw.usdcFormatted,
                 liquidityAmount: removeResult.liquidity,
                 price: currentPrice,
                 portfolioValueBefore,
+                profitLoss: this.totalFeesEarned, // Cumulative fees
+                profitLossPct: this.initialPortfolioValue ? (this.totalFeesEarned / this.initialPortfolioValue) * 100 : 0,
                 gasUsed: removeResult.gasUsed
               });
               console.log(`   ✅ Remove liquidity recorded - TX: ${removeResult.txHash}`);
@@ -1050,10 +1081,14 @@ class TradingBot {
             // Get LP position value after adding liquidity
             const lpValueAfter = await this.getLPPositionValue(currentPrice);
 
-            // Calculate P&L metrics
-            const totalPnL = portfolioValueAfter - this.initialPortfolioValue;
-            const totalPnLPct = (totalPnL / this.initialPortfolioValue) * 100;
-            const rebalanceFees = this.rebalanceStartValue ? (portfolioValueAfter - this.rebalanceStartValue) : 0;
+            // Track deposited amounts for fee calculation on withdrawal
+            this.depositedWETH = wethToAdd;
+            this.depositedUSDC = usdcToAdd;
+            console.log(`   📝 Tracked deposit: ${this.depositedWETH.toFixed(6)} WETH, ${this.depositedUSDC.toFixed(2)} USDC`);
+
+            // P&L = Total fees earned from all LP cycles (only updated on withdrawal)
+            const totalPnL = this.totalFeesEarned;
+            const totalPnLPct = this.initialPortfolioValue ? (totalPnL / this.initialPortfolioValue) * 100 : 0;
 
             await Transaction.create({
               timestamp: new Date(),
