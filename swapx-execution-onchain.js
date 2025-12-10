@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './db.js';
 import PositionSwapX from './models/PositionSwapX.js';
@@ -275,6 +277,37 @@ async function processCandle(candle) {
     console.error('[SwapX] Error processing candle:', error.message);
   }
 }
+
+// Express server for API
+const app = express();
+app.use(cors());
+
+// API endpoint for SwapX positions
+app.get('/api/swapx/positions', async (req, res) => {
+  try {
+    const positions = await PositionSwapX.find()
+      .sort({ timestamp: -1 })
+      .limit(100);
+    res.json(positions);
+  } catch (error) {
+    console.error('[SwapX] API Error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch positions' });
+  }
+});
+
+// API endpoint for latest SwapX data
+app.get('/api/swapx/current', (req, res) => {
+  res.json({
+    currentRanges,
+    lastPositionStatus,
+    lastPositionPercentages
+  });
+});
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`[SwapX] API server running on port ${PORT}`);
+});
 
 // Main execution loop
 async function main() {
