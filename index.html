@@ -2402,6 +2402,7 @@
 
         // Trading Transactions Management
         let currentTxPage = 1;
+        let globalStartingFund = 0; // Store starting fund for consistent P&L calculation
 
         async function loadTradingStats() {
             try {
@@ -2418,8 +2419,9 @@
                     document.getElementById('successRate').textContent = '0%';
                 }
 
-                // Update Starting Fund (USDC)
+                // Update Starting Fund (USDC) - store globally for consistent P&L
                 const startingFund = data.startingFund || 0;
+                globalStartingFund = startingFund; // Store for transaction P&L calculation
                 document.getElementById('startingFund').textContent = `$${startingFund.toFixed(2)}`;
 
                 // Update Current Balance (USDC)
@@ -2548,10 +2550,11 @@
                         fundsDisplay = `$${tx.portfolioValueAfter.toFixed(3)}`;
                     }
 
-                    // P&L = portfolioValueAfter - initialPortfolioValue (simple formula)
+                    // P&L = portfolioValueAfter - globalStartingFund (consistent with header)
+                    // Only show for Add LP transactions (end of each rebalance cycle)
                     let pnlHtml = '';
-                    if (tx.portfolioValueAfter !== undefined && tx.initialPortfolioValue !== undefined) {
-                        const pnlValue = tx.portfolioValueAfter - tx.initialPortfolioValue;
+                    if (tx.txType === 'add_liquidity' && tx.portfolioValueAfter !== undefined && globalStartingFund > 0) {
+                        const pnlValue = tx.portfolioValueAfter - globalStartingFund;
                         const pnlClass = pnlValue >= 0 ? 'pnl-positive' : 'pnl-negative';
                         const pnlSign = pnlValue >= 0 ? '+' : '';
                         pnlHtml = `<span class="${pnlClass}">${pnlSign}$${pnlValue.toFixed(2)}</span>`;
