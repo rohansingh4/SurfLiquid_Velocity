@@ -577,6 +577,45 @@ class TradingBot {
     throw lastError;
   }
 
+  // Sync in-memory liquidity state with actual on-chain position
+  async syncLiquidityState(tickLower, tickUpper) {
+    try {
+      if (!this.swapHelperContract) {
+        console.log('⚠️  SwapHelper not configured, cannot sync liquidity state');
+        return;
+      }
+
+      // Query actual on-chain position liquidity
+      const positionLiquidity = await this.swapHelperContract.getPositionLiquidity(
+        this.poolAddress,
+        tickLower,
+        tickUpper
+      );
+
+      const hasActualLP = positionLiquidity > 0n;
+
+      // Sync state if it doesn't match reality
+      if (hasActualLP !== this.hasLiquidity) {
+        console.log(`🔄 Syncing LP state: Memory=${this.hasLiquidity}, On-chain=${hasActualLP}`);
+        this.hasLiquidity = hasActualLP;
+        if (hasActualLP) {
+          this.currentTickLower = tickLower;
+          this.currentTickUpper = tickUpper;
+          this.currentLiquidity = positionLiquidity;
+          console.log(`   ✅ Found on-chain LP position: ${positionLiquidity.toString()}`);
+        } else {
+          this.currentTickLower = null;
+          this.currentTickUpper = null;
+          this.currentLiquidity = null;
+          console.log(`   ✅ Confirmed no on-chain LP position`);
+        }
+      }
+    } catch (error) {
+      console.error('⚠️  Failed to sync liquidity state:', error.message);
+      // Don't throw - let trading continue with in-memory state
+    }
+  }
+
   // Main trading logic - CORRECTED FOR CONSECUTIVE SIGNALS
   async processSignal(signal, targetWethPct, targetUsdcPct, upperRange, lowerRange, currentPrice, tickLowerProvided, tickUpperProvided) {
     if (this.isExecuting) {
@@ -597,6 +636,9 @@ class TradingBot {
       console.log(`   Last Signal: ${this.lastSignal || 'None'}`);
       console.log(`   Has Liquidity: ${this.hasLiquidity}`);
       console.log(`${'='.repeat(60)}`);
+
+      // Sync liquidity state with on-chain reality (handles bot restarts)
+      await this.syncLiquidityState(tickLowerProvided, tickUpperProvided);
 
       // Approve tokens once
       await this.approveTokensOnce();
