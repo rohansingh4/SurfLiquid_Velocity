@@ -931,23 +931,21 @@ app.get('/api/transactions', async (req, res) => {
 
 app.get('/api/transactions/stats', async (req, res) => {
   try {
-    const [totalCount, successCount, failedCount, lastTransaction] = await Promise.all([
+    const [totalCount, successCount, failedCount, lastTransaction, firstTransaction] = await Promise.all([
       Transaction.countDocuments(),
       Transaction.countDocuments({ status: 'success' }),
       Transaction.countDocuments({ status: 'failed' }),
-      Transaction.findOne().sort({ timestamp: -1 }).lean()
+      Transaction.findOne().sort({ timestamp: -1 }).lean(),
+      Transaction.findOne().sort({ timestamp: 1 }).lean() // Get first transaction for starting fund
     ]);
 
-    // Calculate total P&L
-    const pnlResult = await Transaction.aggregate([
-      { $match: { status: 'success', profitLoss: { $exists: true } } },
-      { $group: { _id: null, totalPnL: { $sum: '$profitLoss' } } }
-    ]);
-
-    const totalPnL = pnlResult.length > 0 ? pnlResult[0].totalPnL : 0;
-
-    // Get wallet balances if trading is enabled
+    // Get wallet balances and current price if trading is enabled
     let walletBalances = null;
+    let startingFund = 0;
+    let currentBalance = 0;
+    let totalPnL = 0;
+    let currentPrice = 0;
+
     if (tradingBot) {
       try {
         const balances = await tradingBot.getBalances();
@@ -956,6 +954,25 @@ app.get('/api/transactions/stats', async (req, res) => {
           usdc: balances.usdcFormatted,
           walletAddress: tradingBot.wallet.address
         };
+
+        // Get current price from pool
+        currentPrice = await tradingBot.getCurrentPrice();
+
+        // Calculate Starting Fund from first transaction
+        // Starting Fund = WETH at start × price at start + USDC at start
+        if (firstTransaction) {
+          const startWeth = firstTransaction.wethBalanceBefore || 0;
+          const startUsdc = firstTransaction.usdcBalanceBefore || 0;
+          const startPrice = firstTransaction.price || currentPrice;
+          startingFund = (startWeth * startPrice) + startUsdc;
+        }
+
+        // Calculate Current Balance = Current WETH × current price + Current USDC
+        currentBalance = (balances.wethFormatted * currentPrice) + balances.usdcFormatted;
+
+        // P&L = Current Balance - Starting Fund
+        totalPnL = currentBalance - startingFund;
+
       } catch (error) {
         console.error('Error fetching wallet balances:', error);
       }
@@ -965,7 +982,12 @@ app.get('/api/transactions/stats', async (req, res) => {
       totalTransactions: totalCount,
       successfulTransactions: successCount,
       failedTransactions: failedCount,
+      // New simple P&L calculation
+      startingFund,
+      currentBalance,
       totalPnL,
+      currentPrice,
+      // Legacy
       lastTransaction,
       walletBalances,
       tradingEnabled: TRADING_ENABLED

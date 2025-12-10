@@ -1073,6 +1073,14 @@
                         <div class="trading-stat-label">Success Rate</div>
                         <div class="trading-stat-value" id="successRate">0%</div>
                     </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">Starting Fund (USDC)</div>
+                        <div class="trading-stat-value" id="startingFund">$0.00</div>
+                    </div>
+                    <div class="trading-stat-card">
+                        <div class="trading-stat-label">Current Balance (USDC)</div>
+                        <div class="trading-stat-value" id="currentBalance">$0.00</div>
+                    </div>
                     <div class="trading-stat-card pnl-card">
                         <div class="trading-stat-label">Total P&L</div>
                         <div class="trading-stat-value" id="totalPnL">$0.00</div>
@@ -2410,7 +2418,15 @@
                     document.getElementById('successRate').textContent = '0%';
                 }
 
-                // Update P&L
+                // Update Starting Fund (USDC)
+                const startingFund = data.startingFund || 0;
+                document.getElementById('startingFund').textContent = `$${startingFund.toFixed(2)}`;
+
+                // Update Current Balance (USDC)
+                const currentBalance = data.currentBalance || 0;
+                document.getElementById('currentBalance').textContent = `$${currentBalance.toFixed(2)}`;
+
+                // Update P&L = Current Balance - Starting Fund
                 const pnlElement = document.getElementById('totalPnL');
                 const pnlValue = data.totalPnL || 0;
                 pnlElement.textContent = `$${pnlValue.toFixed(2)}`;
@@ -2421,6 +2437,9 @@
                 } else if (pnlValue < 0) {
                     pnlElement.classList.add('pnl-negative');
                     pnlElement.classList.remove('pnl-positive');
+                } else {
+                    pnlElement.classList.remove('pnl-positive');
+                    pnlElement.classList.remove('pnl-negative');
                 }
 
                 // Update wallet balances
