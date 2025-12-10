@@ -1089,6 +1089,7 @@ class TradingBot {
             // P&L = Total fees earned from all LP cycles (only updated on withdrawal)
             const totalPnL = this.totalFeesEarned;
             const totalPnLPct = this.initialPortfolioValue ? (totalPnL / this.initialPortfolioValue) * 100 : 0;
+            const rebalanceFees = 0; // No fees on add liquidity (fees are earned on withdrawal)
 
             await Transaction.create({
               timestamp: new Date(),
