@@ -399,37 +399,79 @@ async function updateCandle(data) {
 async function streamPositionData(data) {
   if (!currentCandle) return;
 
-  // Initialize ranges on first run
+  // Initialize ranges on first run OR restore from DB on restart
   if (!currentRanges) {
-    const openPrice = currentCandle.open;
+    // Try to restore existing ranges from the most recent position in DB
+    try {
+      const lastPosition = await Position.findOne().sort({ timestamp: -1 }).limit(1);
 
-    // Calculate tick-based range: ±0.5% range (rounded to 100-tick spacing)
-    // Calculate ideal ±0.5% price targets
-    const idealUpper = openPrice * 1.005;
-    const idealLower = openPrice * 0.995;
+      if (lastPosition && lastPosition.upper_range && lastPosition.lower_range && lastPosition.tickLower && lastPosition.tickUpper) {
+        // Restore ranges from DB (bot was restarted)
+        currentRanges = {
+          upper: lastPosition.upper_range,
+          lower: lastPosition.lower_range,
+          tickLower: lastPosition.tickLower,
+          tickUpper: lastPosition.tickUpper
+        };
+        lastPositionStatus = lastPosition.status || 'Monitoring';
+        console.log(`\n🔄 Ranges RESTORED from DB (bot restarted):`);
+        console.log(`   Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+        console.log(`   Tick Range: ${currentRanges.tickLower} to ${currentRanges.tickUpper}`);
+        console.log(`   Last Status: ${lastPositionStatus}`);
+      } else {
+        // No existing ranges - first time setup
+        const openPrice = currentCandle.open;
 
-    const tickSpacing = await getPoolTickSpacing();
+        // Calculate tick-based range: ±0.5% range (rounded to 100-tick spacing)
+        // Calculate ideal ±0.5% price targets
+        const idealUpper = openPrice * 1.005;
+        const idealLower = openPrice * 0.995;
 
-    // Convert ideal prices to ticks and round to nearest valid multiples
-    const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
-    const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
-    const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
-    const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
+        const tickSpacing = await getPoolTickSpacing();
 
-    // Calculate actual price boundaries from rounded ticks
-    const lowerRange = Math.pow(1.0001, tickLower);
-    const upperRange = Math.pow(1.0001, tickUpper);
+        // Convert ideal prices to ticks and round to nearest valid multiples
+        const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
+        const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
+        const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
+        const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
 
-    currentRanges = {
-      upper: upperRange,
-      lower: lowerRange,
-      tickLower: tickLower,
-      tickUpper: tickUpper
-    };
-    lastPositionStatus = 'Monitoring';
-    console.log(`\n🎯 Initial Ranges Set: Open=$${openPrice.toFixed(2)} (±0.5% target)`);
-    console.log(`   Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
-    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+        // Calculate actual price boundaries from rounded ticks
+        const lowerRange = Math.pow(1.0001, tickLower);
+        const upperRange = Math.pow(1.0001, tickUpper);
+
+        currentRanges = {
+          upper: upperRange,
+          lower: lowerRange,
+          tickLower: tickLower,
+          tickUpper: tickUpper
+        };
+        lastPositionStatus = 'Monitoring';
+        console.log(`\n🎯 Initial Ranges Set (first run): Open=$${openPrice.toFixed(2)} (±0.5% target)`);
+        console.log(`   Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
+        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+      }
+    } catch (error) {
+      console.error('Error restoring ranges from DB:', error);
+      // Fall back to creating new ranges if DB read fails
+      const openPrice = currentCandle.open;
+      const idealUpper = openPrice * 1.005;
+      const idealLower = openPrice * 0.995;
+      const tickSpacing = await getPoolTickSpacing();
+      const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
+      const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
+      const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
+      const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
+      const lowerRange = Math.pow(1.0001, tickLower);
+      const upperRange = Math.pow(1.0001, tickUpper);
+      currentRanges = {
+        upper: upperRange,
+        lower: lowerRange,
+        tickLower: tickLower,
+        tickUpper: tickUpper
+      };
+      lastPositionStatus = 'Monitoring';
+      console.log(`\n⚠️  Ranges initialized from current price (DB restore failed)`);
+    }
   }
 
   // Just log current status, don't save (saving happens on candle close only)
