@@ -271,9 +271,9 @@ async function updateCandle(data) {
           };
 
           console.log(`\n🔄 REBALANCE: ${status}`);
-          console.log(`  Open Price: $${openPrice.toFixed(2)} (tick ${openTick})`);
-          console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, 1% range, spacing=${tickSpacing})`);
+          console.log(`  Open Price: $${openPrice.toFixed(2)} (±0.5% target)`);
+          console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
+          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
           console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC (latest pool composition)`);
 
           // Prevent duplicate saves - only save once per rebalance
