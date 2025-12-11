@@ -235,16 +235,16 @@ async function updateCandle(data) {
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
-          // Update ranges based on OPEN price: +50 ticks above, -50 ticks below
+          // Update ranges based on OPEN price - tightest 1% range (100 ticks)
           // Get current tick from open price
           const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
 
-          // Get tick spacing from pool (for rounding to valid tick boundaries)
+          // Get tick spacing from pool (100 ticks = 1% range)
           const tickSpacing = await getPoolTickSpacing();
 
-          // Calculate +50/-50 from open tick, rounded to valid tick boundaries
-          const tickLower = Math.floor((openTick - 50) / tickSpacing) * tickSpacing;
-          const tickUpper = Math.ceil((openTick + 50) / tickSpacing) * tickSpacing;
+          // Create tightest range that contains the open price (exactly 100 ticks / 1%)
+          const tickLower = Math.floor(openTick / tickSpacing) * tickSpacing;
+          const tickUpper = tickLower + tickSpacing;
 
           // Calculate price boundaries from ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -270,7 +270,7 @@ async function updateCandle(data) {
           console.log(`\n🔄 REBALANCE: ${status}`);
           console.log(`  Open Price: $${openPrice.toFixed(2)} (tick ${openTick})`);
           console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, ±50 from open, spacing=${tickSpacing})`);
+          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, 1% range, spacing=${tickSpacing})`);
           console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC (latest pool composition)`);
 
           // Prevent duplicate saves - only save once per rebalance
@@ -400,13 +400,13 @@ async function streamPositionData(data) {
   if (!currentRanges) {
     const openPrice = currentCandle.open;
 
-    // Calculate tick-based range: +50/-50 from open price
+    // Calculate tick-based range: tightest 1% range containing open price
     const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
     const tickSpacing = await getPoolTickSpacing();
 
-    // Calculate +50/-50 from open tick, rounded to valid tick boundaries
-    const tickLower = Math.floor((openTick - 50) / tickSpacing) * tickSpacing;
-    const tickUpper = Math.ceil((openTick + 50) / tickSpacing) * tickSpacing;
+    // Create tightest range that contains the open price (exactly 100 ticks / 1%)
+    const tickLower = Math.floor(openTick / tickSpacing) * tickSpacing;
+    const tickUpper = tickLower + tickSpacing;
 
     // Calculate price boundaries from ticks
     const lowerRange = Math.pow(1.0001, tickLower);
@@ -421,7 +421,7 @@ async function streamPositionData(data) {
     lastPositionStatus = 'Monitoring';
     console.log(`\n🎯 Initial Ranges Set: Open=$${openPrice.toFixed(2)} (tick ${openTick})`);
     console.log(`   Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, ±50 from open, spacing=${tickSpacing})`);
+    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, 1% range, spacing=${tickSpacing})`);
   }
 
   // Just log current status, don't save (saving happens on candle close only)
