@@ -235,18 +235,21 @@ async function updateCandle(data) {
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
-          // Update ranges based on OPEN price - tightest 1% range (100 ticks)
-          // Get current tick from open price
-          const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+          // Update ranges based on OPEN price - ±0.5% range (rounded to 100-tick spacing)
+          // Calculate ideal ±0.5% price targets
+          const idealUpper = openPrice * 1.005;
+          const idealLower = openPrice * 0.995;
 
           // Get tick spacing from pool (100 ticks = 1% range)
           const tickSpacing = await getPoolTickSpacing();
 
-          // Create tightest range that contains the open price (exactly 100 ticks / 1%)
-          const tickLower = Math.floor(openTick / tickSpacing) * tickSpacing;
-          const tickUpper = tickLower + tickSpacing;
+          // Convert ideal prices to ticks and round to nearest valid multiples
+          const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
+          const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
+          const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
+          const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
 
-          // Calculate price boundaries from ticks
+          // Calculate actual price boundaries from rounded ticks
           const lowerRange = Math.pow(1.0001, tickLower);
           const upperRange = Math.pow(1.0001, tickUpper);
 
@@ -400,15 +403,20 @@ async function streamPositionData(data) {
   if (!currentRanges) {
     const openPrice = currentCandle.open;
 
-    // Calculate tick-based range: tightest 1% range containing open price
-    const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+    // Calculate tick-based range: ±0.5% range (rounded to 100-tick spacing)
+    // Calculate ideal ±0.5% price targets
+    const idealUpper = openPrice * 1.005;
+    const idealLower = openPrice * 0.995;
+
     const tickSpacing = await getPoolTickSpacing();
 
-    // Create tightest range that contains the open price (exactly 100 ticks / 1%)
-    const tickLower = Math.floor(openTick / tickSpacing) * tickSpacing;
-    const tickUpper = tickLower + tickSpacing;
+    // Convert ideal prices to ticks and round to nearest valid multiples
+    const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
+    const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
+    const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
+    const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
 
-    // Calculate price boundaries from ticks
+    // Calculate actual price boundaries from rounded ticks
     const lowerRange = Math.pow(1.0001, tickLower);
     const upperRange = Math.pow(1.0001, tickUpper);
 
@@ -419,9 +427,9 @@ async function streamPositionData(data) {
       tickUpper: tickUpper
     };
     lastPositionStatus = 'Monitoring';
-    console.log(`\n🎯 Initial Ranges Set: Open=$${openPrice.toFixed(2)} (tick ${openTick})`);
-    console.log(`   Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, 1% range, spacing=${tickSpacing})`);
+    console.log(`\n🎯 Initial Ranges Set: Open=$${openPrice.toFixed(2)} (±0.5% target)`);
+    console.log(`   Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
+    console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
   }
 
   // Just log current status, don't save (saving happens on candle close only)

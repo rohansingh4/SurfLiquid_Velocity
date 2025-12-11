@@ -293,7 +293,7 @@ if (volatilityPct > 2) {
 **The key insight:** Your current strategy is fundamentally sound. The main improvements are:
 1. **Don't react too fast** (add confirmation + cooldown)
 2. **Position ranges asymmetrically** in trend direction
-3. **Have exit conditions** (stop-loss/take-profit)
+3. **Have exit conditions** (stop-oss/take-profit)
 
 The goal is not to capture every fee opportunity, but to **capture fees consistently while minimizing swap costs**.
 
@@ -309,3 +309,4 @@ The goal is not to capture every fee opportunity, but to **capture fees consiste
 
 *Last Updated: December 11, 2025*
 *Author: AI Strategy Analysis based on SurfLiquid Velocity codebase*
+
