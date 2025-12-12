@@ -1198,7 +1198,8 @@
                             <tr>
                                 <th>Time</th>
                                 <th>Status</th>
-                                <th>Price</th>
+                                <th>Open</th>
+                                <th>Close</th>
                                 <th>Upper Range</th>
                                 <th>Lower Range</th>
                                 <th>WETH %</th>
@@ -1207,7 +1208,7 @@
                         </thead>
                         <tbody id="swapx-positionsTableBody">
                             <tr>
-                                <td colspan="7" class="text-center">Loading positions...</td>
+                                <td colspan="8" class="text-center">Loading positions...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2277,39 +2278,47 @@
                 const positionsResponse = await fetch(`${apiBaseUrl}/api/swapx/positions`);
                 const positions = await positionsResponse.json();
 
-                // Update current price and stats
+                // Filter out bad data (prices > $100,000 are obviously wrong)
+                const validPositions = positions.filter(pos => 
+                    pos.close && pos.close < 100000 && pos.close > 100
+                );
+
+                // Update current price and stats (only if valid)
                 if (currentData.currentRanges) {
                     const upperRange = currentData.currentRanges.upper || 0;
                     const lowerRange = currentData.currentRanges.lower || 0;
-                    const rangeWidth = upperRange - lowerRange;
-
-                    document.getElementById('swapx-upperRange').textContent = '$' + upperRange.toFixed(2);
-                    document.getElementById('swapx-lowerRange').textContent = '$' + lowerRange.toFixed(2);
-                    document.getElementById('swapx-rangeWidth').textContent = '$' + rangeWidth.toFixed(2);
+                    
+                    // Only show if ranges are reasonable
+                    if (upperRange < 100000 && lowerRange > 100) {
+                        const rangeWidth = upperRange - lowerRange;
+                        document.getElementById('swapx-upperRange').textContent = '$' + upperRange.toFixed(2);
+                        document.getElementById('swapx-lowerRange').textContent = '$' + lowerRange.toFixed(2);
+                        document.getElementById('swapx-rangeWidth').textContent = '$' + rangeWidth.toFixed(2);
+                    }
                 }
 
                 if (currentData.lastPositionStatus) {
                     document.getElementById('swapx-status').textContent = currentData.lastPositionStatus;
                 }
 
-                // Update price from latest position
-                if (positions && positions.length > 0) {
-                    const latestPosition = positions[0];
+                // Update price from latest VALID position
+                if (validPositions && validPositions.length > 0) {
+                    const latestPosition = validPositions[0];
                     const price = latestPosition.close || 0;
                     document.getElementById('swapx-currentPrice').textContent = '$' + price.toFixed(2);
                 }
 
-                // Update position count
-                document.getElementById('swapx-positionCount').textContent = positions.length + ' positions';
+                // Update position count (valid only)
+                document.getElementById('swapx-positionCount').textContent = validPositions.length + ' positions';
 
-                // Update positions table
-                updateSwapXPositionsTable(positions);
+                // Update positions table (use validPositions)
+                updateSwapXPositionsTable(validPositions);
 
-                // Initialize or update chart
+                // Initialize or update chart (use validPositions)
                 if (!swapxChart) {
-                    initSwapXChart(positions);
+                    initSwapXChart(validPositions);
                 } else {
-                    updateSwapXChart(positions);
+                    updateSwapXChart(validPositions);
                 }
             } catch (error) {
                 console.error('Error loading SwapX data:', error);
@@ -2351,7 +2360,7 @@
         function updateSwapXChart(positions) {
             if (!swapxCandlestickSeries || !positions || positions.length === 0) return;
 
-            // Convert positions to candlestick format
+            // Convert positions to candlestick format (already filtered)
             const candles = positions
                 .slice(0, 100)
                 .reverse()
@@ -2370,10 +2379,11 @@
         function updateSwapXPositionsTable(positions) {
             const tbody = document.getElementById('swapx-positionsTableBody');
             if (!tbody || !positions || positions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No positions yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No positions yet</td></tr>';
                 return;
             }
 
+            // Positions are already filtered, just display them
             tbody.innerHTML = positions.slice(0, 50).map(pos => {
                 const statusColors = {
                     'Open-UP': '#00ff88',
@@ -2385,11 +2395,16 @@
 
                 const statusColor = statusColors[pos.status] || '#8e8ea9';
                 const time = new Date(pos.timestamp).toLocaleString();
+                
+                // Show open price for rebalance signals (Open-UP, Open-DOWN)
+                const isRebalance = pos.status === 'Open-UP' || pos.status === 'Open-DOWN';
+                const openPrice = pos.open && pos.open < 100000 ? `$${pos.open.toFixed(2)}` : '-';
 
                 return `
                     <tr>
                         <td>${time}</td>
                         <td><span style="color: ${statusColor}; font-weight: 600;">${pos.status}</span></td>
+                        <td>${isRebalance ? `<strong>${openPrice}</strong>` : openPrice}</td>
                         <td>$${pos.close.toFixed(2)}</td>
                         <td>$${pos.upper_range.toFixed(2)}</td>
                         <td>$${pos.lower_range.toFixed(2)}</td>
