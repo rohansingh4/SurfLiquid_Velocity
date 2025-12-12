@@ -2397,9 +2397,10 @@
             swapxCandlestickSeries = swapxChart.addCandlestickSeries({
                 upColor: '#00ff88',
                 downColor: '#ff3366',
-                borderVisible: false,
+                borderVisible: true,
                 wickUpColor: '#00ff88',
                 wickDownColor: '#ff3366',
+                visible: true,
             });
 
             swapxLineSeries = swapxChart.addLineSeries({
@@ -2407,6 +2408,8 @@
                 lineWidth: 2,
                 visible: false,
             });
+            
+            console.log('[SwapX] Chart initialized with candlestick series');
 
             swapxUpperRangeLine = swapxChart.addLineSeries({
                 color: '#ef5350',
@@ -2468,24 +2471,34 @@
         }
 
         function updateSwapXChart() {
-            if (!swapxCandlestickSeries || !swapxAllPositions || swapxAllPositions.length === 0) return;
+            if (!swapxCandlestickSeries || !swapxAllPositions || swapxAllPositions.length === 0) {
+                console.log('[SwapX] No data for chart');
+                return;
+            }
 
             const filteredPositions = filterSwapXByTimeRange(swapxAllPositions, swapxTimeRange);
+            console.log(`[SwapX] Filtered ${filteredPositions.length} positions for ${swapxTimeRange}`);
+            
             if (filteredPositions.length === 0) return;
 
-            const candles = filteredPositions.slice(0, 500).reverse().map(pos => ({
-                time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
-                open: pos.open || pos.close,
-                high: pos.high || pos.close,
-                low: pos.low || pos.close,
-                close: pos.close
-            }));
+            // Build candle data with valid OHLC
+            const candles = filteredPositions.slice(0, 500).reverse().map(pos => {
+                const closePrice = parseFloat(pos.close) || 0;
+                return {
+                    time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
+                    open: parseFloat(pos.open) || closePrice,
+                    high: parseFloat(pos.high) || closePrice,
+                    low: parseFloat(pos.low) || closePrice,
+                    close: closePrice
+                };
+            });
 
             const lineData = filteredPositions.slice(0, 500).reverse().map(pos => ({
                 time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
-                value: pos.close
+                value: parseFloat(pos.close) || 0
             }));
 
+            console.log(`[SwapX] Setting ${candles.length} candles, first:`, candles[0]);
             swapxCandlestickSeries.setData(candles);
             swapxLineSeries.setData(lineData);
 
@@ -2540,16 +2553,31 @@
             }).join('');
 
             // Update pagination
+            const totalPagesDisplay = Math.max(1, totalPages);
             document.getElementById('swapx-currentPage').textContent = swapxCurrentPage;
-            document.getElementById('swapx-totalPages').textContent = totalPages;
-            document.getElementById('swapx-prevPage').disabled = swapxCurrentPage === 1;
-            document.getElementById('swapx-nextPage').disabled = swapxCurrentPage === totalPages;
+            document.getElementById('swapx-totalPages').textContent = totalPagesDisplay;
+            
+            // Enable/disable pagination buttons
+            const prevBtn = document.getElementById('swapx-prevPage');
+            const nextBtn = document.getElementById('swapx-nextPage');
+            
+            prevBtn.disabled = swapxCurrentPage <= 1;
+            nextBtn.disabled = swapxCurrentPage >= totalPages || totalPages <= 1;
+            
+            // Add visual styling for disabled state
+            prevBtn.style.opacity = prevBtn.disabled ? '0.3' : '1';
+            nextBtn.style.opacity = nextBtn.disabled ? '0.3' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+            nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
         }
 
         function swapxChangePage(delta) {
-            const totalPages = Math.ceil(swapxAllPositions.length / swapxPageSize);
-            swapxCurrentPage = Math.max(1, Math.min(totalPages, swapxCurrentPage + delta));
-            updateSwapXPositionsTable();
+            const totalPages = Math.max(1, Math.ceil(swapxAllPositions.length / swapxPageSize));
+            const newPage = swapxCurrentPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                swapxCurrentPage = newPage;
+                updateSwapXPositionsTable();
+            }
         }
 
         // Trading Transactions Management
