@@ -1019,9 +1019,25 @@ app.get('/api/transactions/stats', async (req, res) => {
           walletAddress: tradingBot.wallet.address
         };
         
-        // Get current price from last transaction or position data
-        // (tradingBot doesn't have getCurrentPrice method)
-        currentPrice = lastTransaction?.price || 0;
+        // Get current price from last transaction, or fetch from pool if no transactions yet
+        if (lastTransaction?.price) {
+          currentPrice = lastTransaction.price;
+        } else {
+          // No transactions yet - fetch current price from pool
+          try {
+            const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
+            const slot0 = await poolContract.slot0();
+            const sqrtPriceX96 = slot0.sqrtPriceX96;
+            const Q96 = 2n ** 96n;
+            const sqrtPrice = Number(sqrtPriceX96) / Number(Q96);
+            const price = sqrtPrice ** 2;
+            const adjustedPrice = price / (10 ** 12); // Adjust for WETH (18 decimals) vs USDC (6 decimals)
+            currentPrice = adjustedPrice;
+          } catch (error) {
+            console.error('Error fetching pool price:', error.message);
+            currentPrice = 0;
+          }
+        }
 
         // Calculate Current Balance = Current WETH × current price + Current USDC
         if (currentPrice > 0) {
