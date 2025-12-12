@@ -1139,6 +1139,20 @@
                     </div>
 
                     <div class="card">
+                        <h2>🔄 Token Distribution</h2>
+                        <div class="token-distribution">
+                            <div class="token-box weth-box">
+                                <span class="token-label">WETH</span>
+                                <span class="token-value" id="swapx-wethPct">50.0%</span>
+                            </div>
+                            <div class="token-box usdc-box">
+                                <span class="token-label">USDC</span>
+                                <span class="token-value" id="swapx-usdcPct">50.0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
                         <h2>📊 Pool Info</h2>
                         <div class="stat">
                             <span class="stat-label">Pool</span>
@@ -1176,19 +1190,36 @@
                 </div>
 
                 <div class="chart-section">
-                    <div class="card" style="height: 500px;">
-                        <h2>📊 SwapX Price Chart (0.1% Range)</h2>
+                    <div class="card chart-card">
+                        <div class="chart-header">
+                            <h2 class="chart-title">📊 Price Chart</h2>
+                            <div class="chart-controls">
+                                <div class="time-filter">
+                                    <button class="time-btn swapx-time-btn" data-range="15m">15m</button>
+                                    <button class="time-btn swapx-time-btn" data-range="1h">1H</button>
+                                    <button class="time-btn swapx-time-btn" data-range="4h">4H</button>
+                                    <button class="time-btn swapx-time-btn" data-range="24h">24H</button>
+                                    <button class="time-btn swapx-time-btn active" data-range="all">All</button>
+                                </div>
+                                <div class="chart-type-toggle">
+                                    <button class="type-btn swapx-type-btn active" data-type="candle">🕯️ Candles</button>
+                                    <button class="type-btn swapx-type-btn" data-type="line">📈 Line</button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="swapx-chart" style="height: 450px;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Positions Data Table -->
+            <!-- Historical Data Table -->
             <div class="data-table-section">
                 <div class="data-table-header">
-                    <h2 class="data-table-title">📋 SwapX Position History</h2>
+                    <h2 class="data-table-title">📋 Historical Data</h2>
                     <div class="data-table-controls">
-                        <span class="data-count" id="swapx-positionCount">0 positions</span>
+                        <span class="data-count">Total Records: <span id="swapx-totalRecords">0</span></span>
+                        <span class="data-count">Showing: <span id="swapx-showingCount">100</span></span>
+                        <span class="data-count">Latest: <span id="swapx-latestTime">-</span></span>
                     </div>
                 </div>
 
@@ -1196,14 +1227,14 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Time</th>
+                                <th>Timestamp</th>
                                 <th>Status</th>
-                                <th>Open</th>
-                                <th>Close</th>
                                 <th>Upper Range</th>
                                 <th>Lower Range</th>
-                                <th>WETH %</th>
-                                <th>USDC %</th>
+                                <th>Open</th>
+                                <th>High</th>
+                                <th>Low</th>
+                                <th>Close</th>
                             </tr>
                         </thead>
                         <tbody id="swapx-positionsTableBody">
@@ -1212,6 +1243,13 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="swapx-pagination">
+                    <button class="pagination-btn" id="swapx-prevPage" onclick="swapxChangePage(-1)">← Previous</button>
+                    <span class="pagination-info">Page <span id="swapx-currentPage">1</span> of <span id="swapx-totalPages">1</span></span>
+                    <button class="pagination-btn" id="swapx-nextPage" onclick="swapxChangePage(1)">Next →</button>
                 </div>
             </div>
         </div>
@@ -2265,30 +2303,37 @@
         }
 
         // SwapX Data Management
+        let swapxAllPositions = [];
+        let swapxCurrentPage = 1;
+        let swapxPageSize = 100;
+        let swapxTimeRange = 'all';
+        let swapxChartType = 'candle';
+        let swapxLineSeries = null;
+        let swapxUpperRangeLine = null;
+        let swapxLowerRangeLine = null;
+
         async function loadSwapXData() {
             try {
-                // Use current hostname with port 3001 (works for both localhost and AWS)
                 const apiBaseUrl = `http://${window.location.hostname}:3001`;
 
-                // Fetch current data
                 const currentResponse = await fetch(`${apiBaseUrl}/api/swapx/current`);
                 const currentData = await currentResponse.json();
 
-                // Fetch positions
                 const positionsResponse = await fetch(`${apiBaseUrl}/api/swapx/positions`);
                 const positions = await positionsResponse.json();
 
-                // Filter out bad data (prices > $100,000 are obviously wrong)
+                // Filter out bad data
                 const validPositions = positions.filter(pos => 
                     pos.close && pos.close < 100000 && pos.close > 100
                 );
 
-                // Update current price and stats (only if valid)
+                swapxAllPositions = validPositions;
+
+                // Update current price and stats
                 if (currentData.currentRanges) {
                     const upperRange = currentData.currentRanges.upper || 0;
                     const lowerRange = currentData.currentRanges.lower || 0;
                     
-                    // Only show if ranges are reasonable
                     if (upperRange < 100000 && lowerRange > 100) {
                         const rangeWidth = upperRange - lowerRange;
                         document.getElementById('swapx-upperRange').textContent = '$' + upperRange.toFixed(2);
@@ -2301,31 +2346,34 @@
                     document.getElementById('swapx-status').textContent = currentData.lastPositionStatus;
                 }
 
-                // Update price from latest VALID position
+                // Update price and token distribution from latest position
                 if (validPositions && validPositions.length > 0) {
                     const latestPosition = validPositions[0];
-                    const price = latestPosition.close || 0;
-                    document.getElementById('swapx-currentPrice').textContent = '$' + price.toFixed(2);
+                    document.getElementById('swapx-currentPrice').textContent = '$' + latestPosition.close.toFixed(2);
+                    document.getElementById('swapx-wethPct').textContent = (latestPosition.weth_pct || 50).toFixed(1) + '%';
+                    document.getElementById('swapx-usdcPct').textContent = (latestPosition.usdc_pct || 50).toFixed(1) + '%';
+                    document.getElementById('swapx-latestTime').textContent = new Date(latestPosition.timestamp).toLocaleString();
                 }
 
-                // Update position count (valid only)
-                document.getElementById('swapx-positionCount').textContent = validPositions.length + ' positions';
+                // Update table info
+                document.getElementById('swapx-totalRecords').textContent = validPositions.length;
+                document.getElementById('swapx-showingCount').textContent = Math.min(swapxPageSize, validPositions.length);
 
-                // Update positions table (use validPositions)
-                updateSwapXPositionsTable(validPositions);
+                // Update positions table with pagination
+                updateSwapXPositionsTable();
 
-                // Initialize or update chart (use validPositions)
+                // Initialize or update chart
                 if (!swapxChart) {
-                    initSwapXChart(validPositions);
+                    initSwapXChart();
                 } else {
-                    updateSwapXChart(validPositions);
+                    updateSwapXChart();
                 }
             } catch (error) {
                 console.error('Error loading SwapX data:', error);
             }
         }
 
-        function initSwapXChart(positions) {
+        function initSwapXChart() {
             const chartContainer = document.getElementById('swapx-chart');
             if (!chartContainer) return;
 
@@ -2354,37 +2402,118 @@
                 wickDownColor: '#ff3366',
             });
 
-            updateSwapXChart(positions);
+            swapxLineSeries = swapxChart.addLineSeries({
+                color: '#00d4ff',
+                lineWidth: 2,
+                visible: false,
+            });
+
+            swapxUpperRangeLine = swapxChart.addLineSeries({
+                color: '#ef5350',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                priceLineVisible: false,
+                lastValueVisible: true,
+            });
+
+            swapxLowerRangeLine = swapxChart.addLineSeries({
+                color: '#26a69a',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                priceLineVisible: false,
+                lastValueVisible: true,
+            });
+
+            // Time filter buttons
+            document.querySelectorAll('.swapx-time-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.swapx-time-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    swapxTimeRange = btn.dataset.range;
+                    updateSwapXChart();
+                });
+            });
+
+            // Chart type toggle
+            document.querySelectorAll('.swapx-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.swapx-type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    swapxChartType = btn.dataset.type;
+                    
+                    swapxCandlestickSeries.applyOptions({ visible: swapxChartType === 'candle' });
+                    swapxLineSeries.applyOptions({ visible: swapxChartType === 'line' });
+                });
+            });
+
+            updateSwapXChart();
         }
 
-        function updateSwapXChart(positions) {
-            if (!swapxCandlestickSeries || !positions || positions.length === 0) return;
+        function filterSwapXByTimeRange(positions, range) {
+            if (!positions || positions.length === 0) return [];
+            if (range === 'all') return positions;
 
-            // Convert positions to candlestick format (already filtered)
-            const candles = positions
-                .slice(0, 100)
-                .reverse()
-                .map(pos => ({
-                    time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
-                    open: pos.open || pos.close,
-                    high: pos.high || pos.close,
-                    low: pos.low || pos.close,
-                    close: pos.close
-                }));
+            const now = Date.now();
+            let cutoffTime;
+
+            switch(range) {
+                case '15m': cutoffTime = now - (15 * 60 * 1000); break;
+                case '1h': cutoffTime = now - (60 * 60 * 1000); break;
+                case '4h': cutoffTime = now - (4 * 60 * 60 * 1000); break;
+                case '24h': cutoffTime = now - (24 * 60 * 60 * 1000); break;
+                default: return positions;
+            }
+
+            return positions.filter(pos => new Date(pos.timestamp).getTime() >= cutoffTime);
+        }
+
+        function updateSwapXChart() {
+            if (!swapxCandlestickSeries || !swapxAllPositions || swapxAllPositions.length === 0) return;
+
+            const filteredPositions = filterSwapXByTimeRange(swapxAllPositions, swapxTimeRange);
+            if (filteredPositions.length === 0) return;
+
+            const candles = filteredPositions.slice(0, 500).reverse().map(pos => ({
+                time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
+                open: pos.open || pos.close,
+                high: pos.high || pos.close,
+                low: pos.low || pos.close,
+                close: pos.close
+            }));
+
+            const lineData = filteredPositions.slice(0, 500).reverse().map(pos => ({
+                time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
+                value: pos.close
+            }));
 
             swapxCandlestickSeries.setData(candles);
+            swapxLineSeries.setData(lineData);
+
+            // Update range lines
+            if (filteredPositions.length > 0) {
+                const latest = filteredPositions[0];
+                const rangeData = candles.map(c => ({ time: c.time, value: latest.upper_range }));
+                const lowerData = candles.map(c => ({ time: c.time, value: latest.lower_range }));
+                swapxUpperRangeLine.setData(rangeData);
+                swapxLowerRangeLine.setData(lowerData);
+            }
+
             swapxChart.timeScale().fitContent();
         }
 
-        function updateSwapXPositionsTable(positions) {
+        function updateSwapXPositionsTable() {
             const tbody = document.getElementById('swapx-positionsTableBody');
-            if (!tbody || !positions || positions.length === 0) {
+            if (!tbody || !swapxAllPositions || swapxAllPositions.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" class="text-center">No positions yet</td></tr>';
                 return;
             }
 
-            // Positions are already filtered, just display them
-            tbody.innerHTML = positions.slice(0, 50).map(pos => {
+            const totalPages = Math.ceil(swapxAllPositions.length / swapxPageSize);
+            const startIdx = (swapxCurrentPage - 1) * swapxPageSize;
+            const endIdx = startIdx + swapxPageSize;
+            const pagePositions = swapxAllPositions.slice(startIdx, endIdx);
+
+            tbody.innerHTML = pagePositions.map(pos => {
                 const statusColors = {
                     'Open-UP': '#00ff88',
                     'Open-DOWN': '#ff3366',
@@ -2395,24 +2524,32 @@
 
                 const statusColor = statusColors[pos.status] || '#8e8ea9';
                 const time = new Date(pos.timestamp).toLocaleString();
-                
-                // Show open price for rebalance signals (Open-UP, Open-DOWN)
-                const isRebalance = pos.status === 'Open-UP' || pos.status === 'Open-DOWN';
-                const openPrice = pos.open && pos.open < 100000 ? `$${pos.open.toFixed(2)}` : '-';
 
                 return `
                     <tr>
                         <td>${time}</td>
                         <td><span style="color: ${statusColor}; font-weight: 600;">${pos.status}</span></td>
-                        <td>${isRebalance ? `<strong>${openPrice}</strong>` : openPrice}</td>
+                        <td>$${(pos.upper_range || 0).toFixed(2)}</td>
+                        <td>$${(pos.lower_range || 0).toFixed(2)}</td>
+                        <td>$${(pos.open || pos.close).toFixed(2)}</td>
+                        <td>$${(pos.high || pos.close).toFixed(2)}</td>
+                        <td>$${(pos.low || pos.close).toFixed(2)}</td>
                         <td>$${pos.close.toFixed(2)}</td>
-                        <td>$${pos.upper_range.toFixed(2)}</td>
-                        <td>$${pos.lower_range.toFixed(2)}</td>
-                        <td>${pos.weth_pct.toFixed(1)}%</td>
-                        <td>${pos.usdc_pct.toFixed(1)}%</td>
                     </tr>
                 `;
             }).join('');
+
+            // Update pagination
+            document.getElementById('swapx-currentPage').textContent = swapxCurrentPage;
+            document.getElementById('swapx-totalPages').textContent = totalPages;
+            document.getElementById('swapx-prevPage').disabled = swapxCurrentPage === 1;
+            document.getElementById('swapx-nextPage').disabled = swapxCurrentPage === totalPages;
+        }
+
+        function swapxChangePage(delta) {
+            const totalPages = Math.ceil(swapxAllPositions.length / swapxPageSize);
+            swapxCurrentPage = Math.max(1, Math.min(totalPages, swapxCurrentPage + delta));
+            updateSwapXPositionsTable();
         }
 
         // Trading Transactions Management
