@@ -1028,11 +1028,8 @@ app.get('/api/transactions/stats', async (req, res) => {
             const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
             const slot0 = await poolContract.slot0();
             const sqrtPriceX96 = slot0.sqrtPriceX96;
-            const Q96 = 2n ** 96n;
-            const sqrtPrice = Number(sqrtPriceX96) / Number(Q96);
-            const price = sqrtPrice ** 2;
-            const adjustedPrice = price / (10 ** 12); // Adjust for WETH (18 decimals) vs USDC (6 decimals)
-            currentPrice = adjustedPrice;
+            // Use the same calculation as the existing function
+            currentPrice = calculatePriceFromSqrtPriceX96(sqrtPriceX96);
           } catch (error) {
             console.error('Error fetching pool price:', error.message);
             currentPrice = 0;
