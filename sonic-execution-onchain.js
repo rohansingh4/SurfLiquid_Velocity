@@ -243,11 +243,21 @@ async function updateCandle(data) {
           // Get tick spacing from pool (100 ticks = 1% range)
           const tickSpacing = await getPoolTickSpacing();
 
-          // Convert ideal prices to ticks and round to nearest valid multiples
-          const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
-          const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
-          const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
-          const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
+          // Convert open price to tick and round to nearest 100-tick boundary
+          const openTick = Math.log(openPrice) / Math.log(1.0001);
+          const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
+
+          // DIRECTIONAL RANGE: Create asymmetric 100-tick range based on signal direction
+          // Open-UP: bias range upward [center, center+100] to capture more upside
+          // Open-DOWN: bias range downward [center-100, center] to capture more downside
+          let tickLower, tickUpper;
+          if (isUpRebalance) {
+            tickLower = centerTick;
+            tickUpper = centerTick + tickSpacing;
+          } else {
+            tickLower = centerTick - tickSpacing;
+            tickUpper = centerTick;
+          }
 
           // Calculate actual price boundaries from rounded ticks
           const lowerRange = Math.pow(1.0001, tickLower);
@@ -429,11 +439,13 @@ async function streamPositionData(data) {
 
         const tickSpacing = await getPoolTickSpacing();
 
-        // Convert ideal prices to ticks and round to nearest valid multiples
-        const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
-        const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
-        const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
-        const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
+        // Convert open price to tick and create symmetric 100-tick range
+        const openTick = Math.log(openPrice) / Math.log(1.0001);
+        const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
+
+        // Initial range is symmetric: [center-50, center+50] for 100 ticks total
+        const tickLower = centerTick - (tickSpacing / 2);
+        const tickUpper = centerTick + (tickSpacing / 2);
 
         // Calculate actual price boundaries from rounded ticks
         const lowerRange = Math.pow(1.0001, tickLower);
@@ -454,13 +466,13 @@ async function streamPositionData(data) {
       console.error('Error restoring ranges from DB:', error);
       // Fall back to creating new ranges if DB read fails
       const openPrice = currentCandle.open;
-      const idealUpper = openPrice * 1.005;
-      const idealLower = openPrice * 0.995;
       const tickSpacing = await getPoolTickSpacing();
-      const upperTickIdeal = Math.log(idealUpper) / Math.log(1.0001);
-      const lowerTickIdeal = Math.log(idealLower) / Math.log(1.0001);
-      const tickUpper = Math.round(upperTickIdeal / tickSpacing) * tickSpacing;
-      const tickLower = Math.round(lowerTickIdeal / tickSpacing) * tickSpacing;
+
+      // Convert open price to tick and create symmetric 100-tick range
+      const openTick = Math.log(openPrice) / Math.log(1.0001);
+      const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
+      const tickLower = centerTick - (tickSpacing / 2);
+      const tickUpper = centerTick + (tickSpacing / 2);
       const lowerRange = Math.pow(1.0001, tickLower);
       const upperRange = Math.pow(1.0001, tickUpper);
       currentRanges = {
