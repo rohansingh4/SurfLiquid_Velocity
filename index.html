@@ -1202,8 +1202,8 @@
                                     <button class="time-btn swapx-time-btn active" data-range="all">All</button>
                                 </div>
                                 <div class="chart-type-toggle">
-                                    <button class="type-btn swapx-type-btn active" data-type="candle">🕯️ Candles</button>
-                                    <button class="type-btn swapx-type-btn" data-type="line">📈 Line</button>
+                                    <button class="type-btn swapx-type-btn" data-type="candle">🕯️ Candles</button>
+                                    <button class="type-btn swapx-type-btn active" data-type="line">📈 Line</button>
                                 </div>
                             </div>
                         </div>
@@ -2394,22 +2394,26 @@
                 },
             });
 
+            // Use line chart by default since SwapX has low volatility (flat candles)
             swapxCandlestickSeries = swapxChart.addCandlestickSeries({
                 upColor: '#00ff88',
                 downColor: '#ff3366',
                 borderVisible: true,
                 wickUpColor: '#00ff88',
                 wickDownColor: '#ff3366',
-                visible: true,
+                visible: false,  // Hidden by default
             });
 
             swapxLineSeries = swapxChart.addLineSeries({
                 color: '#00d4ff',
                 lineWidth: 2,
-                visible: false,
+                visible: true,  // Visible by default
             });
             
-            console.log('[SwapX] Chart initialized with candlestick series');
+            // Set line as default active
+            swapxChartType = 'line';
+            
+            console.log('[SwapX] Chart initialized with line series (default)');
 
             swapxUpperRangeLine = swapxChart.addLineSeries({
                 color: '#ef5350',
