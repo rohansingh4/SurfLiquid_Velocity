@@ -7,8 +7,8 @@ import PositionSwapX from './models/PositionSwapX.js';
 
 dotenv.config();
 
-// Configuration from .env
-const RPC_URL = process.env.SWAPX_RPC_URL;
+// Configuration from .env (fallback to SONIC_RPC_URL if SWAPX_RPC_URL not set)
+const RPC_URL = process.env.SWAPX_RPC_URL || process.env.SONIC_RPC_URL;
 const POOL_ADDRESS = process.env.SWAPX_POOL_ADDRESS || '0xec4ee7d6988ab06f7a8daaf8c5fdffde6321be68';
 const TICK_SPACING = parseInt(process.env.SWAPX_TICK_SPACING) || 5;
 const RANGE_TICKS = parseInt(process.env.SWAPX_RANGE_TICKS) || 10;
@@ -52,24 +52,25 @@ const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
 const token0Contract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
 const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 
-// Calculate price from sqrtPriceX96 (Algebra uses same format as Uniswap V3)
-// IMPORTANT: SwapX pool has token0=USDC, token1=WETH
-// sqrtPriceX96 represents price of token0 in terms of token1 (USDC/WETH)
-// We need to INVERT to get WETH/USDC price
+// Calculate price from sqrtPriceX96 (Algebra V3 format)
+// SwapX pool: token0=USDC (6 decimals), token1=WETH (18 decimals)
+// sqrtPriceX96 = sqrt(token1/token0) * 2^96 in raw units
+// We want WETH price in USDC
 function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
-  // Convert to BigInt if it's not already
-  const sqrtPrice = BigInt(sqrtPriceX96.toString());
   const Q96 = 2n ** 96n;
-
-  // Calculate token0/token1 price (USDC/WETH)
-  // Adjust for decimals: USDC (6 decimals) / WETH (18 decimals) = need to multiply by 10^12
-  const priceToken0PerToken1 = (sqrtPrice * sqrtPrice * (10n ** 12n)) / (Q96 * Q96);
-  const token0PerToken1 = Number(priceToken0PerToken1) / 1e12;
-
-  // Invert to get WETH/USDC price (what we actually want to display)
-  const wethPrice = 1 / token0PerToken1;
-
-  return wethPrice;
+  const sqrtPrice = BigInt(sqrtPriceX96.toString());
+  
+  // price_raw = (sqrtPriceX96 / 2^96)^2 = token1/token0 in raw units
+  // For token0=USDC(6), token1=WETH(18): need to adjust by 10^(18-6) = 10^12
+  // price_adjusted = price_raw * 10^12 = USDC per WETH
+  
+  const sqrtPriceFloat = Number(sqrtPrice) / Number(Q96);
+  const priceRaw = sqrtPriceFloat * sqrtPriceFloat;
+  
+  // Adjust for decimal difference: multiply by 10^12 to get USDC per WETH
+  const usdcPerWeth = priceRaw * 1e12;
+  
+  return usdcPerWeth;
 }
 
 // Calculate percentages of pool composition
@@ -118,17 +119,17 @@ async function fetchPoolData() {
   }
 }
 
-// Initialize ranges on first fetch
+// Initialize ranges on first fetch - CENTERED on current tick (±5 ticks = 0.1% range)
 async function initializeRanges(data) {
   if (currentRanges !== null) return;
 
-  // Calculate initial range using tick spacing
   const currentTick = data.tick;
 
-  // Round down to nearest tick spacing
-  const tickLower = Math.floor(currentTick / TICK_SPACING) * TICK_SPACING;
-  // Use 10 tick range (0.1% with spacing 5)
-  const tickUpper = tickLower + RANGE_TICKS;
+  // Center the range on current tick: ±5 ticks (half of RANGE_TICKS)
+  // Round to nearest valid tick spacing multiple
+  const centerTick = Math.round(currentTick / TICK_SPACING) * TICK_SPACING;
+  const tickLower = centerTick - (RANGE_TICKS / 2);  // -5 ticks
+  const tickUpper = centerTick + (RANGE_TICKS / 2);  // +5 ticks
 
   // Calculate price boundaries from ticks
   const lowerRange = Math.pow(1.0001, tickLower);
@@ -142,8 +143,9 @@ async function initializeRanges(data) {
   };
 
   lastPositionStatus = 'Monitoring';
-  console.log(`\n🎯 [SwapX] Initial Ranges Set: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-  console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${TICK_SPACING})`);
+  console.log(`\n🎯 [SwapX] Initial Ranges Set (centered on tick ${centerTick}):`);
+  console.log(`   Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+  console.log(`   Tick Range: ${tickLower} to ${tickUpper} (±${RANGE_TICKS/2} ticks = 0.1%)`);
 }
 
 // Save position data to MongoDB
@@ -201,19 +203,27 @@ async function processCandle(candle) {
       lastPositionStatus = priceStatus;
       outOfRangeDetectedAt = candle.timestamp;
       positionSavedThisCycle = true;
-    } else if (!isInRange && lastPositionStatus in ['Price-UP', 'Price-DOWN']) {
+    } else if (!isInRange && ['Price-UP', 'Price-DOWN'].includes(lastPositionStatus)) {
       // Still out of range - check if should rebalance
       const timeSinceOutOfRange = candle.timestamp - outOfRangeDetectedAt;
 
       // Rebalance if out of range for 2+ candles (20+ seconds)
       if (timeSinceOutOfRange >= CANDLE_INTERVAL * 2) {
-        // Calculate new range based on current price
-        const currentTick = Math.floor(Math.log(currentPrice) / Math.log(1.0001));
-        const tickLower = Math.floor(currentTick / TICK_SPACING) * TICK_SPACING;
-        const tickUpper = tickLower + RANGE_TICKS;
+        // Calculate new range CENTERED on open price (±5 ticks = 0.1%)
+        const openPrice = candle.open;
+        const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+        
+        // Center the range on open tick
+        const centerTick = Math.round(openTick / TICK_SPACING) * TICK_SPACING;
+        const tickLower = centerTick - (RANGE_TICKS / 2);  // -5 ticks
+        const tickUpper = centerTick + (RANGE_TICKS / 2);  // +5 ticks
 
         const lowerRange = Math.pow(1.0001, tickLower);
         const upperRange = Math.pow(1.0001, tickUpper);
+
+        // Determine signal based on previous out-of-range direction
+        const status = lastPositionStatus === 'Price-UP' ? 'Open-UP' : 'Open-DOWN';
+        const rebalanceType = status === 'Open-UP' ? 'Rebalance UP' : 'Rebalance DOWN';
 
         currentRanges = {
           upper: upperRange,
@@ -222,17 +232,15 @@ async function processCandle(candle) {
           tickUpper: tickUpper
         };
 
-        const status = currentPrice > currentRanges.lower ? 'Open-UP' : 'Open-DOWN';
-        const rebalanceType = status === 'Open-UP' ? 'Rebalance UP' : 'Rebalance DOWN';
-
         // Define strategic target percentages based on signal type
         const targetPercentages = status === 'Open-UP'
           ? { weth_pct: 70, usdc_pct: 30 }
           : { weth_pct: 30, usdc_pct: 70 };
 
         console.log(`\n🔄 [SwapX] REBALANCE: ${status}`);
+        console.log(`  Open Price: $${openPrice.toFixed(2)} (center tick ${centerTick})`);
         console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
-        console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${TICK_SPACING})`);
+        console.log(`  Tick Range: ${tickLower} to ${tickUpper} (±${RANGE_TICKS/2} ticks = 0.1%)`);
         console.log(`  Target Allocation: ${targetPercentages.weth_pct}% WETH, ${targetPercentages.usdc_pct}% USDC`);
 
         // Prevent duplicate saves
