@@ -2481,34 +2481,58 @@
             
             if (filteredPositions.length === 0) return;
 
-            // Build candle data with valid OHLC
-            const candles = filteredPositions.slice(0, 500).reverse().map(pos => {
+            // Build candle data with valid OHLC, remove duplicates by time
+            const seenTimes = new Set();
+            const candles = [];
+            const lineData = [];
+            
+            // Process in reverse (oldest first) to maintain chronological order
+            const sortedPositions = [...filteredPositions].reverse();
+            
+            for (const pos of sortedPositions) {
                 const closePrice = parseFloat(pos.close) || 0;
-                return {
-                    time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
+                if (closePrice === 0) continue;
+                
+                const time = Math.floor(new Date(pos.timestamp).getTime() / 1000);
+                
+                // Skip duplicate timestamps
+                if (seenTimes.has(time)) continue;
+                seenTimes.add(time);
+                
+                candles.push({
+                    time: time,
                     open: parseFloat(pos.open) || closePrice,
                     high: parseFloat(pos.high) || closePrice,
                     low: parseFloat(pos.low) || closePrice,
                     close: closePrice
-                };
-            });
+                });
+                
+                lineData.push({
+                    time: time,
+                    value: closePrice
+                });
+            }
 
-            const lineData = filteredPositions.slice(0, 500).reverse().map(pos => ({
-                time: Math.floor(new Date(pos.timestamp).getTime() / 1000),
-                value: parseFloat(pos.close) || 0
-            }));
-
-            console.log(`[SwapX] Setting ${candles.length} candles, first:`, candles[0]);
-            swapxCandlestickSeries.setData(candles);
-            swapxLineSeries.setData(lineData);
+            console.log(`[SwapX] Setting ${candles.length} candles (after dedup), sample:`, candles.slice(0, 3));
+            
+            if (candles.length > 0) {
+                swapxCandlestickSeries.setData(candles);
+                swapxLineSeries.setData(lineData);
+            }
 
             // Update range lines
-            if (filteredPositions.length > 0) {
+            if (candles.length > 0 && filteredPositions.length > 0) {
                 const latest = filteredPositions[0];
-                const rangeData = candles.map(c => ({ time: c.time, value: latest.upper_range }));
-                const lowerData = candles.map(c => ({ time: c.time, value: latest.lower_range }));
-                swapxUpperRangeLine.setData(rangeData);
-                swapxLowerRangeLine.setData(lowerData);
+                const upperVal = parseFloat(latest.upper_range) || 0;
+                const lowerVal = parseFloat(latest.lower_range) || 0;
+                
+                if (upperVal > 0 && lowerVal > 0) {
+                    const rangeData = candles.map(c => ({ time: c.time, value: upperVal }));
+                    const lowerData = candles.map(c => ({ time: c.time, value: lowerVal }));
+                    swapxUpperRangeLine.setData(rangeData);
+                    swapxLowerRangeLine.setData(lowerData);
+                    console.log(`[SwapX] Range lines: ${lowerVal.toFixed(2)} - ${upperVal.toFixed(2)}`);
+                }
             }
 
             swapxChart.timeScale().fitContent();
