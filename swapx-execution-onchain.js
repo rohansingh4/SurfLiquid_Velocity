@@ -60,15 +60,15 @@ function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
   const Q96 = 2n ** 96n;
   const sqrtPrice = BigInt(sqrtPriceX96.toString());
   
-  // price_raw = (sqrtPriceX96 / 2^96)^2 = token1/token0 in raw units
-  // For token0=USDC(6), token1=WETH(18): need to adjust by 10^(18-6) = 10^12
-  // price_adjusted = price_raw * 10^12 = USDC per WETH
+  // price_raw = (sqrtPriceX96 / 2^96)^2 = token1/token0 in raw units (WETH_raw / USDC_raw)
+  // For token0=USDC(6), token1=WETH(18): price_raw = (weth * 10^18) / (usdc * 10^6)
+  // To get USDC per WETH: 10^12 / price_raw
   
   const sqrtPriceFloat = Number(sqrtPrice) / Number(Q96);
   const priceRaw = sqrtPriceFloat * sqrtPriceFloat;
   
-  // Adjust for decimal difference: multiply by 10^12 to get USDC per WETH
-  const usdcPerWeth = priceRaw * 1e12;
+  // USDC per WETH = 10^12 / priceRaw (inverse of the raw price, adjusted for decimals)
+  const usdcPerWeth = 1e12 / priceRaw;
   
   return usdcPerWeth;
 }
