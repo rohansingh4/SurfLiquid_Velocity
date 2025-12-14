@@ -1,0 +1,20 @@
+{
+  "totalRebalances": 40,
+  "centering": {
+    "chosenBetter": 40,
+    "alternativeBetter": 0,
+    "chosenBetterPct": "100.0"
+  },
+  "directional": {
+    "chosenCorrect": 40,
+    "alternativeCorrect": 0,
+    "bothCorrect": 0,
+    "onlyChosenCorrect": 40,
+    "onlyAlternativeCorrect": 0
+  },
+  "averageDeviations": {
+    "chosen": "0.442",
+    "alternative": "0.558",
+    "difference": "-0.115"
+  }
+}

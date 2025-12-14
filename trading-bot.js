@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import Transaction from './models/Transaction.js';
+import ActivePosition from './models/ActivePosition.js';
 
 // ERC20 ABI for token approvals and balances
 const ERC20_ABI = [
@@ -485,6 +486,9 @@ class TradingBot {
         this.currentTickUpper = tickUpper;
         this.hasLiquidity = true;
 
+        // Save position state to database for recovery after restart
+        await this.savePositionState(tickLower, tickUpper, liquidityAmount);
+
         return {
           txHash: tx.hash,
           gasUsed: receipt.gasUsed.toString(),
@@ -565,6 +569,9 @@ class TradingBot {
         this.currentTickUpper = null;
         this.hasLiquidity = false;
 
+        // Clear position state from database
+        await this.clearPositionState();
+
         return result;
       } catch (error) {
         lastError = error;
@@ -580,6 +587,87 @@ class TradingBot {
 
     console.error('❌ Remove liquidity failed after all retries');
     throw lastError;
+  }
+
+  // Save active position state to MongoDB
+  async savePositionState(tickLower, tickUpper, liquidity) {
+    try {
+      await ActivePosition.findOneAndUpdate(
+        { _id: 'current' },
+        {
+          tickLower: tickLower,
+          tickUpper: tickUpper,
+          liquidity: liquidity.toString(),
+          poolAddress: this.poolAddress,
+          lastUpdated: new Date()
+        },
+        { upsert: true, new: true }
+      );
+      console.log(`   💾 Position state saved to DB: [${tickLower}, ${tickUpper}]`);
+    } catch (error) {
+      console.error('⚠️  Failed to save position state to DB:', error.message);
+      // Don't throw - continue even if DB save fails
+    }
+  }
+
+  // Clear active position state from MongoDB
+  async clearPositionState() {
+    try {
+      await ActivePosition.deleteOne({ _id: 'current' });
+      console.log(`   🗑️  Position state cleared from DB`);
+    } catch (error) {
+      console.error('⚠️  Failed to clear position state from DB:', error.message);
+      // Don't throw - continue even if DB clear fails
+    }
+  }
+
+  // Restore active position state from MongoDB
+  async restorePositionState() {
+    try {
+      const savedPosition = await ActivePosition.findOne({ _id: 'current' });
+      if (savedPosition) {
+        console.log(`   🔄 Restoring position state from DB...`);
+        console.log(`      Tick Range: [${savedPosition.tickLower}, ${savedPosition.tickUpper}]`);
+        console.log(`      Liquidity: ${savedPosition.liquidity}`);
+
+        // Verify the position still exists on-chain
+        if (this.swapHelperContract) {
+          const actualLiquidity = await this.swapHelperContract.getPositionLiquidity(
+            this.poolAddress,
+            savedPosition.tickLower,
+            savedPosition.tickUpper
+          );
+
+          if (actualLiquidity > 0n) {
+            this.currentTickLower = savedPosition.tickLower;
+            this.currentTickUpper = savedPosition.tickUpper;
+            this.currentLiquidity = actualLiquidity;
+            this.hasLiquidity = true;
+            console.log(`   ✅ Position restored and verified on-chain`);
+            console.log(`      On-chain liquidity: ${actualLiquidity.toString()}`);
+            return true;
+          } else {
+            console.log(`   ⚠️  Saved position no longer exists on-chain - clearing state`);
+            await this.clearPositionState();
+            return false;
+          }
+        } else {
+          // No SwapHelper, just restore to memory
+          this.currentTickLower = savedPosition.tickLower;
+          this.currentTickUpper = savedPosition.tickUpper;
+          this.currentLiquidity = BigInt(savedPosition.liquidity);
+          this.hasLiquidity = true;
+          console.log(`   ⚠️  Position restored to memory (SwapHelper not available for verification)`);
+          return true;
+        }
+      } else {
+        console.log(`   ℹ️  No saved position found in DB`);
+        return false;
+      }
+    } catch (error) {
+      console.error('⚠️  Failed to restore position state from DB:', error.message);
+      return false;
+    }
   }
 
   // Sync in-memory liquidity state with actual on-chain position

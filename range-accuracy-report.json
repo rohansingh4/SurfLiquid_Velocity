@@ -1,0 +1,1062 @@
+{
+  "summary": {
+    "totalRebalances": 40,
+    "upperRangeDeviations": {
+      "average": -0.0349,
+      "min": -0.498,
+      "max": 0.501
+    },
+    "lowerRangeDeviations": {
+      "average": 0.03452500000000001,
+      "min": -0.496,
+      "max": 0.493
+    },
+    "directionalAccuracy": {
+      "correct": 40,
+      "total": 40,
+      "percentage": "100.0"
+    }
+  },
+  "detailedResults": [
+    {
+      "timestamp": "12/12/2025, 7:57:30 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3225.73",
+      "tickRange": "80700 to 80800 (100 ticks)",
+      "actualRanges": {
+        "upper": "3227.93",
+        "lower": "3195.81"
+      },
+      "idealRanges": {
+        "upper": "3241.86",
+        "lower": "3209.60"
+      },
+      "actualPercentages": {
+        "upper": "+0.068%",
+        "lower": "-0.928%"
+      },
+      "deviations": {
+        "upper": "-0.432%",
+        "lower": "+0.428%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "53.5%",
+      "usdcPct": "46.5%"
+    },
+    {
+      "timestamp": "12/12/2025, 8:01:42 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3229.51",
+      "tickRange": "80800 to 80900 (100 ticks)",
+      "actualRanges": {
+        "upper": "3260.37",
+        "lower": "3227.93"
+      },
+      "idealRanges": {
+        "upper": "3245.66",
+        "lower": "3213.36"
+      },
+      "actualPercentages": {
+        "upper": "+0.955%",
+        "lower": "-0.049%"
+      },
+      "deviations": {
+        "upper": "+0.455%",
+        "lower": "-0.451%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "53.0%",
+      "usdcPct": "47.0%"
+    },
+    {
+      "timestamp": "12/12/2025, 8:20:22 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3227.01",
+      "tickRange": "80700 to 80800 (100 ticks)",
+      "actualRanges": {
+        "upper": "3227.93",
+        "lower": "3195.81"
+      },
+      "idealRanges": {
+        "upper": "3243.14",
+        "lower": "3210.87"
+      },
+      "actualPercentages": {
+        "upper": "+0.029%",
+        "lower": "-0.967%"
+      },
+      "deviations": {
+        "upper": "-0.471%",
+        "lower": "+0.467%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "53.3%",
+      "usdcPct": "46.7%"
+    },
+    {
+      "timestamp": "12/12/2025, 8:24:52 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3230.58",
+      "tickRange": "80800 to 80900 (100 ticks)",
+      "actualRanges": {
+        "upper": "3260.37",
+        "lower": "3227.93"
+      },
+      "idealRanges": {
+        "upper": "3246.73",
+        "lower": "3214.42"
+      },
+      "actualPercentages": {
+        "upper": "+0.922%",
+        "lower": "-0.082%"
+      },
+      "deviations": {
+        "upper": "+0.422%",
+        "lower": "-0.418%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "52.9%",
+      "usdcPct": "47.1%"
+    },
+    {
+      "timestamp": "12/12/2025, 8:31:01 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3226.88",
+      "tickRange": "80700 to 80800 (100 ticks)",
+      "actualRanges": {
+        "upper": "3227.93",
+        "lower": "3195.81"
+      },
+      "idealRanges": {
+        "upper": "3243.01",
+        "lower": "3210.74"
+      },
+      "actualPercentages": {
+        "upper": "+0.033%",
+        "lower": "-0.963%"
+      },
+      "deviations": {
+        "upper": "-0.467%",
+        "lower": "+0.463%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "53.3%",
+      "usdcPct": "46.7%"
+    },
+    {
+      "timestamp": "12/12/2025, 8:55:22 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3194.47",
+      "tickRange": "80600 to 80700 (100 ticks)",
+      "actualRanges": {
+        "upper": "3195.81",
+        "lower": "3164.01"
+      },
+      "idealRanges": {
+        "upper": "3210.44",
+        "lower": "3178.50"
+      },
+      "actualPercentages": {
+        "upper": "+0.042%",
+        "lower": "-0.953%"
+      },
+      "deviations": {
+        "upper": "-0.458%",
+        "lower": "+0.453%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "57.3%",
+      "usdcPct": "42.7%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:00:01 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3160.67",
+      "tickRange": "80500 to 80600 (100 ticks)",
+      "actualRanges": {
+        "upper": "3164.01",
+        "lower": "3132.53"
+      },
+      "idealRanges": {
+        "upper": "3176.47",
+        "lower": "3144.87"
+      },
+      "actualPercentages": {
+        "upper": "+0.106%",
+        "lower": "-0.890%"
+      },
+      "deviations": {
+        "upper": "-0.394%",
+        "lower": "+0.390%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "61.1%",
+      "usdcPct": "38.9%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:05:52 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3122.40",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3138.01",
+        "lower": "3106.79"
+      },
+      "actualPercentages": {
+        "upper": "+0.325%",
+        "lower": "-0.674%"
+      },
+      "deviations": {
+        "upper": "-0.175%",
+        "lower": "+0.174%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.7%",
+      "usdcPct": "35.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:11:52 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3097.11",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3112.60",
+        "lower": "3081.63"
+      },
+      "actualPercentages": {
+        "upper": "+0.137%",
+        "lower": "-0.859%"
+      },
+      "deviations": {
+        "upper": "-0.363%",
+        "lower": "+0.359%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.6%",
+      "usdcPct": "33.4%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:15:10 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3104.82",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3120.34",
+        "lower": "3089.30"
+      },
+      "actualPercentages": {
+        "upper": "+0.893%",
+        "lower": "-0.111%"
+      },
+      "deviations": {
+        "upper": "+0.393%",
+        "lower": "-0.389%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.1%",
+      "usdcPct": "33.9%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:22:01 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3100.50",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3116.00",
+        "lower": "3085.00"
+      },
+      "actualPercentages": {
+        "upper": "+0.028%",
+        "lower": "-0.967%"
+      },
+      "deviations": {
+        "upper": "-0.472%",
+        "lower": "+0.467%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.4%",
+      "usdcPct": "33.6%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:28:40 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3067.85",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3083.19",
+        "lower": "3052.52"
+      },
+      "actualPercentages": {
+        "upper": "+0.087%",
+        "lower": "-0.909%"
+      },
+      "deviations": {
+        "upper": "-0.413%",
+        "lower": "+0.409%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "68.5%",
+      "usdcPct": "31.5%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:31:22 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3070.70",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3086.06",
+        "lower": "3055.35"
+      },
+      "actualPercentages": {
+        "upper": "+0.999%",
+        "lower": "-0.006%"
+      },
+      "deviations": {
+        "upper": "+0.499%",
+        "lower": "-0.494%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "67.2%",
+      "usdcPct": "32.8%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:33:40 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3066.92",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3082.26",
+        "lower": "3051.59"
+      },
+      "actualPercentages": {
+        "upper": "+0.117%",
+        "lower": "-0.879%"
+      },
+      "deviations": {
+        "upper": "-0.383%",
+        "lower": "+0.379%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "67.3%",
+      "usdcPct": "32.7%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:37:01 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3073.85",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3089.22",
+        "lower": "3058.48"
+      },
+      "actualPercentages": {
+        "upper": "+0.895%",
+        "lower": "-0.109%"
+      },
+      "deviations": {
+        "upper": "+0.395%",
+        "lower": "-0.391%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.8%",
+      "usdcPct": "33.2%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:47:01 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3068.16",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3083.50",
+        "lower": "3052.82"
+      },
+      "actualPercentages": {
+        "upper": "+0.077%",
+        "lower": "-0.919%"
+      },
+      "deviations": {
+        "upper": "-0.423%",
+        "lower": "+0.419%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "67.3%",
+      "usdcPct": "32.7%"
+    },
+    {
+      "timestamp": "12/12/2025, 9:56:11 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3075.84",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3091.22",
+        "lower": "3060.46"
+      },
+      "actualPercentages": {
+        "upper": "+0.830%",
+        "lower": "-0.173%"
+      },
+      "deviations": {
+        "upper": "+0.330%",
+        "lower": "-0.327%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.6%",
+      "usdcPct": "33.4%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:05:02 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3068.22",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3083.56",
+        "lower": "3052.88"
+      },
+      "actualPercentages": {
+        "upper": "+0.075%",
+        "lower": "-0.921%"
+      },
+      "deviations": {
+        "upper": "-0.425%",
+        "lower": "+0.421%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "67.0%",
+      "usdcPct": "33.0%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:28:02 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3071.73",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3087.09",
+        "lower": "3056.37"
+      },
+      "actualPercentages": {
+        "upper": "+0.965%",
+        "lower": "-0.040%"
+      },
+      "deviations": {
+        "upper": "+0.465%",
+        "lower": "-0.460%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.6%",
+      "usdcPct": "35.4%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:28:41 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3068.88",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3084.22",
+        "lower": "3053.53"
+      },
+      "actualPercentages": {
+        "upper": "+0.053%",
+        "lower": "-0.942%"
+      },
+      "deviations": {
+        "upper": "-0.447%",
+        "lower": "+0.442%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.9%",
+      "usdcPct": "35.1%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:31:41 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3070.85",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3086.21",
+        "lower": "3055.50"
+      },
+      "actualPercentages": {
+        "upper": "+0.994%",
+        "lower": "-0.011%"
+      },
+      "deviations": {
+        "upper": "+0.494%",
+        "lower": "-0.489%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.7%",
+      "usdcPct": "35.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:32:41 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3070.32",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3085.67",
+        "lower": "3054.97"
+      },
+      "actualPercentages": {
+        "upper": "+0.006%",
+        "lower": "-0.989%"
+      },
+      "deviations": {
+        "upper": "-0.494%",
+        "lower": "+0.489%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.7%",
+      "usdcPct": "35.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:33:20 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3070.79",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3086.14",
+        "lower": "3055.43"
+      },
+      "actualPercentages": {
+        "upper": "+0.996%",
+        "lower": "-0.009%"
+      },
+      "deviations": {
+        "upper": "+0.496%",
+        "lower": "-0.491%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "64.7%",
+      "usdcPct": "35.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:34:11 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3070.45",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3085.80",
+        "lower": "3055.09"
+      },
+      "actualPercentages": {
+        "upper": "+0.002%",
+        "lower": "-0.993%"
+      },
+      "deviations": {
+        "upper": "-0.498%",
+        "lower": "+0.493%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.6%",
+      "usdcPct": "33.4%"
+    },
+    {
+      "timestamp": "12/12/2025, 10:35:11 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3072.68",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3088.04",
+        "lower": "3057.32"
+      },
+      "actualPercentages": {
+        "upper": "+0.934%",
+        "lower": "-0.071%"
+      },
+      "deviations": {
+        "upper": "+0.434%",
+        "lower": "-0.429%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.4%",
+      "usdcPct": "33.6%"
+    },
+    {
+      "timestamp": "12/12/2025, 11:00:02 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3069.81",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3085.16",
+        "lower": "3054.46"
+      },
+      "actualPercentages": {
+        "upper": "+0.023%",
+        "lower": "-0.972%"
+      },
+      "deviations": {
+        "upper": "-0.477%",
+        "lower": "+0.472%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.7%",
+      "usdcPct": "33.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 11:03:51 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3072.63",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3087.99",
+        "lower": "3057.27"
+      },
+      "actualPercentages": {
+        "upper": "+0.935%",
+        "lower": "-0.069%"
+      },
+      "deviations": {
+        "upper": "+0.435%",
+        "lower": "-0.431%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.4%",
+      "usdcPct": "33.6%"
+    },
+    {
+      "timestamp": "12/12/2025, 11:28:21 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3069.44",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3084.79",
+        "lower": "3054.10"
+      },
+      "actualPercentages": {
+        "upper": "+0.035%",
+        "lower": "-0.961%"
+      },
+      "deviations": {
+        "upper": "-0.465%",
+        "lower": "+0.461%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.7%",
+      "usdcPct": "33.3%"
+    },
+    {
+      "timestamp": "12/12/2025, 11:33:21 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3070.64",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3085.99",
+        "lower": "3055.29"
+      },
+      "actualPercentages": {
+        "upper": "+1.001%",
+        "lower": "-0.004%"
+      },
+      "deviations": {
+        "upper": "+0.501%",
+        "lower": "-0.496%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.6%",
+      "usdcPct": "33.4%"
+    },
+    {
+      "timestamp": "12/13/2025, 1:16:11 AM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3068.62",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3083.97",
+        "lower": "3053.28"
+      },
+      "actualPercentages": {
+        "upper": "+0.061%",
+        "lower": "-0.934%"
+      },
+      "deviations": {
+        "upper": "-0.439%",
+        "lower": "+0.434%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.8%",
+      "usdcPct": "33.2%"
+    },
+    {
+      "timestamp": "12/13/2025, 1:23:32 AM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3071.32",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3086.68",
+        "lower": "3055.96"
+      },
+      "actualPercentages": {
+        "upper": "+0.978%",
+        "lower": "-0.026%"
+      },
+      "deviations": {
+        "upper": "+0.478%",
+        "lower": "-0.474%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "66.5%",
+      "usdcPct": "33.5%"
+    },
+    {
+      "timestamp": "12/13/2025, 1:28:21 AM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3070.19",
+      "tickRange": "80200 to 80300 (100 ticks)",
+      "actualRanges": {
+        "upper": "3070.51",
+        "lower": "3039.96"
+      },
+      "idealRanges": {
+        "upper": "3085.54",
+        "lower": "3054.84"
+      },
+      "actualPercentages": {
+        "upper": "+0.011%",
+        "lower": "-0.985%"
+      },
+      "deviations": {
+        "upper": "-0.489%",
+        "lower": "+0.485%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "68.3%",
+      "usdcPct": "31.7%"
+    },
+    {
+      "timestamp": "12/13/2025, 1:29:21 AM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3071.68",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3087.04",
+        "lower": "3056.32"
+      },
+      "actualPercentages": {
+        "upper": "+0.966%",
+        "lower": "-0.038%"
+      },
+      "deviations": {
+        "upper": "+0.466%",
+        "lower": "-0.462%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "68.2%",
+      "usdcPct": "31.8%"
+    },
+    {
+      "timestamp": "12/13/2025, 1:46:01 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3102.68",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3118.20",
+        "lower": "3087.17"
+      },
+      "actualPercentages": {
+        "upper": "+0.962%",
+        "lower": "-0.042%"
+      },
+      "deviations": {
+        "upper": "+0.462%",
+        "lower": "-0.458%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "61.2%",
+      "usdcPct": "38.8%"
+    },
+    {
+      "timestamp": "12/13/2025, 4:11:51 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3132.86",
+      "tickRange": "80500 to 80600 (100 ticks)",
+      "actualRanges": {
+        "upper": "3164.01",
+        "lower": "3132.53"
+      },
+      "idealRanges": {
+        "upper": "3148.52",
+        "lower": "3117.19"
+      },
+      "actualPercentages": {
+        "upper": "+0.995%",
+        "lower": "-0.010%"
+      },
+      "deviations": {
+        "upper": "+0.495%",
+        "lower": "-0.490%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "56.8%",
+      "usdcPct": "43.2%"
+    },
+    {
+      "timestamp": "12/13/2025, 4:24:21 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3131.94",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3147.60",
+        "lower": "3116.28"
+      },
+      "actualPercentages": {
+        "upper": "+0.019%",
+        "lower": "-0.976%"
+      },
+      "deviations": {
+        "upper": "-0.481%",
+        "lower": "+0.476%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "57.0%",
+      "usdcPct": "43.0%"
+    },
+    {
+      "timestamp": "12/13/2025, 6:58:50 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3099.16",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3114.66",
+        "lower": "3083.67"
+      },
+      "actualPercentages": {
+        "upper": "+0.071%",
+        "lower": "-0.925%"
+      },
+      "deviations": {
+        "upper": "-0.429%",
+        "lower": "+0.425%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "62.9%",
+      "usdcPct": "37.1%"
+    },
+    {
+      "timestamp": "12/13/2025, 7:02:41 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3101.64",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3117.15",
+        "lower": "3086.13"
+      },
+      "actualPercentages": {
+        "upper": "+0.996%",
+        "lower": "-0.009%"
+      },
+      "deviations": {
+        "upper": "+0.496%",
+        "lower": "-0.491%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "62.4%",
+      "usdcPct": "37.6%"
+    },
+    {
+      "timestamp": "12/13/2025, 7:58:30 PM",
+      "status": "Open-DOWN",
+      "rebalanceType": "Rebalance DOWN",
+      "openPrice": "3101.24",
+      "tickRange": "80300 to 80400 (100 ticks)",
+      "actualRanges": {
+        "upper": "3101.37",
+        "lower": "3070.51"
+      },
+      "idealRanges": {
+        "upper": "3116.75",
+        "lower": "3085.73"
+      },
+      "actualPercentages": {
+        "upper": "+0.004%",
+        "lower": "-0.991%"
+      },
+      "deviations": {
+        "upper": "-0.496%",
+        "lower": "+0.491%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "62.5%",
+      "usdcPct": "37.5%"
+    },
+    {
+      "timestamp": "12/13/2025, 8:01:42 PM",
+      "status": "Open-UP",
+      "rebalanceType": "Rebalance UP",
+      "openPrice": "3102.15",
+      "tickRange": "80400 to 80500 (100 ticks)",
+      "actualRanges": {
+        "upper": "3132.53",
+        "lower": "3101.37"
+      },
+      "idealRanges": {
+        "upper": "3117.66",
+        "lower": "3086.64"
+      },
+      "actualPercentages": {
+        "upper": "+0.979%",
+        "lower": "-0.025%"
+      },
+      "deviations": {
+        "upper": "+0.479%",
+        "lower": "-0.475%"
+      },
+      "isDirectionalCorrect": "✅",
+      "wethPct": "62.3%",
+      "usdcPct": "37.7%"
+    }
+  ]
+}

@@ -1,0 +1,1602 @@
+[
+  {
+    "index": 1,
+    "timestamp": "12/12/2025, 7:57:30 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3225.73",
+    "openTick": "80793.20",
+    "centerTick": 80800,
+    "idealRanges": {
+      "upper": "3241.86",
+      "lower": "3209.60"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "0.068",
+      "lowerPct": "0.928",
+      "upperDev": "-0.432",
+      "lowerDev": "0.428",
+      "avgDev": "0.430",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80800 to 80900",
+      "priceRange": "$3227.93 to $3260.37",
+      "upperPct": "1.074",
+      "lowerPct": "-0.068",
+      "upperDev": "0.574",
+      "lowerDev": "-0.568",
+      "avgDev": "0.571",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.141"
+    }
+  },
+  {
+    "index": 2,
+    "timestamp": "12/12/2025, 8:01:42 PM",
+    "signal": "Open-UP",
+    "openPrice": "3229.51",
+    "openTick": "80804.90",
+    "centerTick": 80800,
+    "idealRanges": {
+      "upper": "3245.66",
+      "lower": "3213.36"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80800 to 80900",
+      "priceRange": "$3227.93 to $3260.37",
+      "upperPct": "0.955",
+      "lowerPct": "0.049",
+      "upperDev": "0.455",
+      "lowerDev": "-0.451",
+      "avgDev": "0.453",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "-0.049",
+      "lowerPct": "1.043",
+      "upperDev": "-0.549",
+      "lowerDev": "0.543",
+      "avgDev": "0.546",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.093"
+    }
+  },
+  {
+    "index": 3,
+    "timestamp": "12/12/2025, 8:20:22 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3227.01",
+    "openTick": "80797.15",
+    "centerTick": 80800,
+    "idealRanges": {
+      "upper": "3243.14",
+      "lower": "3210.87"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "0.029",
+      "lowerPct": "0.967",
+      "upperDev": "-0.471",
+      "lowerDev": "0.467",
+      "avgDev": "0.469",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80800 to 80900",
+      "priceRange": "$3227.93 to $3260.37",
+      "upperPct": "1.034",
+      "lowerPct": "-0.029",
+      "upperDev": "0.534",
+      "lowerDev": "-0.529",
+      "avgDev": "0.531",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.062"
+    }
+  },
+  {
+    "index": 4,
+    "timestamp": "12/12/2025, 8:24:52 PM",
+    "signal": "Open-UP",
+    "openPrice": "3230.58",
+    "openTick": "80808.20",
+    "centerTick": 80800,
+    "idealRanges": {
+      "upper": "3246.73",
+      "lower": "3214.42"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80800 to 80900",
+      "priceRange": "$3227.93 to $3260.37",
+      "upperPct": "0.922",
+      "lowerPct": "0.082",
+      "upperDev": "0.422",
+      "lowerDev": "-0.418",
+      "avgDev": "0.420",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "-0.082",
+      "lowerPct": "1.076",
+      "upperDev": "-0.582",
+      "lowerDev": "0.576",
+      "avgDev": "0.579",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.159"
+    }
+  },
+  {
+    "index": 5,
+    "timestamp": "12/12/2025, 8:31:01 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3226.88",
+    "openTick": "80796.74",
+    "centerTick": 80800,
+    "idealRanges": {
+      "upper": "3243.01",
+      "lower": "3210.74"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "0.033",
+      "lowerPct": "0.963",
+      "upperDev": "-0.467",
+      "lowerDev": "0.463",
+      "avgDev": "0.465",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80800 to 80900",
+      "priceRange": "$3227.93 to $3260.37",
+      "upperPct": "1.038",
+      "lowerPct": "-0.033",
+      "upperDev": "0.538",
+      "lowerDev": "-0.533",
+      "avgDev": "0.535",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.070"
+    }
+  },
+  {
+    "index": 6,
+    "timestamp": "12/12/2025, 8:55:22 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3194.47",
+    "openTick": "80695.80",
+    "centerTick": 80700,
+    "idealRanges": {
+      "upper": "3210.44",
+      "lower": "3178.50"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80600 to 80700",
+      "priceRange": "$3164.01 to $3195.81",
+      "upperPct": "0.042",
+      "lowerPct": "0.953",
+      "upperDev": "-0.458",
+      "lowerDev": "0.453",
+      "avgDev": "0.456",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80700 to 80800",
+      "priceRange": "$3195.81 to $3227.93",
+      "upperPct": "1.047",
+      "lowerPct": "-0.042",
+      "upperDev": "0.547",
+      "lowerDev": "-0.542",
+      "avgDev": "0.545",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.089"
+    }
+  },
+  {
+    "index": 7,
+    "timestamp": "12/12/2025, 9:00:01 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3160.67",
+    "openTick": "80589.42",
+    "centerTick": 80600,
+    "idealRanges": {
+      "upper": "3176.47",
+      "lower": "3144.87"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80500 to 80600",
+      "priceRange": "$3132.53 to $3164.01",
+      "upperPct": "0.106",
+      "lowerPct": "0.890",
+      "upperDev": "-0.394",
+      "lowerDev": "0.390",
+      "avgDev": "0.392",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80600 to 80700",
+      "priceRange": "$3164.01 to $3195.81",
+      "upperPct": "1.112",
+      "lowerPct": "-0.106",
+      "upperDev": "0.612",
+      "lowerDev": "-0.606",
+      "avgDev": "0.609",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.217"
+    }
+  },
+  {
+    "index": 8,
+    "timestamp": "12/12/2025, 9:05:52 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3122.40",
+    "openTick": "80467.59",
+    "centerTick": 80500,
+    "idealRanges": {
+      "upper": "3138.01",
+      "lower": "3106.79"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.325",
+      "lowerPct": "0.674",
+      "upperDev": "-0.175",
+      "lowerDev": "0.174",
+      "avgDev": "0.174",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80500 to 80600",
+      "priceRange": "$3132.53 to $3164.01",
+      "upperPct": "1.333",
+      "lowerPct": "-0.325",
+      "upperDev": "0.833",
+      "lowerDev": "-0.825",
+      "avgDev": "0.829",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.654"
+    }
+  },
+  {
+    "index": 9,
+    "timestamp": "12/12/2025, 9:11:52 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3097.11",
+    "openTick": "80386.28",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3112.60",
+      "lower": "3081.63"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.137",
+      "lowerPct": "0.859",
+      "upperDev": "-0.363",
+      "lowerDev": "0.359",
+      "avgDev": "0.361",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "1.144",
+      "lowerPct": "-0.137",
+      "upperDev": "0.644",
+      "lowerDev": "-0.637",
+      "avgDev": "0.640",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.280"
+    }
+  },
+  {
+    "index": 10,
+    "timestamp": "12/12/2025, 9:15:10 PM",
+    "signal": "Open-UP",
+    "openPrice": "3104.82",
+    "openTick": "80411.13",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3120.34",
+      "lower": "3089.30"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.893",
+      "lowerPct": "0.111",
+      "upperDev": "0.393",
+      "lowerDev": "-0.389",
+      "avgDev": "0.391",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "-0.111",
+      "lowerPct": "1.105",
+      "upperDev": "-0.611",
+      "lowerDev": "0.605",
+      "avgDev": "0.608",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.217"
+    }
+  },
+  {
+    "index": 11,
+    "timestamp": "12/12/2025, 9:22:01 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3100.50",
+    "openTick": "80397.20",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3116.00",
+      "lower": "3085.00"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.028",
+      "lowerPct": "0.967",
+      "upperDev": "-0.472",
+      "lowerDev": "0.467",
+      "avgDev": "0.470",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "1.033",
+      "lowerPct": "-0.028",
+      "upperDev": "0.533",
+      "lowerDev": "-0.528",
+      "avgDev": "0.531",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.061"
+    }
+  },
+  {
+    "index": 12,
+    "timestamp": "12/12/2025, 9:28:40 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3067.85",
+    "openTick": "80291.35",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3083.19",
+      "lower": "3052.52"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.087",
+      "lowerPct": "0.909",
+      "upperDev": "-0.413",
+      "lowerDev": "0.409",
+      "avgDev": "0.411",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.092",
+      "lowerPct": "-0.087",
+      "upperDev": "0.592",
+      "lowerDev": "-0.587",
+      "avgDev": "0.589",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.178"
+    }
+  },
+  {
+    "index": 13,
+    "timestamp": "12/12/2025, 9:31:22 PM",
+    "signal": "Open-UP",
+    "openPrice": "3070.70",
+    "openTick": "80300.64",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3086.06",
+      "lower": "3055.35"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.999",
+      "lowerPct": "0.006",
+      "upperDev": "0.499",
+      "lowerDev": "-0.494",
+      "avgDev": "0.496",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.006",
+      "lowerPct": "1.001",
+      "upperDev": "-0.506",
+      "lowerDev": "0.501",
+      "avgDev": "0.504",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.008"
+    }
+  },
+  {
+    "index": 14,
+    "timestamp": "12/12/2025, 9:33:40 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3066.92",
+    "openTick": "80288.31",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3082.26",
+      "lower": "3051.59"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.117",
+      "lowerPct": "0.879",
+      "upperDev": "-0.383",
+      "lowerDev": "0.379",
+      "avgDev": "0.381",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.123",
+      "lowerPct": "-0.117",
+      "upperDev": "0.623",
+      "lowerDev": "-0.617",
+      "avgDev": "0.620",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.239"
+    }
+  },
+  {
+    "index": 15,
+    "timestamp": "12/12/2025, 9:37:01 PM",
+    "signal": "Open-UP",
+    "openPrice": "3073.85",
+    "openTick": "80310.89",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3089.22",
+      "lower": "3058.48"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.895",
+      "lowerPct": "0.109",
+      "upperDev": "0.395",
+      "lowerDev": "-0.391",
+      "avgDev": "0.393",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.109",
+      "lowerPct": "1.103",
+      "upperDev": "-0.609",
+      "lowerDev": "0.603",
+      "avgDev": "0.606",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.213"
+    }
+  },
+  {
+    "index": 16,
+    "timestamp": "12/12/2025, 9:47:01 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3068.16",
+    "openTick": "80292.34",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3083.50",
+      "lower": "3052.82"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.077",
+      "lowerPct": "0.919",
+      "upperDev": "-0.423",
+      "lowerDev": "0.419",
+      "avgDev": "0.421",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.082",
+      "lowerPct": "-0.077",
+      "upperDev": "0.582",
+      "lowerDev": "-0.577",
+      "avgDev": "0.579",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.158"
+    }
+  },
+  {
+    "index": 17,
+    "timestamp": "12/12/2025, 9:56:11 PM",
+    "signal": "Open-UP",
+    "openPrice": "3075.84",
+    "openTick": "80317.35",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3091.22",
+      "lower": "3060.46"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.830",
+      "lowerPct": "0.173",
+      "upperDev": "0.330",
+      "lowerDev": "-0.327",
+      "avgDev": "0.328",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.173",
+      "lowerPct": "1.167",
+      "upperDev": "-0.673",
+      "lowerDev": "0.667",
+      "avgDev": "0.670",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.342"
+    }
+  },
+  {
+    "index": 18,
+    "timestamp": "12/12/2025, 10:05:02 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3068.22",
+    "openTick": "80292.54",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3083.56",
+      "lower": "3052.88"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.075",
+      "lowerPct": "0.921",
+      "upperDev": "-0.425",
+      "lowerDev": "0.421",
+      "avgDev": "0.423",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.080",
+      "lowerPct": "-0.075",
+      "upperDev": "0.580",
+      "lowerDev": "-0.575",
+      "avgDev": "0.577",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.154"
+    }
+  },
+  {
+    "index": 19,
+    "timestamp": "12/12/2025, 10:28:02 PM",
+    "signal": "Open-UP",
+    "openPrice": "3071.73",
+    "openTick": "80303.97",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3087.09",
+      "lower": "3056.37"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.965",
+      "lowerPct": "0.040",
+      "upperDev": "0.465",
+      "lowerDev": "-0.460",
+      "avgDev": "0.463",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.040",
+      "lowerPct": "1.034",
+      "upperDev": "-0.540",
+      "lowerDev": "0.534",
+      "avgDev": "0.537",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.074"
+    }
+  },
+  {
+    "index": 20,
+    "timestamp": "12/12/2025, 10:28:41 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3068.88",
+    "openTick": "80294.69",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3084.22",
+      "lower": "3053.53"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.053",
+      "lowerPct": "0.942",
+      "upperDev": "-0.447",
+      "lowerDev": "0.442",
+      "avgDev": "0.445",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.059",
+      "lowerPct": "-0.053",
+      "upperDev": "0.559",
+      "lowerDev": "-0.553",
+      "avgDev": "0.556",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.111"
+    }
+  },
+  {
+    "index": 21,
+    "timestamp": "12/12/2025, 10:31:41 PM",
+    "signal": "Open-UP",
+    "openPrice": "3070.85",
+    "openTick": "80301.12",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3086.21",
+      "lower": "3055.50"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.994",
+      "lowerPct": "0.011",
+      "upperDev": "0.494",
+      "lowerDev": "-0.489",
+      "avgDev": "0.491",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.011",
+      "lowerPct": "1.006",
+      "upperDev": "-0.511",
+      "lowerDev": "0.506",
+      "avgDev": "0.509",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.017"
+    }
+  },
+  {
+    "index": 22,
+    "timestamp": "12/12/2025, 10:32:41 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3070.32",
+    "openTick": "80299.38",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3085.67",
+      "lower": "3054.97"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.006",
+      "lowerPct": "0.989",
+      "upperDev": "-0.494",
+      "lowerDev": "0.489",
+      "avgDev": "0.491",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.011",
+      "lowerPct": "-0.006",
+      "upperDev": "0.511",
+      "lowerDev": "-0.506",
+      "avgDev": "0.509",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.017"
+    }
+  },
+  {
+    "index": 23,
+    "timestamp": "12/12/2025, 10:33:20 PM",
+    "signal": "Open-UP",
+    "openPrice": "3070.79",
+    "openTick": "80300.90",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3086.14",
+      "lower": "3055.43"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.996",
+      "lowerPct": "0.009",
+      "upperDev": "0.496",
+      "lowerDev": "-0.491",
+      "avgDev": "0.493",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.009",
+      "lowerPct": "1.004",
+      "upperDev": "-0.509",
+      "lowerDev": "0.504",
+      "avgDev": "0.506",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.013"
+    }
+  },
+  {
+    "index": 24,
+    "timestamp": "12/12/2025, 10:34:11 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3070.45",
+    "openTick": "80299.79",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3085.80",
+      "lower": "3055.09"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.002",
+      "lowerPct": "0.993",
+      "upperDev": "-0.498",
+      "lowerDev": "0.493",
+      "avgDev": "0.495",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.007",
+      "lowerPct": "-0.002",
+      "upperDev": "0.507",
+      "lowerDev": "-0.502",
+      "avgDev": "0.505",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.009"
+    }
+  },
+  {
+    "index": 25,
+    "timestamp": "12/12/2025, 10:35:11 PM",
+    "signal": "Open-UP",
+    "openPrice": "3072.68",
+    "openTick": "80307.07",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3088.04",
+      "lower": "3057.32"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.934",
+      "lowerPct": "0.071",
+      "upperDev": "0.434",
+      "lowerDev": "-0.429",
+      "avgDev": "0.431",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.071",
+      "lowerPct": "1.065",
+      "upperDev": "-0.571",
+      "lowerDev": "0.565",
+      "avgDev": "0.568",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.136"
+    }
+  },
+  {
+    "index": 26,
+    "timestamp": "12/12/2025, 11:00:02 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3069.81",
+    "openTick": "80297.72",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3085.16",
+      "lower": "3054.46"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.023",
+      "lowerPct": "0.972",
+      "upperDev": "-0.477",
+      "lowerDev": "0.472",
+      "avgDev": "0.475",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.028",
+      "lowerPct": "-0.023",
+      "upperDev": "0.528",
+      "lowerDev": "-0.523",
+      "avgDev": "0.525",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.051"
+    }
+  },
+  {
+    "index": 27,
+    "timestamp": "12/12/2025, 11:03:51 PM",
+    "signal": "Open-UP",
+    "openPrice": "3072.63",
+    "openTick": "80306.90",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3087.99",
+      "lower": "3057.27"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.935",
+      "lowerPct": "0.069",
+      "upperDev": "0.435",
+      "lowerDev": "-0.431",
+      "avgDev": "0.433",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.069",
+      "lowerPct": "1.063",
+      "upperDev": "-0.569",
+      "lowerDev": "0.563",
+      "avgDev": "0.566",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.133"
+    }
+  },
+  {
+    "index": 28,
+    "timestamp": "12/12/2025, 11:28:21 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3069.44",
+    "openTick": "80296.53",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3084.79",
+      "lower": "3054.10"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.035",
+      "lowerPct": "0.961",
+      "upperDev": "-0.465",
+      "lowerDev": "0.461",
+      "avgDev": "0.463",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.040",
+      "lowerPct": "-0.035",
+      "upperDev": "0.540",
+      "lowerDev": "-0.535",
+      "avgDev": "0.537",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.074"
+    }
+  },
+  {
+    "index": 29,
+    "timestamp": "12/12/2025, 11:33:21 PM",
+    "signal": "Open-UP",
+    "openPrice": "3070.64",
+    "openTick": "80300.42",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3085.99",
+      "lower": "3055.29"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.001",
+      "lowerPct": "0.004",
+      "upperDev": "0.501",
+      "lowerDev": "-0.496",
+      "avgDev": "0.498",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.004",
+      "lowerPct": "0.999",
+      "upperDev": "-0.504",
+      "lowerDev": "0.499",
+      "avgDev": "0.502",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.003"
+    }
+  },
+  {
+    "index": 30,
+    "timestamp": "12/13/2025, 1:16:11 AM",
+    "signal": "Open-DOWN",
+    "openPrice": "3068.62",
+    "openTick": "80293.86",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3083.97",
+      "lower": "3053.28"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.061",
+      "lowerPct": "0.934",
+      "upperDev": "-0.439",
+      "lowerDev": "0.434",
+      "avgDev": "0.436",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.067",
+      "lowerPct": "-0.061",
+      "upperDev": "0.567",
+      "lowerDev": "-0.561",
+      "avgDev": "0.564",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.128"
+    }
+  },
+  {
+    "index": 31,
+    "timestamp": "12/13/2025, 1:23:32 AM",
+    "signal": "Open-UP",
+    "openPrice": "3071.32",
+    "openTick": "80302.64",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3086.68",
+      "lower": "3055.96"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.978",
+      "lowerPct": "0.026",
+      "upperDev": "0.478",
+      "lowerDev": "-0.474",
+      "avgDev": "0.476",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.026",
+      "lowerPct": "1.021",
+      "upperDev": "-0.526",
+      "lowerDev": "0.521",
+      "avgDev": "0.524",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.048"
+    }
+  },
+  {
+    "index": 32,
+    "timestamp": "12/13/2025, 1:28:21 AM",
+    "signal": "Open-DOWN",
+    "openPrice": "3070.19",
+    "openTick": "80298.95",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3085.54",
+      "lower": "3054.84"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "0.011",
+      "lowerPct": "0.985",
+      "upperDev": "-0.489",
+      "lowerDev": "0.485",
+      "avgDev": "0.487",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "1.016",
+      "lowerPct": "-0.011",
+      "upperDev": "0.516",
+      "lowerDev": "-0.511",
+      "avgDev": "0.513",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.026"
+    }
+  },
+  {
+    "index": 33,
+    "timestamp": "12/13/2025, 1:29:21 AM",
+    "signal": "Open-UP",
+    "openPrice": "3071.68",
+    "openTick": "80303.82",
+    "centerTick": 80300,
+    "idealRanges": {
+      "upper": "3087.04",
+      "lower": "3056.32"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.966",
+      "lowerPct": "0.038",
+      "upperDev": "0.466",
+      "lowerDev": "-0.462",
+      "avgDev": "0.464",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80200 to 80300",
+      "priceRange": "$3039.96 to $3070.51",
+      "upperPct": "-0.038",
+      "lowerPct": "1.033",
+      "upperDev": "-0.538",
+      "lowerDev": "0.533",
+      "avgDev": "0.536",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.071"
+    }
+  },
+  {
+    "index": 34,
+    "timestamp": "12/13/2025, 1:46:01 PM",
+    "signal": "Open-UP",
+    "openPrice": "3102.68",
+    "openTick": "80404.24",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3118.20",
+      "lower": "3087.17"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.962",
+      "lowerPct": "0.042",
+      "upperDev": "0.462",
+      "lowerDev": "-0.458",
+      "avgDev": "0.460",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "-0.042",
+      "lowerPct": "1.037",
+      "upperDev": "-0.542",
+      "lowerDev": "0.537",
+      "avgDev": "0.540",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.080"
+    }
+  },
+  {
+    "index": 35,
+    "timestamp": "12/13/2025, 4:11:51 PM",
+    "signal": "Open-UP",
+    "openPrice": "3132.86",
+    "openTick": "80501.04",
+    "centerTick": 80500,
+    "idealRanges": {
+      "upper": "3148.52",
+      "lower": "3117.19"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80500 to 80600",
+      "priceRange": "$3132.53 to $3164.01",
+      "upperPct": "0.995",
+      "lowerPct": "0.010",
+      "upperDev": "0.495",
+      "lowerDev": "-0.490",
+      "avgDev": "0.492",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "-0.010",
+      "lowerPct": "1.005",
+      "upperDev": "-0.510",
+      "lowerDev": "0.505",
+      "avgDev": "0.508",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.016"
+    }
+  },
+  {
+    "index": 36,
+    "timestamp": "12/13/2025, 4:24:21 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3131.94",
+    "openTick": "80498.09",
+    "centerTick": 80500,
+    "idealRanges": {
+      "upper": "3147.60",
+      "lower": "3116.28"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.019",
+      "lowerPct": "0.976",
+      "upperDev": "-0.481",
+      "lowerDev": "0.476",
+      "avgDev": "0.479",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80500 to 80600",
+      "priceRange": "$3132.53 to $3164.01",
+      "upperPct": "1.024",
+      "lowerPct": "-0.019",
+      "upperDev": "0.524",
+      "lowerDev": "-0.519",
+      "avgDev": "0.522",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.043"
+    }
+  },
+  {
+    "index": 37,
+    "timestamp": "12/13/2025, 6:58:50 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3099.16",
+    "openTick": "80392.90",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3114.66",
+      "lower": "3083.67"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.071",
+      "lowerPct": "0.925",
+      "upperDev": "-0.429",
+      "lowerDev": "0.425",
+      "avgDev": "0.427",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "1.077",
+      "lowerPct": "-0.071",
+      "upperDev": "0.577",
+      "lowerDev": "-0.571",
+      "avgDev": "0.574",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.147"
+    }
+  },
+  {
+    "index": 38,
+    "timestamp": "12/13/2025, 7:02:41 PM",
+    "signal": "Open-UP",
+    "openPrice": "3101.64",
+    "openTick": "80400.88",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3117.15",
+      "lower": "3086.13"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.996",
+      "lowerPct": "0.009",
+      "upperDev": "0.496",
+      "lowerDev": "-0.491",
+      "avgDev": "0.494",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "-0.009",
+      "lowerPct": "1.004",
+      "upperDev": "-0.509",
+      "lowerDev": "0.504",
+      "avgDev": "0.506",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.013"
+    }
+  },
+  {
+    "index": 39,
+    "timestamp": "12/13/2025, 7:58:30 PM",
+    "signal": "Open-DOWN",
+    "openPrice": "3101.24",
+    "openTick": "80399.59",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3116.75",
+      "lower": "3085.73"
+    },
+    "chosenRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "0.004",
+      "lowerPct": "0.991",
+      "upperDev": "-0.496",
+      "lowerDev": "0.491",
+      "avgDev": "0.493",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "1.009",
+      "lowerPct": "-0.004",
+      "upperDev": "0.509",
+      "lowerDev": "-0.504",
+      "avgDev": "0.507",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.013"
+    }
+  },
+  {
+    "index": 40,
+    "timestamp": "12/13/2025, 8:01:42 PM",
+    "signal": "Open-UP",
+    "openPrice": "3102.15",
+    "openTick": "80402.53",
+    "centerTick": 80400,
+    "idealRanges": {
+      "upper": "3117.66",
+      "lower": "3086.64"
+    },
+    "chosenRange": {
+      "name": "Upper Range",
+      "tickRange": "80400 to 80500",
+      "priceRange": "$3101.37 to $3132.53",
+      "upperPct": "0.979",
+      "lowerPct": "0.025",
+      "upperDev": "0.479",
+      "lowerDev": "-0.475",
+      "avgDev": "0.477",
+      "directionalCorrect": true
+    },
+    "alternativeRange": {
+      "name": "Lower Range",
+      "tickRange": "80300 to 80400",
+      "priceRange": "$3070.51 to $3101.37",
+      "upperPct": "-0.025",
+      "lowerPct": "1.020",
+      "upperDev": "-0.525",
+      "lowerDev": "0.520",
+      "avgDev": "0.523",
+      "directionalCorrect": false
+    },
+    "choiceAnalysis": {
+      "chosenBetter": true,
+      "chosenDirectionalCorrect": true,
+      "altDirectionalCorrect": false,
+      "deviationDiff": "-0.046"
+    }
+  }
+]

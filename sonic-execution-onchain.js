@@ -86,6 +86,10 @@ if (TRADING_ENABLED) {
   if (WRITE_RPC_URL) {
     console.log(`   📡 Using separate Write RPC to reduce rate limiting`);
   }
+
+  // Restore position state from database (prevents failures after bot restart)
+  console.log(`\n🔄 Restoring position state from database...`);
+  await tradingBot.restorePositionState();
 } else {
   if (!PRIVATE_KEY || PRIVATE_KEY.length < 10) {
     console.log('⚠️  Trading disabled: No private key configured');
