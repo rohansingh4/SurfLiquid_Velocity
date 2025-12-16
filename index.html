@@ -2845,8 +2845,50 @@
                     horzLines: { color: '#2a2a3e' },
                 },
                 timeScale: {
+                    borderColor: '#2a2a3e',
                     timeVisible: true,
-                    secondsVisible: true,
+                    secondsVisible: false,
+                    rightOffset: 12,
+                    barSpacing: 12,
+                    minBarSpacing: 4,
+                    fixLeftEdge: false,
+                    fixRightEdge: false,
+                    lockVisibleTimeRangeOnResize: true,
+                    shiftVisibleRangeOnNewBar: true,
+                },
+                localization: {
+                    timeFormatter: (timestamp) => {
+                        // Timestamp is already adjusted for local timezone
+                        // Chart displays in UTC, but our adjusted timestamp makes it show local time
+                        const date = new Date(timestamp * 1000);
+                        const hours = date.getUTCHours();
+                        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+                        const period = hours >= 12 ? 'PM' : 'AM';
+                        const displayHours = hours % 12 || 12;
+                        return `${displayHours}:${minutes} ${period}`;
+                    },
+                },
+                handleScroll: {
+                    mouseWheel: true,
+                    pressedMouseMove: true,
+                    horzTouchDrag: true,
+                    vertTouchDrag: true,
+                },
+                handleScale: {
+                    axisPressedMouseMove: {
+                        time: true,
+                        price: true,
+                    },
+                    axisDoubleClickReset: {
+                        time: true,
+                        price: true,
+                    },
+                    mouseWheel: true,
+                    pinch: true,
+                },
+                kineticScroll: {
+                    mouse: true,
+                    touch: true,
                 },
             });
 
