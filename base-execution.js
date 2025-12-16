@@ -97,7 +97,7 @@ function calculatePriceFromSqrtPriceX96(sqrtPriceX96, decimals0, decimals1) {
   const priceRaw = sqrtPriceFloat * sqrtPriceFloat;
 
   // Adjust for decimals: price of token1 in terms of token0
-  const decimalAdjustment = 10 ** (decimals0 - decimals1);
+  const decimalAdjustment = 10 ** (Number(decimals0) - Number(decimals1));
   const price = priceRaw * decimalAdjustment;
 
   return price;
@@ -105,8 +105,8 @@ function calculatePriceFromSqrtPriceX96(sqrtPriceX96, decimals0, decimals1) {
 
 // Calculate percentages of pool composition
 function calculatePoolComposition(token0Reserve, token1Reserve, price, decimals0, decimals1) {
-  const token0Value = Number(token0Reserve) / (10 ** decimals0);
-  const token1Value = Number(token1Reserve) / (10 ** decimals1);
+  const token0Value = Number(token0Reserve) / (10 ** Number(decimals0));
+  const token1Value = Number(token1Reserve) / (10 ** Number(decimals1));
   const token1ValueInToken0 = token1Value * price;
 
   const totalValue = token0Value + token1ValueInToken0;
