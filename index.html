@@ -1333,6 +1333,7 @@
                                     <button class="type-btn base-type-btn" data-type="candle">🕯️ Candles</button>
                                     <button class="type-btn base-type-btn active" data-type="line">📈 Line</button>
                                 </div>
+                                <button class="refresh-btn" onclick="loadBaseData()">🔄 Refresh</button>
                             </div>
                         </div>
                         <div id="base-chart" style="height: 450px;"></div>
@@ -2995,7 +2996,8 @@
                 const closePrice = parseFloat(pos.close) || 0;
                 if (closePrice === 0) continue;
 
-                const time = Math.floor(new Date(pos.timestamp).getTime() / 1000);
+                // Use getTimeForChart to adjust for browser timezone
+                const time = getTimeForChart(pos.timestamp);
 
                 // Skip duplicate timestamps
                 if (seenTimes.has(time)) continue;
