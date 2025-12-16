@@ -1,0 +1,2316 @@
+{
+  "summary": {
+    "totalCycles": 144,
+    "profitableCycles": 1,
+    "unprofitableCycles": 143,
+    "totalFeesEarned": 0.0009189597494048419,
+    "totalSwapLoss": 0.14412212294755022,
+    "netProfitLoss": -0.14320316319814538
+  },
+  "cycles": [
+    {
+      "addTime": "2025-12-12T14:27:44.841Z",
+      "removeTime": "2025-12-12T14:31:48.226Z",
+      "durationMin": 4,
+      "tickRange": [
+        80700,
+        80800
+      ],
+      "wethDeposited": 2.833511934512839e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.833511934495492e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.602310392628359e-15
+    },
+    {
+      "addTime": "2025-12-12T14:31:58.668Z",
+      "removeTime": "2025-12-12T14:50:27.301Z",
+      "durationMin": 18,
+      "tickRange": [
+        80800,
+        80900
+      ],
+      "wethDeposited": 2.847714260286599e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 5.695428520590545e-7,
+      "usdcReceived": 0,
+      "wethFees": 2.847714260303946e-7,
+      "usdcFees": 0,
+      "feesUsd": 0.0009189597494048419
+    },
+    {
+      "addTime": "2025-12-12T14:50:35.750Z",
+      "removeTime": "2025-12-12T14:54:57.352Z",
+      "durationMin": 4,
+      "tickRange": [
+        80700,
+        80800
+      ],
+      "wethDeposited": 2.833511934512839e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.833511934495492e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.604156750177658e-15
+    },
+    {
+      "addTime": "2025-12-12T14:55:05.807Z",
+      "removeTime": "2025-12-12T15:01:06.430Z",
+      "durationMin": 6,
+      "tickRange": [
+        80800,
+        80900
+      ],
+      "wethDeposited": 2.847714260303946e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.847714260286599e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.597738091780621e-15
+    },
+    {
+      "addTime": "2025-12-12T15:01:14.937Z",
+      "removeTime": "2025-12-12T15:25:27.504Z",
+      "durationMin": 24,
+      "tickRange": [
+        80700,
+        80800
+      ],
+      "wethDeposited": 2.833511934495492e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.833511934495492e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T15:25:44.558Z",
+      "removeTime": "2025-12-12T15:30:06.532Z",
+      "durationMin": 4,
+      "tickRange": [
+        80600,
+        80700
+      ],
+      "wethDeposited": 2.8193804395802713e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.819380439562924e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.482887255151315e-15
+    },
+    {
+      "addTime": "2025-12-12T15:30:23.029Z",
+      "removeTime": "2025-12-12T15:35:57.584Z",
+      "durationMin": 6,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222645017e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.416498076558089e-15
+    },
+    {
+      "addTime": "2025-12-12T15:36:17.055Z",
+      "removeTime": "2025-12-12T15:41:57.763Z",
+      "durationMin": 6,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T15:42:18.417Z",
+      "removeTime": "2025-12-12T15:45:15.786Z",
+      "durationMin": 3,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T15:45:24.409Z",
+      "removeTime": "2025-12-12T15:52:06.982Z",
+      "durationMin": 7,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.378507367805645e-15
+    },
+    {
+      "addTime": "2025-12-12T15:52:15.544Z",
+      "removeTime": "2025-12-12T15:58:46.063Z",
+      "durationMin": 7,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3218793526279794e-15
+    },
+    {
+      "addTime": "2025-12-12T15:59:03.140Z",
+      "removeTime": "2025-12-12T16:01:28.353Z",
+      "durationMin": 2,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.326822079319056e-15
+    },
+    {
+      "addTime": "2025-12-12T16:01:47.215Z",
+      "removeTime": "2025-12-12T16:03:46.113Z",
+      "durationMin": 2,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T16:04:05.535Z",
+      "removeTime": "2025-12-12T16:08:09.133Z",
+      "durationMin": 4,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.332286619277431e-15
+    },
+    {
+      "addTime": "2025-12-12T16:08:17.636Z",
+      "removeTime": "2025-12-12T16:17:07.242Z",
+      "durationMin": 9,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T16:17:15.824Z",
+      "removeTime": "2025-12-12T16:26:16.448Z",
+      "durationMin": 9,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.335733540750316e-15
+    },
+    {
+      "addTime": "2025-12-12T16:26:24.897Z",
+      "removeTime": "2025-12-12T16:35:07.469Z",
+      "durationMin": 9,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.322512334099755e-15
+    },
+    {
+      "addTime": "2025-12-12T16:35:16.479Z",
+      "removeTime": "2025-12-12T16:58:07.854Z",
+      "durationMin": 23,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T16:58:24.344Z",
+      "removeTime": "2025-12-12T16:58:48.780Z",
+      "durationMin": 0,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T16:58:57.755Z",
+      "removeTime": "2025-12-12T17:01:46.789Z",
+      "durationMin": 3,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.327077811386926e-15
+    },
+    {
+      "addTime": "2025-12-12T17:01:55.568Z",
+      "removeTime": "2025-12-12T17:02:46.794Z",
+      "durationMin": 1,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T17:02:55.448Z",
+      "removeTime": "2025-12-12T17:03:25.789Z",
+      "durationMin": 1,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.326964418684071e-15
+    },
+    {
+      "addTime": "2025-12-12T17:03:34.198Z",
+      "removeTime": "2025-12-12T17:04:16.779Z",
+      "durationMin": 1,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3263738124286344e-15
+    },
+    {
+      "addTime": "2025-12-12T17:04:33.458Z",
+      "removeTime": "2025-12-12T17:05:16.803Z",
+      "durationMin": 1,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.330249192613485e-15
+    },
+    {
+      "addTime": "2025-12-12T17:05:26.011Z",
+      "removeTime": "2025-12-12T17:30:08.201Z",
+      "durationMin": 25,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3252709081683325e-15
+    },
+    {
+      "addTime": "2025-12-12T17:30:16.625Z",
+      "removeTime": "2025-12-12T17:33:56.387Z",
+      "durationMin": 4,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T17:34:05.479Z",
+      "removeTime": "2025-12-12T17:58:26.935Z",
+      "durationMin": 24,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.324637234021724e-15
+    },
+    {
+      "addTime": "2025-12-12T17:58:35.376Z",
+      "removeTime": "2025-12-12T18:03:26.987Z",
+      "durationMin": 5,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T18:03:35.972Z",
+      "removeTime": "2025-12-12T19:46:17.273Z",
+      "durationMin": 103,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.323212994763483e-15
+    },
+    {
+      "addTime": "2025-12-12T19:46:29.842Z",
+      "removeTime": "2025-12-12T19:53:38.291Z",
+      "durationMin": 7,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729794892e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-12T19:53:50.327Z",
+      "removeTime": "2025-12-12T19:58:26.435Z",
+      "durationMin": 5,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.325924198182748e-15
+    },
+    {
+      "addTime": "2025-12-12T19:58:45.947Z",
+      "removeTime": "2025-12-12T19:59:26.391Z",
+      "durationMin": 1,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.328519908739491e-15
+    },
+    {
+      "addTime": "2025-12-12T19:59:34.814Z",
+      "removeTime": "2025-12-13T08:16:08.233Z",
+      "durationMin": 737,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T08:16:24.557Z",
+      "removeTime": "2025-12-13T10:41:56.952Z",
+      "durationMin": 146,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T10:42:15.814Z",
+      "removeTime": "2025-12-13T10:54:27.372Z",
+      "durationMin": 12,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222471545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T10:54:35.841Z",
+      "removeTime": "2025-12-13T13:28:56.223Z",
+      "durationMin": 154,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.376192692943882e-15
+    },
+    {
+      "addTime": "2025-12-13T13:29:12.737Z",
+      "removeTime": "2025-12-13T13:32:47.250Z",
+      "durationMin": 4,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T13:32:55.681Z",
+      "removeTime": "2025-12-13T14:28:35.812Z",
+      "durationMin": 56,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3797918105362695e-15
+    },
+    {
+      "addTime": "2025-12-13T14:28:44.286Z",
+      "removeTime": "2025-12-13T14:31:47.777Z",
+      "durationMin": 3,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T14:31:57.059Z",
+      "removeTime": "2025-12-13T16:33:47.129Z",
+      "durationMin": 122,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3776968267168914e-15
+    },
+    {
+      "addTime": "2025-12-13T16:33:56.197Z",
+      "removeTime": "2025-12-13T16:34:26.137Z",
+      "durationMin": 0,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T16:34:34.586Z",
+      "removeTime": "2025-12-13T17:10:47.441Z",
+      "durationMin": 36,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.379628766610442e-15
+    },
+    {
+      "addTime": "2025-12-13T17:10:55.895Z",
+      "removeTime": "2025-12-13T17:15:56.489Z",
+      "durationMin": 5,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.380841914832762e-15
+    },
+    {
+      "addTime": "2025-12-13T17:16:15.684Z",
+      "removeTime": "2025-12-13T17:30:26.541Z",
+      "durationMin": 14,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T17:30:34.956Z",
+      "removeTime": "2025-12-13T17:41:05.613Z",
+      "durationMin": 11,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.38216039088681e-15
+    },
+    {
+      "addTime": "2025-12-13T17:41:14.043Z",
+      "removeTime": "2025-12-13T21:32:20.572Z",
+      "durationMin": 231,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-13T21:32:29.073Z",
+      "removeTime": "2025-12-13T21:43:18.974Z",
+      "durationMin": 11,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": null,
+      "usdcReceived": null,
+      "wethFees": null,
+      "usdcFees": null,
+      "feesUsd": null
+    },
+    {
+      "addTime": "2025-12-14T10:14:24.108Z",
+      "removeTime": "2025-12-14T10:21:06.622Z",
+      "durationMin": 7,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T10:21:22.947Z",
+      "removeTime": "2025-12-14T11:16:57.894Z",
+      "durationMin": 56,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T11:17:06.372Z",
+      "removeTime": "2025-12-14T11:45:07.006Z",
+      "durationMin": 28,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.321471443905011e-15
+    },
+    {
+      "addTime": "2025-12-14T11:45:23.541Z",
+      "removeTime": "2025-12-14T11:47:07.055Z",
+      "durationMin": 2,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.331781591552751e-15
+    },
+    {
+      "addTime": "2025-12-14T11:47:15.540Z",
+      "removeTime": "2025-12-14T12:41:08.091Z",
+      "durationMin": 54,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T12:41:24.413Z",
+      "removeTime": "2025-12-14T12:57:47.178Z",
+      "durationMin": 16,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.375502331882883e-15
+    },
+    {
+      "addTime": "2025-12-14T12:57:55.645Z",
+      "removeTime": "2025-12-14T14:00:27.710Z",
+      "durationMin": 63,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T14:00:36.291Z",
+      "removeTime": "2025-12-14T14:15:15.410Z",
+      "durationMin": 15,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.378823644967077e-15
+    },
+    {
+      "addTime": "2025-12-14T14:15:24.059Z",
+      "removeTime": "2025-12-14T16:22:47.030Z",
+      "durationMin": 127,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.384032152916815e-15
+    },
+    {
+      "addTime": "2025-12-14T16:22:55.475Z",
+      "removeTime": "2025-12-14T16:32:26.306Z",
+      "durationMin": 10,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T16:32:42.679Z",
+      "removeTime": "2025-12-14T18:56:36.005Z",
+      "durationMin": 144,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3814550857846655e-15
+    },
+    {
+      "addTime": "2025-12-14T18:56:52.313Z",
+      "removeTime": "2025-12-14T19:02:27.031Z",
+      "durationMin": 6,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3792842597270345e-15
+    },
+    {
+      "addTime": "2025-12-14T19:02:35.827Z",
+      "removeTime": "2025-12-14T22:30:55.918Z",
+      "durationMin": 208,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T22:31:13.730Z",
+      "removeTime": "2025-12-14T22:59:26.121Z",
+      "durationMin": 28,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729794892e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T22:59:42.437Z",
+      "removeTime": "2025-12-14T23:11:47.135Z",
+      "durationMin": 12,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.322127787163935e-15
+    },
+    {
+      "addTime": "2025-12-14T23:11:55.629Z",
+      "removeTime": "2025-12-14T23:17:17.323Z",
+      "durationMin": 5,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T23:17:25.794Z",
+      "removeTime": "2025-12-14T23:17:38.219Z",
+      "durationMin": 0,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.324740177185523e-15
+    },
+    {
+      "addTime": "2025-12-14T23:17:46.809Z",
+      "removeTime": "2025-12-14T23:33:06.687Z",
+      "durationMin": 15,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729794892e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T23:33:25.348Z",
+      "removeTime": "2025-12-14T23:33:36.488Z",
+      "durationMin": 0,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.749773125483579e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.749773125483579e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-14T23:33:54.775Z",
+      "removeTime": "2025-12-15T00:01:57.647Z",
+      "durationMin": 28,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.3439678610887215e-15
+    },
+    {
+      "addTime": "2025-12-15T00:02:14.730Z",
+      "removeTime": "2025-12-15T00:09:47.423Z",
+      "durationMin": 8,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.326365920302473e-15
+    },
+    {
+      "addTime": "2025-12-15T00:10:03.958Z",
+      "removeTime": "2025-12-15T00:10:47.473Z",
+      "durationMin": 1,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.326567582928773e-15
+    },
+    {
+      "addTime": "2025-12-15T00:10:55.952Z",
+      "removeTime": "2025-12-15T00:11:05.492Z",
+      "durationMin": 0,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T00:11:13.957Z",
+      "removeTime": "2025-12-15T00:19:56.530Z",
+      "durationMin": 9,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729794892e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.330449643959949e-15
+    },
+    {
+      "addTime": "2025-12-15T00:20:05.048Z",
+      "removeTime": "2025-12-15T00:37:47.637Z",
+      "durationMin": 18,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.325386865403606e-15
+    },
+    {
+      "addTime": "2025-12-15T00:37:56.099Z",
+      "removeTime": "2025-12-15T00:55:35.730Z",
+      "durationMin": 18,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T00:55:44.190Z",
+      "removeTime": "2025-12-15T01:38:56.972Z",
+      "durationMin": 43,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.777407416224703e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416207356e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.404574154413055e-15
+    },
+    {
+      "addTime": "2025-12-15T01:39:13.447Z",
+      "removeTime": "2025-12-15T02:18:27.154Z",
+      "durationMin": 39,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T02:18:43.479Z",
+      "removeTime": "2025-12-15T02:39:27.288Z",
+      "durationMin": 21,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222645017e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.426490244185713e-15
+    },
+    {
+      "addTime": "2025-12-15T02:39:43.594Z",
+      "removeTime": "2025-12-15T06:47:37.707Z",
+      "durationMin": 248,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T06:47:46.200Z",
+      "removeTime": "2025-12-15T07:05:07.791Z",
+      "durationMin": 17,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222645017e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.43277281194558e-15
+    },
+    {
+      "addTime": "2025-12-15T07:05:24.417Z",
+      "removeTime": "2025-12-15T08:24:27.310Z",
+      "durationMin": 79,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T08:24:35.775Z",
+      "removeTime": "2025-12-15T10:27:57.968Z",
+      "durationMin": 123,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222471545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.805319422229807e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.497227454278126e-15
+    },
+    {
+      "addTime": "2025-12-15T10:28:14.424Z",
+      "removeTime": "2025-12-15T10:39:58.024Z",
+      "durationMin": 12,
+      "tickRange": [
+        80600,
+        80700
+      ],
+      "wethDeposited": 2.8193804395802713e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.819380439562924e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.487413213868828e-15
+    },
+    {
+      "addTime": "2025-12-15T10:40:14.361Z",
+      "removeTime": "2025-12-15T13:37:15.846Z",
+      "durationMin": 177,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222471545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T13:37:32.218Z",
+      "removeTime": "2025-12-15T13:40:37.042Z",
+      "durationMin": 3,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531023818e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.4352605889375075e-15
+    },
+    {
+      "addTime": "2025-12-15T13:40:45.507Z",
+      "removeTime": "2025-12-15T14:26:36.849Z",
+      "durationMin": 46,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222471545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T14:26:46.162Z",
+      "removeTime": "2025-12-15T14:37:05.778Z",
+      "durationMin": 10,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.7913285310585123e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.444859185349171e-15
+    },
+    {
+      "addTime": "2025-12-15T14:37:23.680Z",
+      "removeTime": "2025-12-15T14:41:26.766Z",
+      "durationMin": 4,
+      "tickRange": [
+        80500,
+        80600
+      ],
+      "wethDeposited": 2.8053194222471545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.8053194222471545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T14:41:43.186Z",
+      "removeTime": "2025-12-15T14:49:27.478Z",
+      "durationMin": 8,
+      "tickRange": [
+        80400,
+        80500
+      ],
+      "wethDeposited": 2.791328531041165e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.791328531041165e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T14:49:43.770Z",
+      "removeTime": "2025-12-15T14:55:28.075Z",
+      "durationMin": 6,
+      "tickRange": [
+        80300,
+        80400
+      ],
+      "wethDeposited": 2.7774074162420503e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.777407416224703e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.326161639548573e-15
+    },
+    {
+      "addTime": "2025-12-15T14:55:44.467Z",
+      "removeTime": "2025-12-15T15:01:16.345Z",
+      "durationMin": 6,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T15:01:32.738Z",
+      "removeTime": "2025-12-15T15:06:07.618Z",
+      "durationMin": 5,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.749773125483579e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7497731254662316e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.28387210761824e-15
+    },
+    {
+      "addTime": "2025-12-15T15:06:36.355Z",
+      "removeTime": "2025-12-15T15:15:26.013Z",
+      "durationMin": 9,
+      "tickRange": [
+        80200,
+        80300
+      ],
+      "wethDeposited": 2.763555729777545e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.763555729777545e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T15:15:42.875Z",
+      "removeTime": "2025-12-15T15:22:26.227Z",
+      "durationMin": 7,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.749773125483579e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7497731254662316e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.212058629336884e-15
+    },
+    {
+      "addTime": "2025-12-15T15:22:43.143Z",
+      "removeTime": "2025-12-15T15:45:27.402Z",
+      "durationMin": 23,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258774681e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T15:45:35.887Z",
+      "removeTime": "2025-12-15T15:53:05.806Z",
+      "durationMin": 7,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.749773125483579e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7497731254662316e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.213114353056164e-15
+    },
+    {
+      "addTime": "2025-12-15T15:53:14.450Z",
+      "removeTime": "2025-12-15T15:59:47.780Z",
+      "durationMin": 7,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258757334e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.221672923803076e-15
+    },
+    {
+      "addTime": "2025-12-15T15:59:56.380Z",
+      "removeTime": "2025-12-15T16:00:56.816Z",
+      "durationMin": 1,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.7497731254662316e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7497731254662316e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T16:01:05.299Z",
+      "removeTime": "2025-12-15T16:05:49.163Z",
+      "durationMin": 5,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258757334e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.226632082122001e-15
+    },
+    {
+      "addTime": "2025-12-15T16:05:57.696Z",
+      "removeTime": "2025-12-15T16:12:36.216Z",
+      "durationMin": 7,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.7497731254662316e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7497731254662316e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T16:12:44.706Z",
+      "removeTime": "2025-12-15T16:21:45.557Z",
+      "durationMin": 9,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258757334e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.221754278108385e-15
+    },
+    {
+      "addTime": "2025-12-15T16:21:54.017Z",
+      "removeTime": "2025-12-15T16:30:06.849Z",
+      "durationMin": 8,
+      "tickRange": [
+        80100,
+        80200
+      ],
+      "wethDeposited": 2.749773125483579e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.749773125483579e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T16:30:15.290Z",
+      "removeTime": "2025-12-15T16:42:37.226Z",
+      "durationMin": 12,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258757334e-7,
+      "usdcReceived": 0,
+      "wethFees": -1.734723475976807e-18,
+      "usdcFees": 0,
+      "feesUsd": -5.163841631771797e-15
+    },
+    {
+      "addTime": "2025-12-15T16:42:53.557Z",
+      "removeTime": "2025-12-15T16:53:17.385Z",
+      "durationMin": 10,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.7224137868347986e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T16:53:33.664Z",
+      "removeTime": "2025-12-15T17:13:36.028Z",
+      "durationMin": 20,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258739987e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258739987e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T17:13:52.342Z",
+      "removeTime": "2025-12-15T17:21:56.765Z",
+      "durationMin": 8,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.7224137868347986e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T17:22:05.242Z",
+      "removeTime": "2025-12-15T17:27:26.792Z",
+      "durationMin": 5,
+      "tickRange": [
+        80000,
+        80100
+      ],
+      "wethDeposited": 2.736059258774681e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.736059258774681e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T17:27:35.729Z",
+      "removeTime": "2025-12-15T17:51:17.961Z",
+      "durationMin": 24,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.722413786869493e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0225704963478376e-14
+    },
+    {
+      "addTime": "2025-12-15T17:51:34.405Z",
+      "removeTime": "2025-12-15T18:34:06.331Z",
+      "durationMin": 43,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T18:34:22.689Z",
+      "removeTime": "2025-12-15T18:42:36.375Z",
+      "durationMin": 8,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T18:42:44.825Z",
+      "removeTime": "2025-12-15T18:43:45.347Z",
+      "durationMin": 1,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7088363686172956e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T18:43:53.802Z",
+      "removeTime": "2025-12-15T18:53:36.523Z",
+      "durationMin": 10,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.6953266646020935e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.013602682884138e-14
+    },
+    {
+      "addTime": "2025-12-15T18:53:45.013Z",
+      "removeTime": "2025-12-15T19:02:36.554Z",
+      "durationMin": 9,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T19:02:52.854Z",
+      "removeTime": "2025-12-15T19:09:57.539Z",
+      "durationMin": 7,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.722413786869493e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0229997188078788e-14
+    },
+    {
+      "addTime": "2025-12-15T19:10:05.976Z",
+      "removeTime": "2025-12-15T19:32:27.740Z",
+      "durationMin": 22,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T19:32:36.354Z",
+      "removeTime": "2025-12-15T19:41:27.754Z",
+      "durationMin": 9,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.7224137868347986e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T19:41:36.206Z",
+      "removeTime": "2025-12-15T20:18:45.931Z",
+      "durationMin": 37,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0132321438057443e-14
+    },
+    {
+      "addTime": "2025-12-15T20:19:02.487Z",
+      "removeTime": "2025-12-15T20:19:15.994Z",
+      "durationMin": 0,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.6953266646020935e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0138645008705062e-14
+    },
+    {
+      "addTime": "2025-12-15T20:19:24.595Z",
+      "removeTime": "2025-12-15T23:00:26.397Z",
+      "durationMin": 161,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-15T23:00:42.783Z",
+      "removeTime": "2025-12-16T00:58:06.625Z",
+      "durationMin": 117,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.7224137868347986e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T00:58:16.630Z",
+      "removeTime": "2025-12-16T01:06:36.734Z",
+      "durationMin": 8,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0236853022933588e-14
+    },
+    {
+      "addTime": "2025-12-16T01:06:45.183Z",
+      "removeTime": "2025-12-16T01:35:27.849Z",
+      "durationMin": 29,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.7224137868347986e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7224137868347986e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T01:35:36.292Z",
+      "removeTime": "2025-12-16T02:26:37.141Z",
+      "durationMin": 51,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T02:26:45.582Z",
+      "removeTime": "2025-12-16T02:53:46.291Z",
+      "durationMin": 27,
+      "tickRange": [
+        79900,
+        80000
+      ],
+      "wethDeposited": 2.722413786869493e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.722413786869493e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T02:53:54.754Z",
+      "removeTime": "2025-12-16T04:28:46.877Z",
+      "durationMin": 95,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.013298863647878e-14
+    },
+    {
+      "addTime": "2025-12-16T04:29:03.204Z",
+      "removeTime": "2025-12-16T04:49:47.020Z",
+      "durationMin": 21,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.6953266646020935e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0010311170976115e-14
+    },
+    {
+      "addTime": "2025-12-16T04:50:03.353Z",
+      "removeTime": "2025-12-16T04:50:26.006Z",
+      "durationMin": 0,
+      "tickRange": [
+        79600,
+        79700
+      ],
+      "wethDeposited": 2.681884337212004e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.681884337212004e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T04:50:34.516Z",
+      "removeTime": "2025-12-16T05:10:56.237Z",
+      "durationMin": 20,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:11:12.583Z",
+      "removeTime": "2025-12-16T05:14:47.312Z",
+      "durationMin": 4,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:14:55.835Z",
+      "removeTime": "2025-12-16T05:15:56.306Z",
+      "durationMin": 1,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:16:04.932Z",
+      "removeTime": "2025-12-16T05:16:35.303Z",
+      "durationMin": 1,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0132876033212276e-14
+    },
+    {
+      "addTime": "2025-12-16T05:16:43.814Z",
+      "removeTime": "2025-12-16T05:16:56.301Z",
+      "durationMin": 0,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:17:04.787Z",
+      "removeTime": "2025-12-16T05:17:56.329Z",
+      "durationMin": 1,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:18:04.959Z",
+      "removeTime": "2025-12-16T05:18:17.328Z",
+      "durationMin": 0,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:18:25.821Z",
+      "removeTime": "2025-12-16T05:21:17.335Z",
+      "durationMin": 3,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0132783465730578e-14
+    },
+    {
+      "addTime": "2025-12-16T05:21:25.901Z",
+      "removeTime": "2025-12-16T05:21:47.316Z",
+      "durationMin": 0,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:21:55.723Z",
+      "removeTime": "2025-12-16T05:22:56.286Z",
+      "durationMin": 1,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:23:04.894Z",
+      "removeTime": "2025-12-16T05:23:47.321Z",
+      "durationMin": 1,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.6953266646020935e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0134035853071896e-14
+    },
+    {
+      "addTime": "2025-12-16T05:23:55.811Z",
+      "removeTime": "2025-12-16T05:24:05.323Z",
+      "durationMin": 0,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:24:14.258Z",
+      "removeTime": "2025-12-16T05:24:26.340Z",
+      "durationMin": 0,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:24:34.820Z",
+      "removeTime": "2025-12-16T05:24:47.348Z",
+      "durationMin": 0,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.7088363686172956e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:24:55.814Z",
+      "removeTime": "2025-12-16T05:41:56.453Z",
+      "durationMin": 17,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.6953266646020935e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0138150169746151e-14
+    },
+    {
+      "addTime": "2025-12-16T05:42:04.934Z",
+      "removeTime": "2025-12-16T05:49:47.541Z",
+      "durationMin": 8,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.708836368582601e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:49:56.024Z",
+      "removeTime": "2025-12-16T05:51:26.530Z",
+      "durationMin": 2,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    },
+    {
+      "addTime": "2025-12-16T05:51:35.128Z",
+      "removeTime": "2025-12-16T05:51:56.519Z",
+      "durationMin": 0,
+      "tickRange": [
+        79800,
+        79900
+      ],
+      "wethDeposited": 2.7088363686172956e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.708836368582601e-7,
+      "usdcReceived": 0,
+      "wethFees": -3.469446951953614e-18,
+      "usdcFees": 0,
+      "feesUsd": -1.0132688728640463e-14
+    },
+    {
+      "addTime": "2025-12-16T05:52:04.991Z",
+      "removeTime": "2025-12-16T05:53:47.563Z",
+      "durationMin": 2,
+      "tickRange": [
+        79700,
+        79800
+      ],
+      "wethDeposited": 2.695326664636788e-7,
+      "usdcDeposited": 0,
+      "wethReceived": 2.695326664636788e-7,
+      "usdcReceived": 0,
+      "wethFees": 0,
+      "usdcFees": 0,
+      "feesUsd": 0
+    }
+  ]
+}

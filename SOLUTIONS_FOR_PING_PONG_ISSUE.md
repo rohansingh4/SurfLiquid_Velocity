@@ -494,9 +494,8 @@ rebalance();
 
 ---
 
-## FINAL RECOMMENDATION FOR BOSS
+## FINAL RECOMMENDATION 
 
-**Tell the boss:**
 
 > "You're absolutely right - we have a ping-pong problem. 79.5% of rebalances flip direction within 12 minutes, with some flipping in just 1 minute. This is caused by tight boundaries (avg 0.057% from open price) when price oscillates near center tick.
 >

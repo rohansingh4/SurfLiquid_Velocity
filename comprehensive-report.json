@@ -1,0 +1,3926 @@
+{
+  "metadata": {
+    "totalTransactions": 342,
+    "totalRebalances": 146,
+    "dateRange": {
+      "start": "2025-12-12T14:27:36.447Z",
+      "end": "2025-12-16T05:53:56.037Z"
+    }
+  },
+  "fees": {
+    "earned": 0,
+    "lost": 64.73069458092826,
+    "net": -64.73069458092826,
+    "details": [
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T14:27:36.447Z",
+        "amount": 0.002273426618401686,
+        "txHash": "0x79f1893659efa7348f43d8073df3ee51147f7851dc47270199cf971a24286085"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T14:27:44.841Z",
+        "amount": 0.002273426618401686,
+        "txHash": "0x7f554f6ce9405c8d4f4afac54a57a52ae185d86af8d7149ee560a64a4fbee0a4"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:25:35.446Z",
+        "amount": 0.004001811252607013,
+        "txHash": "0x54b5897458609d78ae5d7c63fec3bba73b2d58b92d1ac0b985cf72b765a9f3b6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:25:44.558Z",
+        "amount": 0.004001811252607013,
+        "txHash": "0xd4fe0217e7569948ee27f1f90379a8f3b598f3e18db1da56fa7db41e9945609a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:30:14.651Z",
+        "amount": 0.0037731944231325087,
+        "txHash": "0x8442deb2d52ed3d0a55c8f108179d00144a66ec6f0a261466efa2e09f585c4fe"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:30:23.029Z",
+        "amount": 0.0037731944231325087,
+        "txHash": "0x007980f290994ef8f929b533d73d9cdd1fb9ebac907bcb0837fc718792880349"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:36:05.527Z",
+        "amount": 0.003041341575055867,
+        "txHash": "0x6236deaf6e4b68a13e0306b670dca25de83d881ea62a73633f65d33269734b01"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:36:17.055Z",
+        "amount": 0.003041341575055867,
+        "txHash": "0xa3f990ca8d4cf9ea81e352df097b8fe920fb9ab80e8323b6cea7c20a82a58ba0"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:42:10.045Z",
+        "amount": 0.0038453830537434897,
+        "txHash": "0x6baecaab151754424e93b172fe6d7ea257035c85945bafeb683ad8537d54b749"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:42:18.417Z",
+        "amount": 0.0038453830537434897,
+        "txHash": "0x8911fa5b379bfa87a8fa80d5e176ea0dbfce04b32b08bb4984d65455784f5f6a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:52:15.544Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xec09baf227b480ae83e4ae6bc72839b8a09b2f2387d49aca67c4fde86bd10b19"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:58:54.011Z",
+        "amount": 0.002738490616394529,
+        "txHash": "0x4eb56d63f7ca545477bdcb65556cb7226f6381c63aeb6190cab612b7d69fc9bc"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T15:59:03.140Z",
+        "amount": 0.0027384906164016343,
+        "txHash": "0x0e064a6b6aaa8c2c77072ad8dc6f779efbaee0b668990dac7425d918503fcb30"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:01:36.485Z",
+        "amount": 0.0017914883709337914,
+        "txHash": "0xedbd5fea1000d82257440d9f0689e86bfa096f9c89ce81b20d413db0994ddcdf"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:01:47.215Z",
+        "amount": 0.0017914883709408969,
+        "txHash": "0xf28955d4a12e2eab9a8714ffbe58dfe7584b98070e7a8035e49041156968a7d4"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:17:15.824Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x9333a42750a185eb8f178368c6b2fa1621c1b124c31ab2319f418155294aa0e5"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:26:24.897Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x608a997dd77328db1fa2d9e008259582e2c4814e6d49ff327b907eed42b62b9a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:58:15.790Z",
+        "amount": 0.002535243822400446,
+        "txHash": "0xf450427c4518dc1b37359f634524ea43f39b2e7daf073c45a5c3cb32682a38cd"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:58:24.344Z",
+        "amount": 0.0025352438224075513,
+        "txHash": "0xddb9e663b77bd3275ac7f5d9b7b1ffda301642bb9a44883d8b5072526d88953d"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T16:58:57.755Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x89d310c130e48448eacb1bc9fc2d8d898e18a085a547dfe9a68c04d673053144"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:01:55.568Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xe9b81494488c935c2fe69f789e88f268151440e98e687694e55fe78768b6cb5f"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:03:34.198Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xb35732d02a6f9cc09f87ca72a6ec22e626f9649502139a0eb54c81ed22fb0d39"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:04:25.079Z",
+        "amount": 0.0019738452022934894,
+        "txHash": "0x47255d51e4d718f6c233c9c1f1ec6d5b0a32f2753b9b335fd8e03cdd53a8deff"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:04:33.458Z",
+        "amount": 0.001973845202300595,
+        "txHash": "0x0f95d8f4a15a3f2e1c6a269fe347ebff5dfc8dd5541d9b0e966f712b6a38eb99"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:05:26.011Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x0adf29fc58dda14bacf79da3bafb3ce12c61a8fd2d92f67d39c3a3127404bd1b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:34:05.479Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x5f46a7039c9bf8f00b82fb49e673fdffe45ac3af0e7e211b6c34644e200d54d5"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T17:58:35.376Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x83e0eb05eb8bba46ad2a166f02e79f4cb0db5ab2bc5d2bb317544309b4adf168"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T18:03:35.972Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xb105403ff402d2ad001a27ff6c1e42a6b8cf31f83f7b5488fadc7bfdd656d30b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T19:46:29.842Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x30a98b240865e9b9f986bad78ba38a94ae082bffe186ab537f6543d74c731ec2"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T19:53:50.327Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x91c2440f086d25d2cbe65f9b1e6d2fc7dd98ff795e7e37e48164174e52e221c5"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T19:58:34.373Z",
+        "amount": 0.0012782740694987638,
+        "txHash": "0xc6fbec21a8fa601fba87aca805ccc74b2348279fddef35a3ff5137d83239e681"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T19:58:45.947Z",
+        "amount": 0.0012782740695058692,
+        "txHash": "0x34ec1556078488bc1021e4edfb32c59aeb320abb2bce1b5b73f833039b169af6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-12T19:59:34.814Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xe0dc0874013bd613fe843cb0ee3f96b14277402f3cc09df242a88a19443cc66e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T08:16:16.184Z",
+        "amount": 0.0037517244577571773,
+        "txHash": "0xf86f46e6b4c8d9cddba4915b96f393ef841210c210e26efd5ae5e10c6eddc1c8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T08:16:24.557Z",
+        "amount": 0.0037517244577571773,
+        "txHash": "0x1fa7dba1af9b2830e032a23a5043c0a2623d8cff895105a3e9bdfd28b73485ca"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T10:42:04.893Z",
+        "amount": 0.002839832801157627,
+        "txHash": "0x202da7ff97e3b418204dc2860f03d90a8efddac4710754b545820355c75700c8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T10:42:15.814Z",
+        "amount": 0.002839832801157627,
+        "txHash": "0x2b89708daddcc615be95cfd72ae4b0a80e087a2a901960f27156025e81fd6a7c"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T10:54:35.841Z",
+        "amount": 2.842170943040401e-14,
+        "txHash": "0xccbfefd235cb457fb05ee28e61f399110765475e392563c758814c966a7f68de"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T13:29:04.142Z",
+        "amount": 0.0061029962857332976,
+        "txHash": "0x44b925d586969b593cba1ae4749c8f59b0dc9b51606e4457418ae6732ce11766"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T13:29:12.737Z",
+        "amount": 0.006102996285747508,
+        "txHash": "0xb1230f80e3bd3eccc7dc9748f4f6fd77cb1d498e4ddd5e74d9af1755b08b0a8d"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T13:32:55.681Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x77a9377b9625b8d2508880c5752be0697843fba09e574db929f65c7bbfbf24f5"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T17:10:55.895Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x70dc889965a835e37c94a3590974689f701721c1a3d213f1dde160c9015b2317"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T17:16:07.207Z",
+        "amount": 0.0006523094085224557,
+        "txHash": "0x0c81eb5a683e3159ee65d001b7a1b47614676b25256a55911d6b0077d45806c6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T17:16:15.684Z",
+        "amount": 0.0006523094085224557,
+        "txHash": "0xe442498aee0340bda775607211c0a045b684b6a3e6ad8c4a7cda17be65c4db93"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T17:30:34.956Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x7e51df432d16cc2ac4ddc2a095c92d5161c7e90c07f64997f44ef5d5bd5f17e2"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T21:32:29.073Z",
+        "amount": 2.842170943040401e-14,
+        "txHash": "0xd61a28959d178feefda78a1cf8adeef90e810851de4ad0d4b6f4dc9a2f53bf1f"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-13T21:43:18.988Z",
+        "amount": 64.44245033503269
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T10:14:15.641Z",
+        "amount": 0.0008321497524690358,
+        "txHash": "0xdd69a9d0335d8b9a1f022707bc9fab33f0699d600fbc898b2f5f9022caa832bb"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T10:14:24.108Z",
+        "amount": 0.0008321497524832466,
+        "txHash": "0x91a8b287869093ebe9e3b0fa476e3d45c9447dd44e86a041ab56f127c26dc9a1"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T10:21:14.565Z",
+        "amount": 0.000838717171461667,
+        "txHash": "0x22aa554c108496668ffeda360f55bbf8acb0005d4418e8ea1c03beb86c351cb1"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T10:21:22.947Z",
+        "amount": 0.0008387171714474562,
+        "txHash": "0x0d72c88986c5bb9e2052155b00508121bad842525c076b552331d35ce593a64e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T11:17:06.372Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xc88c67c138231bd6577d540889a20e1c6b94be032c2c542034ac7741a27bb998"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T11:45:15.124Z",
+        "amount": 0.00031652392254954975,
+        "txHash": "0x267628bfd64220f665df450e91935e46eb1e410a39589cac56232c2bda7b74fd"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T11:45:23.541Z",
+        "amount": 0.0003165239225566552,
+        "txHash": "0x95d1860001a8a416e11b5897b21cbaac6762cc596824017500be372042cf2747"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T12:41:16.037Z",
+        "amount": 0.004035384507801609,
+        "txHash": "0x33316db1c364b8e7f35782c707762847ecad9ddb360fcd044d09a70db2e6c49a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T12:41:24.413Z",
+        "amount": 0.00403538450781582,
+        "txHash": "0x9fc461e25d078e62365306c45c1973f8faedeed698c9aaf66ea2571b177f7c5b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T12:57:55.645Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x66902f34b75f0fffab0fd35ab4c5c6166fd67db2bc02e1613d2bad04c529f0a9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T16:32:34.302Z",
+        "amount": 0.0008470791003958311,
+        "txHash": "0x3f39db0d11dbb3e1038bd61362d57d92b036d8ad82a2e1813de4a2a6def46448"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T16:32:42.679Z",
+        "amount": 0.000847079100410042,
+        "txHash": "0x12bbf3aedcbc024c30a162050b8de954c0efbf5e486f1773bc2a7413ab4b4eb6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T18:56:43.949Z",
+        "amount": 0.0008849543060875931,
+        "txHash": "0x47b8a7f543926c9cd6d46136905f28693d02d91170ebf712810a14cdf80821a6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T18:56:52.313Z",
+        "amount": 0.0008849543061018039,
+        "txHash": "0xee2e8998fa348dcd240bea8e6f49672b4e43d42afff4ffd04902a12e2f387e4a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T22:31:03.891Z",
+        "amount": 0.0026391546342452443,
+        "txHash": "0xe98204aecd9c2c1282563dd0214fce043d04bd796fb6dbff3ef97829002b6d39"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T22:31:13.730Z",
+        "amount": 0.0026391546342452443,
+        "txHash": "0xfd46ec8770353e1a299d126ac6f8732b6b13f2347c6cd758ca35b84cee6c8d26"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T22:59:34.070Z",
+        "amount": 0.0009842089986733527,
+        "txHash": "0xf9f359fd0165031b16a6559efca790689f4d53fb6f3538839c1eb7ed224a8f02"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T22:59:42.437Z",
+        "amount": 0.0009842089986733527,
+        "txHash": "0xc079e8a4f90f6805d485de8d6b48840e2dfab6b8cb8561f604471617f727e61e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:17:25.794Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xc6e0a91e6804d650db8123ea8b3aa288ab5fa7718d319e01fc54816ed3d07c6a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:17:46.809Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x6ee2e1f67f17c36d4fef944a92c00301281d3a6f275e63cf7437681a2e364737"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:33:15.633Z",
+        "amount": 0.005383080953436092,
+        "txHash": "0xad92672947bd0b6e0b1c51380958d9b2a2bded13c648fd6bdc251cd35a4c9b85"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:33:25.348Z",
+        "amount": 0.005383080953428987,
+        "txHash": "0x85dd4a617b39e62ae6aa1ef45764ca2e2d10fb1b2eb0929e9b554beb8a112312"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:33:45.251Z",
+        "amount": 0.0008707850084590518,
+        "txHash": "0x27b70c8c5ece86506a78a410b3a81e4a06d6bb925b0a6d10a21d7de402ef0e81"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-14T23:33:54.775Z",
+        "amount": 0.0008707850084732627,
+        "txHash": "0x89caff3b462bc231cad5c9660d3e5906b307c2554bd53c6e253840dc1b1c25ea"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:02:06.367Z",
+        "amount": 0.0031564150590668305,
+        "txHash": "0xe60caf49b7730b3d82009b71d8da76141115b53ea2310620f33d736cf486ac9b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:02:14.730Z",
+        "amount": 0.0031564150590810414,
+        "txHash": "0x74508a5e0dde9b0c95fb9160d85dc65136cfd50a68144b6e8c35204fc8e6e509"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:09:55.348Z",
+        "amount": 0.0013025909338892916,
+        "txHash": "0x501ecf6caa221adfd07d5cf1cf91e39c1e458f9fc8b5fcf602ad049fce0ca3f0"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:10:03.958Z",
+        "amount": 0.0013025909338892916,
+        "txHash": "0x0851e83bbcd356b9e6d9f499989db142f342a2bb019cf1a974862b7decf0873e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:10:55.952Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xe7b9dffe9a9c8357c77e90fb9420f02047b5fdaeaa7a97572e2fe81e848001ba"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T00:55:44.190Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xbef79cd4562f0bbe62a312000756b045fc2da0ae8ca88c51a45632904a23c31b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T01:39:05.075Z",
+        "amount": 0.008484808015566614,
+        "txHash": "0xbbd7a51fb8d21898d557bbfd522b19dbbb0786148d4ac7172cbd0898d39ebfed"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T01:39:13.447Z",
+        "amount": 0.008484808015552403,
+        "txHash": "0x50e81bdfca1d95a7039b7b250118d7e4fe53f0530ac0a012b7a80241ffe921eb"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T02:18:35.096Z",
+        "amount": 0.004381426316115267,
+        "txHash": "0x0d37f25175049a3ee0988b7bdd6640097923c73278c51b97a1081dd4566a2d9f"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T02:18:43.479Z",
+        "amount": 0.0043814263161294775,
+        "txHash": "0xe91ca58b5f7e6b2feed255df3187563836336a1d7838f8ea53ccbd86857d11ed"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T02:39:35.220Z",
+        "amount": 0.001987778075218216,
+        "txHash": "0x3db483dd6dfb9b5b1445a25de87c160d9185adf79f38e19964c55ce47173a1ac"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T02:39:43.594Z",
+        "amount": 0.001987778075218216,
+        "txHash": "0x1a180210e38835da9ab4428a3d2f13e378e80eb26e20f7092dcff309d44e1c6b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T07:05:16.044Z",
+        "amount": 0.0027621842272083086,
+        "txHash": "0x55ddefeac31606c56064d1b81de7bd28c32e2a469e3ae042a75a235c78326ea1"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T07:05:24.417Z",
+        "amount": 0.0027621842271940977,
+        "txHash": "0xdf6b8ce33beda087a604a3bf17863204d2ea0bf8b760d0b9d7410950bec8913f"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T08:24:35.775Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xf728392608628574f8574e0a57d04be4a4d379af225809d180fed1e20235b141"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T10:28:06.058Z",
+        "amount": 0.0038498079276365615,
+        "txHash": "0x7dd68c774657fabd31f473351c6934c9ed0524acc7dd97c3fa54de54430eaa74"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T10:28:14.424Z",
+        "amount": 0.0038498079276365615,
+        "txHash": "0xdd3d7d1b80d122761513b056408f66cc6d1f02e91d4beb42606b73ab4ef7be1e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T10:40:05.963Z",
+        "amount": 0.0010301553238605266,
+        "txHash": "0xafb321655b096e94bbb2e5fc728010b1da3f6787f337a280cab74014ab252fa2"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T10:40:14.361Z",
+        "amount": 0.0010301553238605266,
+        "txHash": "0xd535df8892690ec62a6a65799b8c644b584ff78eb18c92db18481a29fa95d2d9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T13:37:23.825Z",
+        "amount": 0.0030017983670518333,
+        "txHash": "0x182e52a32540f6ec976bc6c9afaa0b5ec27569c552e9ce681a430d881ccd49fb"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T13:37:32.218Z",
+        "amount": 0.0030017983670518333,
+        "txHash": "0xaa4abe21853887763de6556f2de6d71a23585c39f90084a7770303c3d69b34c3"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T13:40:45.507Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0x452add6057eeb969af760b15a655efab6143d8b3f1498903719e23bd8daa94e9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:26:46.162Z",
+        "amount": 1.4210854715202004e-14,
+        "txHash": "0xf0064330dea1e0d32677bcbad8bc9731b4ae040f71cd0ae6e767421b3ef05aa0"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:37:14.097Z",
+        "amount": 0.0008586790210216577,
+        "txHash": "0x1616f4dcc6f4b1a031b8e740d732adb6ba4233639b50ab59ae8fe11f538f56f9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:37:23.680Z",
+        "amount": 0.0008586790210358686,
+        "txHash": "0x841bf6bd1aa040d448e3c4ecf02f8d1500656915902e0fbf68cb2fb0febd9f80"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:41:34.813Z",
+        "amount": 0.0009214882893644472,
+        "txHash": "0x415b75c902f3d216cde541b5db4dcc79b67cc9a2b2bb0c822c7b4d778cb40924"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:41:43.186Z",
+        "amount": 0.0009214882893644472,
+        "txHash": "0xf9e16dd828629a30119a06227b61f838efd65a565d6b4044abeb31d362d39cbb"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:49:35.407Z",
+        "amount": 0.0044291617437011155,
+        "txHash": "0x695a19138e9f7c728243caf8f73022ebf268f8dc2534317be836e869997a51e7"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:49:43.770Z",
+        "amount": 0.004429161743715326,
+        "txHash": "0xe6a79f206db20f732436e03dee347115c3215fabed3beca3f42ca7dc2bde90bb"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:55:36.056Z",
+        "amount": 0.004828047970434568,
+        "txHash": "0xac37c23821032d848536018625c3789cf5ae32f71bafe840e03c6f630f5b9560"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T14:55:44.467Z",
+        "amount": 0.004828047970420357,
+        "txHash": "0x4b8877cb6d48b09fff8f80c406f84297869d19e4a7798a6a1e0a7a173853ab00"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:01:24.311Z",
+        "amount": 0.006764552284288072,
+        "txHash": "0xa8c6259eb67fae0886d0acd0ee1687f55d04c2cd7c66462763235f98046dd56b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:01:32.738Z",
+        "amount": 0.006764552284295178,
+        "txHash": "0xed4f61b73692b02c707f690bec683abe34ba44d373f28aeb956eecdb7cdf8070"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:06:27.910Z",
+        "amount": 0.0047315036987001236,
+        "txHash": "0xd4a3fa5a9ba76b038b59dadfbc85291f03c17e9cd2a510bfc7b83c7368b2719a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:06:36.355Z",
+        "amount": 0.0047315036987001236,
+        "txHash": "0x0a60ed5489f8d29e8d54183c07de65443b299b371dbacd7667ddabb0fec092ab"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:15:34.468Z",
+        "amount": 0.003921086570876753,
+        "txHash": "0x0e54930789ab434620f96cb33d7df4e2665fa123865798427e8ce2d6f1839e64"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:15:42.875Z",
+        "amount": 0.003921086570869647,
+        "txHash": "0xc7f2922e8ab7ef721128d013c99f4fab28f52520a355890c12fb24865aae76d0"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:22:34.674Z",
+        "amount": 0.012769264075757292,
+        "txHash": "0x43a10b5ef9003b5b7f81d2d7cc9a247fa394d53fac9897b20d9565143dc74b9d"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:22:43.143Z",
+        "amount": 0.012769264075757292,
+        "txHash": "0x740d8b7b36ec3baea07675b788fb66489b56e486061948f7a42dd7280d090bf1"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:45:35.887Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xad2c54c2186a61c1b69a2f9c16972026f2615ba81e99d5013ddfb3616ee7edb3"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T15:53:14.450Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x125d1b52d95fb487f4e1b09699b9617ae72479c125039b1ede99cf41e3cb9544"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:01:05.299Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x8ff58ecd9be2adc92a65e3377fbd3883b5ddd2c7d2f057fd632609fe5140864b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:12:44.706Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xb8fa9779947546e00b23ef670616c5cf38c3817f1fa22ef850b45e643ecf9e0d"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:21:54.017Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x45d470687aa4f4108de77de2f8a9a4451f8cc5c6ad6da930d1eb29c1dc7ebbe4"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:42:45.225Z",
+        "amount": 0.0010775185124387576,
+        "txHash": "0x366413aa1e74b745baedff9b6c91db70a56b7e9e3c6caf5a94bec034233c8ae6"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:42:53.557Z",
+        "amount": 0.0010775185124387576,
+        "txHash": "0xd74b1b112b50a2ff36beb9a7ac9069e3d60dcec26cc80c129f63ad80e7f3eb7d"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:53:25.309Z",
+        "amount": 0.0019795006234204493,
+        "txHash": "0x34fda3fd0f30bb90562aaab3d535c68d8141a5b3c5f15e496af2c1096abaee59"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T16:53:33.664Z",
+        "amount": 0.001979500623413344,
+        "txHash": "0xe3bc8b5f5e169129b192ce57a6f1422e9c89b1ed29415f80b1e00b4695f08ae8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T17:22:05.242Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x3e7d1384a57ff45cd795041104061dbd27d1e7873d986807568b9d664d9b9372"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T18:34:14.282Z",
+        "amount": 0.002023757899813461,
+        "txHash": "0xb726159ab2ae70ba29060a6c0d867e0377aca753959712812e3734ffc097d8f4"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T18:34:22.689Z",
+        "amount": 0.0020237578998205663,
+        "txHash": "0xc72604fcc49b6eb94eea753b146448fd27fd7eab06f54e35863654521f1daca9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T18:42:44.825Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xf86173c240482b4bc39db6a500cd723de1a1b1799ade929c07d1cae30222af0e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T19:02:44.514Z",
+        "amount": 0.002088822295249315,
+        "txHash": "0x01e02e6afe3a9bb9ae977028db2dc5088cb3eb0f49089ef636bbdee431b10789"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T19:02:52.854Z",
+        "amount": 0.002088822295263526,
+        "txHash": "0xd2d3a779444512facf1b99a15638fc48fd110d443cad8056b829e727d3bd14b9"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T20:18:53.857Z",
+        "amount": 0.0023085930171333757,
+        "txHash": "0xe3d632394222f9ec7f69b6adef6f325d6a171b42d4a5e5b9d47bd2c7ea1beb8b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T20:19:02.487Z",
+        "amount": 0.002308593017140481,
+        "txHash": "0x792b8c0269e313b5906714181234ba39025e7c9dfa5584647a3b77cc5ccd91fd"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T23:00:34.334Z",
+        "amount": 0.002463060556102903,
+        "txHash": "0xfb26d972adb076e775dbad68a96d80e32f64dcb6354b887a9cccca86e4bd6f50"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-15T23:00:42.783Z",
+        "amount": 0.002463060556102903,
+        "txHash": "0x718c3a3262767ceac5ea718b7e879c31f0333e97052ab007d4e39c6e8b3a1d20"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T00:58:16.630Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x3ae86cff493c89e1f077f4ae58e1ad47a834ef605b83d7c08025b1e38155c23e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T02:26:45.582Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x0daefb7cdbea2c4da64bdac8a90677ff64ee3f8e09e32cf2ad011efa11b7df72"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T02:53:54.754Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x899c7615a00a8d1bd64f21084b693e277b61463da9b350dde7f0e868323bf21a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T04:49:54.965Z",
+        "amount": 0.002813640512684401,
+        "txHash": "0x2447875e07ba7f01f6dca7d9c9a0b3c1d5190ca69bfdfc875053719545cf6fa8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T04:50:03.353Z",
+        "amount": 0.002813640512684401,
+        "txHash": "0x2b5a824768b30a69c5aff20f2709acd4bc54925cab5e366fffddf1b30ecba14b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:11:04.187Z",
+        "amount": 0.001955081317738916,
+        "txHash": "0xb3b5faac83176948a7a84a85e3e74e032e3c5c1d57059b289a4b2ee3c5a7342e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:11:12.583Z",
+        "amount": 0.001955081317738916,
+        "txHash": "0x7c7a7f4c449e9d6dc1a6b3840512fe9253bad3cd6240e442e130ccb102829e3b"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:14:55.835Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x41b64d84d75eef7b7aabc6dea2381ed78f5910bd00f47708af0120e500ef1e7a"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:16:04.932Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x1e134f15e9fffdb5c2251ce47fcfa5fb667f6b38af3ed91e3e7e45cc0e23ccf8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:21:25.901Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xb5f249d41ec6f91147a40f962ce7c6426ae448afe16f350092f5eb990c88d92e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:23:04.894Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x276564d8699f3630eb55270c4aaac45dcd9ec3ee90159375041372b5d3264e1e"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:24:34.820Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xdd5520a28fffaa4080245f4c0a6a74570e00abd98248084e80139a61e7ca1ffe"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:24:55.814Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0xdeff3864ed34afe41262341040440d24bd5b62808b7b628a34c0ef1f6d2201d8"
+      },
+      {
+        "type": "lost",
+        "timestamp": "2025-12-16T05:51:35.128Z",
+        "amount": 7.105427357601002e-15,
+        "txHash": "0x7155aa9511bb62b9c4568db93cb77ce9ce51c070ee70a0e4f4f3d088952bfabf"
+      }
+    ]
+  },
+  "ranges": {
+    "totalAnalyzed": 146,
+    "chosenBetter": 140,
+    "chosenDirectionalCorrect": 146,
+    "details": [
+      {
+        "timestamp": "12/12/2025, 7:57:30 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3225.73",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.430",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80800, 80900]",
+          "avgDev": "0.571",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 8:01:42 PM",
+        "signal": "Open-UP",
+        "openPrice": "3229.51",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80800, 80900]",
+          "avgDev": "0.453",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.546",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 8:20:22 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3227.01",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.469",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80800, 80900]",
+          "avgDev": "0.531",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 8:24:52 PM",
+        "signal": "Open-UP",
+        "openPrice": "3230.58",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80800, 80900]",
+          "avgDev": "0.420",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.579",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 8:31:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3226.88",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.465",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80800, 80900]",
+          "avgDev": "0.535",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 8:55:22 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3194.47",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80600, 80700]",
+          "avgDev": "0.456",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80700, 80800]",
+          "avgDev": "0.545",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:00:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3160.67",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.392",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80600, 80700]",
+          "avgDev": "0.609",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:05:52 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3122.40",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.174",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.829",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:11:52 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3097.11",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.361",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.640",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:15:10 PM",
+        "signal": "Open-UP",
+        "openPrice": "3104.82",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.391",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.608",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:22:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.50",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.470",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.531",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:28:40 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3067.85",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.411",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.589",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:31:22 PM",
+        "signal": "Open-UP",
+        "openPrice": "3070.70",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.496",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.504",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:33:40 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3066.92",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.381",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.620",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:37:01 PM",
+        "signal": "Open-UP",
+        "openPrice": "3073.85",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.393",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.606",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:47:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3068.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.421",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.579",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 9:56:11 PM",
+        "signal": "Open-UP",
+        "openPrice": "3075.84",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.328",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.670",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:05:02 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3068.22",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.423",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.577",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:28:02 PM",
+        "signal": "Open-UP",
+        "openPrice": "3071.73",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.463",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.537",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:28:41 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3068.88",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.445",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.556",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:31:41 PM",
+        "signal": "Open-UP",
+        "openPrice": "3070.85",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.491",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.509",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:32:41 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.32",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.491",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.509",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:33:20 PM",
+        "signal": "Open-UP",
+        "openPrice": "3070.79",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:34:11 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.45",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.495",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.505",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 10:35:11 PM",
+        "signal": "Open-UP",
+        "openPrice": "3072.68",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.431",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.568",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 11:00:02 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3069.81",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.475",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.525",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 11:03:51 PM",
+        "signal": "Open-UP",
+        "openPrice": "3072.63",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.433",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.566",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 11:28:21 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3069.44",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.463",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.537",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/12/2025, 11:33:21 PM",
+        "signal": "Open-UP",
+        "openPrice": "3070.64",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.498",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.502",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 1:16:11 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3068.62",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.436",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.564",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 1:23:32 AM",
+        "signal": "Open-UP",
+        "openPrice": "3071.32",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.476",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.524",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 1:28:21 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.19",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.487",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.513",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 1:29:21 AM",
+        "signal": "Open-UP",
+        "openPrice": "3071.68",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.464",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.536",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 1:46:01 PM",
+        "signal": "Open-UP",
+        "openPrice": "3102.68",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.460",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.540",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 4:11:51 PM",
+        "signal": "Open-UP",
+        "openPrice": "3132.86",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.492",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.508",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 4:24:21 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3131.94",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.479",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.522",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 6:58:50 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3099.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.427",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.574",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 7:02:41 PM",
+        "signal": "Open-UP",
+        "openPrice": "3101.64",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.494",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 7:58:30 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3101.24",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.507",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 8:01:42 PM",
+        "signal": "Open-UP",
+        "openPrice": "3102.15",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.477",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.523",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 10:03:41 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.03",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.455",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.546",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 10:04:20 PM",
+        "signal": "Open-UP",
+        "openPrice": "3102.19",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.476",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.524",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 10:40:42 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3101.14",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.490",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.510",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 10:45:51 PM",
+        "signal": "Open-UP",
+        "openPrice": "3101.84",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.487",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.513",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 11:00:21 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.28",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.463",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.538",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/13/2025, 11:11:00 PM",
+        "signal": "Open-UP",
+        "openPrice": "3102.60",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.462",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.537",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 3:02:11 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3099.55",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.439",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.561",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 3:12:11 AM",
+        "signal": "Open-UP",
+        "openPrice": "3102.41",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.469",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.531",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 3:44:10 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3096.06",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.327",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.675",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 3:51:01 PM",
+        "signal": "Open-UP",
+        "openPrice": "3101.42",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.501",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.499",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 4:46:52 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3101.25",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.494",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 5:15:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3067.62",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.404",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.597",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 5:17:01 PM",
+        "signal": "Open-UP",
+        "openPrice": "3073.56",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.403",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.596",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 6:11:02 PM",
+        "signal": "Open-UP",
+        "openPrice": "3101.52",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.497",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.503",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 6:27:41 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3098.77",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.414",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.587",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 7:30:22 PM",
+        "signal": "Open-UP",
+        "openPrice": "3105.40",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.372",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.627",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 7:45:10 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.68",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.475",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.525",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 9:52:41 PM",
+        "signal": "Open-UP",
+        "openPrice": "3103.68",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.427",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.572",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/14/2025, 10:02:20 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3096.35",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.336",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.665",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 12:26:30 AM",
+        "signal": "Open-UP",
+        "openPrice": "3102.20",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.476",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.524",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 12:32:21 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.95",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.484",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.516",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:00:50 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3061.15",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.193",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.810",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:29:20 AM",
+        "signal": "Open-UP",
+        "openPrice": "3072.77",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.429",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.571",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:41:41 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3068.00",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.416",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.585",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:47:11 AM",
+        "signal": "Open-UP",
+        "openPrice": "3070.52",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.502",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.498",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:47:32 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3069.50",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.465",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.535",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:03:00 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3036.05",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.370",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.632",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:03:30 AM",
+        "signal": "Open-UP",
+        "openPrice": "3046.00",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.303",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.695",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:31:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "3080.59",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.174",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.823",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:39:42 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.44",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.495",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.505",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:40:42 AM",
+        "signal": "Open-UP",
+        "openPrice": "3070.56",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.501",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.499",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:41:00 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.41",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.494",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 5:49:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "3072.80",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.428",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.572",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 6:07:42 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3069.88",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.477",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.523",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 6:25:30 AM",
+        "signal": "Open-UP",
+        "openPrice": "3072.50",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.437",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.562",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 7:08:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "3115.52",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.046",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.950",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 7:48:21 AM",
+        "signal": "Open-UP",
+        "openPrice": "3142.19",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.194",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.803",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:09:21 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "3128.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.358",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.643",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 12:17:32 PM",
+        "signal": "Open-UP",
+        "openPrice": "3133.69",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.465",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.534",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 12:35:02 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3131.78",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.474",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.527",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 1:54:21 PM",
+        "signal": "Open-UP",
+        "openPrice": "3133.06",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.485",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.514",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 3:57:52 PM",
+        "signal": "Open-UP",
+        "openPrice": "3168.94",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80600, 80700]",
+          "avgDev": "0.346",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.652",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 4:09:52 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3163.28",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.474",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80600, 80700]",
+          "avgDev": "0.526",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 7:07:10 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3132.13",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.485",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.516",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 7:10:31 PM",
+        "signal": "Open-UP",
+        "openPrice": "3133.21",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.481",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.519",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 7:56:30 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3129.04",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.386",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.615",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:07:00 PM",
+        "signal": "Open-UP",
+        "openPrice": "3138.75",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.304",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.694",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:11:21 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3131.14",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.453",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80500, 80600]",
+          "avgDev": "0.547",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:19:22 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3100.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.459",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80400, 80500]",
+          "avgDev": "0.541",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:25:22 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3070.32",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.491",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80300, 80400]",
+          "avgDev": "0.509",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:31:11 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3027.66",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.093",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.911",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:36:02 PM",
+        "signal": "Open-UP",
+        "openPrice": "3045.94",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.305",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.693",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:45:20 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3037.13",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.405",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80200, 80300]",
+          "avgDev": "0.596",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 8:52:20 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3004.55",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.326",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.675",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:15:21 PM",
+        "signal": "Open-UP",
+        "openPrice": "3010.87",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.464",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.536",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:23:00 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3005.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.347",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.655",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:29:42 PM",
+        "signal": "Open-UP",
+        "openPrice": "3010.09",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.490",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.510",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:30:51 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3008.31",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.451",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.549",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:35:43 PM",
+        "signal": "Open-UP",
+        "openPrice": "3012.95",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.395",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.604",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:42:30 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3006.16",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.380",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.621",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 9:51:40 PM",
+        "signal": "Open-UP",
+        "openPrice": "3010.14",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.488",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.512",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:00:01 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "3007.19",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.414",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80100, 80200]",
+          "avgDev": "0.587",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:12:31 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "2976.75",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.397",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.604",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:23:11 PM",
+        "signal": "Open-UP",
+        "openPrice": "2984.61",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.339",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.659",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:43:30 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "2977.18",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.411",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.590",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:51:51 PM",
+        "signal": "Open-UP",
+        "openPrice": "2980.18",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.489",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.511",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 10:57:21 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "2978.49",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.455",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[80000, 80100]",
+          "avgDev": "0.546",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/15/2025, 11:21:12 PM",
+        "signal": "Open-DOWN",
+        "openPrice": "2947.36",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.404",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.597",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:04:01 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2919.92",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.469",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.531",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:12:31 AM",
+        "signal": "Open-UP",
+        "openPrice": "2923.45",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.410",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.589",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:13:40 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2918.97",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.436",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.564",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:23:31 AM",
+        "signal": "Open-UP",
+        "openPrice": "2921.51",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.477",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.523",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:32:31 AM",
+        "signal": "Open-UP",
+        "openPrice": "2953.90",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.374",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.625",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 12:39:52 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2948.60",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.446",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.554",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 1:02:22 AM",
+        "signal": "Open-UP",
+        "openPrice": "2952.06",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.436",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.563",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 1:11:22 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2948.65",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.448",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.552",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 1:48:40 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.44",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.486",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.514",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 1:49:10 AM",
+        "signal": "Open-UP",
+        "openPrice": "2922.27",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.451",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.549",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 4:30:21 AM",
+        "signal": "Open-UP",
+        "openPrice": "2952.50",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.421",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.578",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 6:28:01 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2947.96",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.424",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.576",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 6:36:31 AM",
+        "signal": "Open-UP",
+        "openPrice": "2950.57",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.487",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.513",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 7:05:22 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2949.00",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.460",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.540",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 7:56:31 AM",
+        "signal": "Open-UP",
+        "openPrice": "2953.14",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.400",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.599",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 8:23:41 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2948.52",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.443",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79900, 80000]",
+          "avgDev": "0.557",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 9:58:41 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.64",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.507",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:19:41 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2885.28",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79600, 79700]",
+          "avgDev": "0.276",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.726",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:20:20 AM",
+        "signal": "Open-UP",
+        "openPrice": "2896.15",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.348",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79600, 79700]",
+          "avgDev": "0.650",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:40:50 AM",
+        "signal": "Open-UP",
+        "openPrice": "2920.92",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.497",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.503",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:44:41 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.52",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.489",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.511",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:45:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "2921.03",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:46:30 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.60",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.492",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.508",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:46:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "2921.03",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.506",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:47:51 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.53",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.489",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.511",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:48:12 AM",
+        "signal": "Open-UP",
+        "openPrice": "2921.07",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.492",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.508",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:51:12 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.58",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.491",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.509",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:51:42 AM",
+        "signal": "Open-UP",
+        "openPrice": "2920.79",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.502",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.498",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:52:51 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.71",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.496",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.504",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:53:42 AM",
+        "signal": "Open-UP",
+        "openPrice": "2920.94",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.497",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.503",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:54:00 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.72",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.496",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.504",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:54:21 AM",
+        "signal": "Open-UP",
+        "openPrice": "2920.81",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.501",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.499",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 10:54:42 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.74",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.496",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.504",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 11:11:51 AM",
+        "signal": "Open-UP",
+        "openPrice": "2922.12",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.456",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.544",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 11:19:42 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.62",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.492",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.508",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 11:21:21 AM",
+        "signal": "Open-UP",
+        "openPrice": "2920.81",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.501",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.499",
+          "directional": false
+        },
+        "chosenBetter": false,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 11:21:51 AM",
+        "signal": "Open-DOWN",
+        "openPrice": "2920.55",
+        "chosenRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.490",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.510",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      },
+      {
+        "timestamp": "12/16/2025, 11:23:42 AM",
+        "signal": "Open-UP",
+        "openPrice": "2921.04",
+        "chosenRange": {
+          "name": "Upper Range",
+          "ticks": "[79800, 79900]",
+          "avgDev": "0.493",
+          "directional": true
+        },
+        "altRange": {
+          "name": "Lower Range",
+          "ticks": "[79700, 79800]",
+          "avgDev": "0.507",
+          "directional": false
+        },
+        "chosenBetter": true,
+        "chosenCorrectDir": true,
+        "altCorrectDir": false
+      }
+    ]
+  },
+  "pingPong": {
+    "totalFlips": 115,
+    "totalRebalances": 146,
+    "flipRate": 79.3,
+    "avgFlipTime": 26.095652173913045,
+    "fastestFlip": 0,
+    "slowestFlip": 752,
+    "allFlipTimes": [
+      4,
+      19,
+      5,
+      6,
+      3,
+      7,
+      3,
+      2,
+      3,
+      10,
+      9,
+      9,
+      23,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      25,
+      4,
+      25,
+      5,
+      103,
+      7,
+      5,
+      1,
+      13,
+      4,
+      56,
+      3,
+      122,
+      1,
+      36,
+      5,
+      15,
+      11,
+      231,
+      10,
+      752,
+      7,
+      56,
+      2,
+      17,
+      63,
+      15,
+      128,
+      10,
+      144,
+      6,
+      29,
+      12,
+      6,
+      0,
+      0,
+      8,
+      1,
+      0,
+      9,
+      18,
+      18,
+      21,
+      248,
+      18,
+      79,
+      12,
+      3,
+      46,
+      11,
+      4,
+      5,
+      9,
+      23,
+      8,
+      7,
+      1,
+      5,
+      7,
+      9,
+      8,
+      11,
+      20,
+      8,
+      6,
+      9,
+      1,
+      10,
+      7,
+      23,
+      9,
+      1,
+      118,
+      9,
+      29,
+      51,
+      27,
+      1,
+      4,
+      1,
+      1,
+      0,
+      1,
+      0,
+      3,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      17,
+      8,
+      2,
+      1,
+      2
+    ]
+  }
+}

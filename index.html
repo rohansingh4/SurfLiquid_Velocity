@@ -909,6 +909,7 @@
         <div class="tabs-container">
             <button class="tab-btn active" data-tab="shadow">🌑 Shadow DEX (1%)</button>
             <button class="tab-btn" data-tab="swapx">⚡ SwapX (0.1%)</button>
+            <button class="tab-btn" data-tab="base">🔷 Base Pool (0.1%)</button>
         </div>
 
         <!-- Shadow DEX Tab -->
@@ -1254,6 +1255,133 @@
             </div>
         </div>
         <!-- End SwapX Tab -->
+
+        <!-- Base Pool Tab -->
+        <div class="tab-content" id="base-tab">
+            <div class="main-grid">
+                <div class="sidebar">
+                    <div class="card">
+                        <h2>💰 Current Price</h2>
+                        <div class="price-large" id="base-currentPrice">$0.00</div>
+                        <div class="price-change" id="base-priceChange">+$0.00 (+0.00%)</div>
+                    </div>
+
+                    <div class="card">
+                        <h2>🔄 Token Distribution</h2>
+                        <div class="token-distribution">
+                            <div class="token-box weth-box">
+                                <span class="token-label">Token1</span>
+                                <span class="token-value" id="base-token1Pct">50.0%</span>
+                            </div>
+                            <div class="token-box usdc-box">
+                                <span class="token-label">Token0</span>
+                                <span class="token-value" id="base-token0Pct">50.0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>📊 Pool Info</h2>
+                        <div class="stat">
+                            <span class="stat-label">Pool</span>
+                            <span class="stat-value">0xd0b5...f224</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Network</span>
+                            <span class="stat-value">Base</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Range</span>
+                            <span class="stat-value">0.1% (10 ticks)</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value" id="base-status">Monitoring</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>📈 Range Info</h2>
+                        <div class="stat">
+                            <span class="stat-label">Upper Range</span>
+                            <span class="stat-value" id="base-upperRange">$0.00</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Lower Range</span>
+                            <span class="stat-value" id="base-lowerRange">$0.00</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Range Width</span>
+                            <span class="stat-value" id="base-rangeWidth">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <div class="card chart-card">
+                        <div class="chart-header">
+                            <h2 class="chart-title">📊 Price Chart</h2>
+                            <div class="chart-controls">
+                                <div class="time-filter">
+                                    <button class="time-btn base-time-btn" data-range="15m">15m</button>
+                                    <button class="time-btn base-time-btn" data-range="1h">1H</button>
+                                    <button class="time-btn base-time-btn" data-range="4h">4H</button>
+                                    <button class="time-btn base-time-btn" data-range="24h">24H</button>
+                                    <button class="time-btn base-time-btn active" data-range="all">All</button>
+                                </div>
+                                <div class="chart-type-toggle">
+                                    <button class="type-btn base-type-btn" data-type="candle">🕯️ Candles</button>
+                                    <button class="type-btn base-type-btn active" data-type="line">📈 Line</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="base-chart" style="height: 450px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Data Table -->
+            <div class="data-table-section">
+                <div class="data-table-header">
+                    <h2 class="data-table-title">📋 Historical Data</h2>
+                    <div class="data-table-controls">
+                        <span class="data-count">Total Records: <span id="base-totalRecords">0</span></span>
+                        <span class="data-count">Showing: <span id="base-showingCount">100</span></span>
+                        <span class="data-count">Latest: <span id="base-latestTime">-</span></span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Status</th>
+                                <th>Upper Range</th>
+                                <th>Lower Range</th>
+                                <th>Open</th>
+                                <th>High</th>
+                                <th>Low</th>
+                                <th>Close</th>
+                            </tr>
+                        </thead>
+                        <tbody id="base-positionsTableBody">
+                            <tr>
+                                <td colspan="8" class="text-center">Loading positions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="base-pagination">
+                    <button class="pagination-btn" id="base-prevPage" onclick="baseChangePage(-1)">← Previous</button>
+                    <span class="pagination-info">Page <span id="base-currentPage">1</span> of <span id="base-totalPages">1</span></span>
+                    <button class="pagination-btn" id="base-nextPage" onclick="baseChangePage(1)">Next →</button>
+                </div>
+            </div>
+        </div>
+        <!-- End Base Pool Tab -->
 
         <div class="last-update">
             Last updated: <span id="lastUpdate">Never</span>
@@ -2141,6 +2269,20 @@
                     clearInterval(swapxRefreshInterval);
                     swapxRefreshInterval = null;
                 }
+
+                // Load Base data when switching to that tab
+                if (tabName === 'base') {
+                    loadBaseData();
+                    if (!baseRefreshInterval) {
+                        baseRefreshInterval = setInterval(loadBaseData, 10000); // Refresh every 10s
+                    }
+                }
+
+                // Clear Base refresh interval when switching away
+                if (tabName !== 'base' && baseRefreshInterval) {
+                    clearInterval(baseRefreshInterval);
+                    baseRefreshInterval = null;
+                }
             });
         });
 
@@ -2605,6 +2747,324 @@
             if (newPage >= 1 && newPage <= totalPages) {
                 swapxCurrentPage = newPage;
                 updateSwapXPositionsTable();
+            }
+        }
+
+        // ============================================
+        // BASE POOL DATA MANAGEMENT
+        // ============================================
+        let baseRefreshInterval = null;
+        let baseChart = null;
+        let baseCandlestickSeries = null;
+        let baseLineSeries = null;
+        let baseAllPositions = [];
+        let baseCurrentPage = 1;
+        let basePageSize = 100;
+        let baseTimeRange = 'all';
+        let baseChartType = 'line';
+        let baseUpperRangeLine = null;
+        let baseLowerRangeLine = null;
+
+        async function loadBaseData() {
+            try {
+                const apiBaseUrl = `http://${window.location.hostname}:3002`;
+
+                const currentResponse = await fetch(`${apiBaseUrl}/api/base/current`);
+                const currentData = await currentResponse.json();
+
+                const positionsResponse = await fetch(`${apiBaseUrl}/api/base/positions`);
+                const positions = await positionsResponse.json();
+
+                // Filter out bad data
+                const validPositions = positions.filter(pos =>
+                    pos.close && pos.close < 100000000 && pos.close > 0.000001
+                );
+
+                baseAllPositions = validPositions;
+
+                // Update current price and stats
+                if (currentData.currentRanges) {
+                    const upperRange = currentData.currentRanges.upper || 0;
+                    const lowerRange = currentData.currentRanges.lower || 0;
+
+                    if (upperRange < 100000000 && lowerRange > 0.000001) {
+                        const rangeWidth = upperRange - lowerRange;
+                        document.getElementById('base-upperRange').textContent = upperRange.toFixed(6);
+                        document.getElementById('base-lowerRange').textContent = lowerRange.toFixed(6);
+                        document.getElementById('base-rangeWidth').textContent = rangeWidth.toFixed(6);
+                    }
+                }
+
+                if (currentData.lastPositionStatus) {
+                    document.getElementById('base-status').textContent = currentData.lastPositionStatus;
+                }
+
+                // Update price and token distribution from latest position
+                if (validPositions && validPositions.length > 0) {
+                    const latestPosition = validPositions[0];
+                    const closePrice = parseFloat(latestPosition.close);
+                    const decimals = closePrice > 1000 ? 2 : 6;
+
+                    document.getElementById('base-currentPrice').textContent = closePrice.toFixed(decimals);
+                    document.getElementById('base-token1Pct').textContent = (latestPosition.weth_pct || 50).toFixed(1) + '%';
+                    document.getElementById('base-token0Pct').textContent = (latestPosition.usdc_pct || 50).toFixed(1) + '%';
+                    document.getElementById('base-latestTime').textContent = new Date(latestPosition.timestamp).toLocaleString();
+                }
+
+                // Update table info
+                document.getElementById('base-totalRecords').textContent = validPositions.length;
+                document.getElementById('base-showingCount').textContent = Math.min(basePageSize, validPositions.length);
+
+                // Update positions table with pagination
+                updateBasePositionsTable();
+
+                // Initialize or update chart
+                if (!baseChart) {
+                    initBaseChart();
+                } else {
+                    updateBaseChart();
+                }
+            } catch (error) {
+                console.error('Error loading Base data:', error);
+            }
+        }
+
+        function initBaseChart() {
+            const chartContainer = document.getElementById('base-chart');
+            if (!chartContainer) return;
+
+            baseChart = LightweightCharts.createChart(chartContainer, {
+                width: chartContainer.clientWidth,
+                height: 450,
+                layout: {
+                    background: { color: '#16213e' },
+                    textColor: '#d1d4dc',
+                },
+                grid: {
+                    vertLines: { color: '#2a2a3e' },
+                    horzLines: { color: '#2a2a3e' },
+                },
+                timeScale: {
+                    timeVisible: true,
+                    secondsVisible: true,
+                },
+            });
+
+            // Use line chart by default
+            baseCandlestickSeries = baseChart.addCandlestickSeries({
+                upColor: '#00ff88',
+                downColor: '#ff3366',
+                borderVisible: true,
+                wickUpColor: '#00ff88',
+                wickDownColor: '#ff3366',
+                visible: false,  // Hidden by default
+            });
+
+            baseLineSeries = baseChart.addLineSeries({
+                color: '#00d4ff',
+                lineWidth: 2,
+                visible: true,  // Visible by default
+            });
+
+            // Set line as default active
+            baseChartType = 'line';
+
+            console.log('[Base] Chart initialized with line series (default)');
+
+            baseUpperRangeLine = baseChart.addLineSeries({
+                color: '#ef5350',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                priceLineVisible: false,
+                lastValueVisible: true,
+            });
+
+            baseLowerRangeLine = baseChart.addLineSeries({
+                color: '#26a69a',
+                lineWidth: 2,
+                lineStyle: LightweightCharts.LineStyle.Dashed,
+                priceLineVisible: false,
+                lastValueVisible: true,
+            });
+
+            // Time filter buttons
+            document.querySelectorAll('.base-time-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.base-time-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    baseTimeRange = btn.dataset.range;
+                    updateBaseChart();
+                });
+            });
+
+            // Chart type toggle
+            document.querySelectorAll('.base-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.base-type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    baseChartType = btn.dataset.type;
+
+                    baseCandlestickSeries.applyOptions({ visible: baseChartType === 'candle' });
+                    baseLineSeries.applyOptions({ visible: baseChartType === 'line' });
+                });
+            });
+
+            updateBaseChart();
+        }
+
+        function filterBaseByTimeRange(positions, range) {
+            if (!positions || positions.length === 0) return [];
+            if (range === 'all') return positions;
+
+            const now = Date.now();
+            let cutoffTime;
+
+            switch(range) {
+                case '15m': cutoffTime = now - (15 * 60 * 1000); break;
+                case '1h': cutoffTime = now - (60 * 60 * 1000); break;
+                case '4h': cutoffTime = now - (4 * 60 * 60 * 1000); break;
+                case '24h': cutoffTime = now - (24 * 60 * 60 * 1000); break;
+                default: return positions;
+            }
+
+            return positions.filter(pos => new Date(pos.timestamp).getTime() >= cutoffTime);
+        }
+
+        function updateBaseChart() {
+            if (!baseCandlestickSeries || !baseAllPositions || baseAllPositions.length === 0) {
+                console.log('[Base] No data for chart');
+                return;
+            }
+
+            const filteredPositions = filterBaseByTimeRange(baseAllPositions, baseTimeRange);
+            console.log(`[Base] Filtered ${filteredPositions.length} positions for ${baseTimeRange}`);
+
+            if (filteredPositions.length === 0) return;
+
+            // Build candle data with valid OHLC, remove duplicates by time
+            const seenTimes = new Set();
+            const candles = [];
+            const lineData = [];
+
+            // Process in reverse (oldest first) to maintain chronological order
+            const sortedPositions = [...filteredPositions].reverse();
+
+            for (const pos of sortedPositions) {
+                const closePrice = parseFloat(pos.close) || 0;
+                if (closePrice === 0) continue;
+
+                const time = Math.floor(new Date(pos.timestamp).getTime() / 1000);
+
+                // Skip duplicate timestamps
+                if (seenTimes.has(time)) continue;
+                seenTimes.add(time);
+
+                candles.push({
+                    time: time,
+                    open: parseFloat(pos.open) || closePrice,
+                    high: parseFloat(pos.high) || closePrice,
+                    low: parseFloat(pos.low) || closePrice,
+                    close: closePrice
+                });
+
+                lineData.push({
+                    time: time,
+                    value: closePrice
+                });
+            }
+
+            console.log(`[Base] Setting ${candles.length} candles (after dedup), sample:`, candles.slice(0, 3));
+
+            if (candles.length > 0) {
+                baseCandlestickSeries.setData(candles);
+                baseLineSeries.setData(lineData);
+            }
+
+            // Update range lines
+            if (candles.length > 0 && filteredPositions.length > 0) {
+                const latest = filteredPositions[0];
+                const upperVal = parseFloat(latest.upper_range) || 0;
+                const lowerVal = parseFloat(latest.lower_range) || 0;
+
+                if (upperVal > 0 && lowerVal > 0) {
+                    const rangeData = candles.map(c => ({ time: c.time, value: upperVal }));
+                    const lowerData = candles.map(c => ({ time: c.time, value: lowerVal }));
+                    baseUpperRangeLine.setData(rangeData);
+                    baseLowerRangeLine.setData(lowerData);
+                    console.log(`[Base] Range lines: ${lowerVal.toFixed(6)} - ${upperVal.toFixed(6)}`);
+                }
+            }
+
+            baseChart.timeScale().fitContent();
+        }
+
+        function updateBasePositionsTable() {
+            const tbody = document.getElementById('base-positionsTableBody');
+            if (!tbody || !baseAllPositions || baseAllPositions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No positions yet</td></tr>';
+                return;
+            }
+
+            const totalPages = Math.ceil(baseAllPositions.length / basePageSize);
+            const startIdx = (baseCurrentPage - 1) * basePageSize;
+            const endIdx = startIdx + basePageSize;
+            const pagePositions = baseAllPositions.slice(startIdx, endIdx);
+
+            tbody.innerHTML = pagePositions.map(pos => {
+                const statusColors = {
+                    'Open-UP': '#00ff88',
+                    'Open-DOWN': '#ff3366',
+                    'Monitoring': '#00d4ff',
+                    'Price-UP': '#ffaa00',
+                    'Price-DOWN': '#ff6600'
+                };
+
+                const statusColor = statusColors[pos.status] || '#8e8ea9';
+                const time = new Date(pos.timestamp).toLocaleString();
+
+                // Determine decimal places based on price magnitude
+                const closePrice = parseFloat(pos.close);
+                const decimals = closePrice > 1000 ? 2 : 6;
+
+                return `
+                    <tr>
+                        <td>${time}</td>
+                        <td><span style="color: ${statusColor}; font-weight: 600;">${pos.status}</span></td>
+                        <td>${(pos.upper_range || 0).toFixed(decimals)}</td>
+                        <td>${(pos.lower_range || 0).toFixed(decimals)}</td>
+                        <td>${(pos.open || pos.close).toFixed(decimals)}</td>
+                        <td>${(pos.high || pos.close).toFixed(decimals)}</td>
+                        <td>${(pos.low || pos.close).toFixed(decimals)}</td>
+                        <td>${pos.close.toFixed(decimals)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Update pagination
+            const totalPagesDisplay = Math.max(1, totalPages);
+            document.getElementById('base-currentPage').textContent = baseCurrentPage;
+            document.getElementById('base-totalPages').textContent = totalPagesDisplay;
+
+            // Enable/disable pagination buttons
+            const prevBtn = document.getElementById('base-prevPage');
+            const nextBtn = document.getElementById('base-nextPage');
+
+            prevBtn.disabled = baseCurrentPage <= 1;
+            nextBtn.disabled = baseCurrentPage >= totalPages || totalPages <= 1;
+
+            // Add visual styling for disabled state
+            prevBtn.style.opacity = prevBtn.disabled ? '0.3' : '1';
+            nextBtn.style.opacity = nextBtn.disabled ? '0.3' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+            nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+        }
+
+        function baseChangePage(delta) {
+            const totalPages = Math.max(1, Math.ceil(baseAllPositions.length / basePageSize));
+            const newPage = baseCurrentPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                baseCurrentPage = newPage;
+                updateBasePositionsTable();
             }
         }
 
