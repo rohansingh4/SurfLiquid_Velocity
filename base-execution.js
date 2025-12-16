@@ -356,7 +356,7 @@ app.get('/api/base/positions', async (req, res) => {
   try {
     const positions = await PositionBase.find()
       .sort({ timestamp: -1 })
-      .limit(100);
+      .limit(1000);
     res.json(positions);
   } catch (error) {
     console.error('[Base] API Error:', error.message);
