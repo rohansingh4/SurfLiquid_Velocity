@@ -159,7 +159,8 @@ async function fetchPoolData() {
 async function initializeRanges(data) {
   if (currentRanges !== null) return;
 
-  const currentTick = data.tick;
+  const { token0Info, token1Info } = await getTokenInfo();
+  const currentTick = Number(data.tick);
 
   // Center the range on current tick: ±5 ticks (half of RANGE_TICKS)
   // Round to nearest valid tick spacing multiple
@@ -167,9 +168,14 @@ async function initializeRanges(data) {
   const tickLower = centerTick - (RANGE_TICKS / 2);  // -5 ticks
   const tickUpper = centerTick + (RANGE_TICKS / 2);  // +5 ticks
 
-  // Calculate price boundaries from ticks
-  const lowerRange = Math.pow(1.0001, tickLower);
-  const upperRange = Math.pow(1.0001, tickUpper);
+  // Calculate price boundaries from ticks using proper conversion
+  // For Uniswap V3: price = 1.0001^tick, then adjust for decimals
+  const priceLowerRaw = Math.pow(1.0001, tickLower);
+  const priceUpperRaw = Math.pow(1.0001, tickUpper);
+
+  const decimalAdjustment = 10 ** (Number(token0Info.decimals) - Number(token1Info.decimals));
+  const lowerRange = priceLowerRaw * decimalAdjustment;
+  const upperRange = priceUpperRaw * decimalAdjustment;
 
   currentRanges = {
     upper: upperRange,
@@ -180,7 +186,7 @@ async function initializeRanges(data) {
 
   lastPositionStatus = 'Monitoring';
   console.log(`\n🎯 [Base] Initial Ranges Set (centered on tick ${centerTick}):`);
-  console.log(`   Upper=${currentRanges.upper.toFixed(6)}, Lower=${currentRanges.lower.toFixed(6)}`);
+  console.log(`   Upper=${currentRanges.upper.toFixed(2)}, Lower=${currentRanges.lower.toFixed(2)}`);
   console.log(`   Tick Range: ${tickLower} to ${tickUpper} (±${RANGE_TICKS/2} ticks = 0.1%)`);
 }
 
@@ -247,15 +253,21 @@ async function processCandle(candle) {
       if (timeSinceOutOfRange >= CANDLE_INTERVAL * 2) {
         // Calculate new range CENTERED on open price (±5 ticks = 0.1%)
         const openPrice = candle.open;
-        const openTick = Math.floor(Math.log(openPrice) / Math.log(1.0001));
+
+        // Convert price back to tick (inverse of price calculation)
+        const decimalAdjustment = 10 ** (Number(token0Info.decimals) - Number(token1Info.decimals));
+        const priceRaw = openPrice / decimalAdjustment;
+        const openTick = Math.floor(Math.log(priceRaw) / Math.log(1.0001));
 
         // Center the range on open tick
         const centerTick = Math.round(openTick / TICK_SPACING) * TICK_SPACING;
         const tickLower = centerTick - (RANGE_TICKS / 2);  // -5 ticks
         const tickUpper = centerTick + (RANGE_TICKS / 2);  // +5 ticks
 
-        const lowerRange = Math.pow(1.0001, tickLower);
-        const upperRange = Math.pow(1.0001, tickUpper);
+        const priceLowerRaw = Math.pow(1.0001, tickLower);
+        const priceUpperRaw = Math.pow(1.0001, tickUpper);
+        const lowerRange = priceLowerRaw * decimalAdjustment;
+        const upperRange = priceUpperRaw * decimalAdjustment;
 
         // Determine signal based on previous out-of-range direction
         const status = lastPositionStatus === 'Price-UP' ? 'Open-UP' : 'Open-DOWN';
@@ -274,8 +286,8 @@ async function processCandle(candle) {
           : { weth_pct: 30, usdc_pct: 70 };
 
         console.log(`\n🔄 [Base] REBALANCE: ${status}`);
-        console.log(`  Open Price: ${openPrice.toFixed(6)} (center tick ${centerTick})`);
-        console.log(`  New Ranges: Upper=${currentRanges.upper.toFixed(6)}, Lower=${currentRanges.lower.toFixed(6)}`);
+        console.log(`  Open Price: $${openPrice.toFixed(2)} (center tick ${centerTick})`);
+        console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
         console.log(`  Tick Range: ${tickLower} to ${tickUpper} (±${RANGE_TICKS/2} ticks = 0.1%)`);
         console.log(`  Target Allocation: ${targetPercentages.weth_pct}% Token1, ${targetPercentages.usdc_pct}% Token0`);
 
@@ -354,11 +366,27 @@ app.get('/api/base/positions', async (req, res) => {
 
 // API endpoint for latest Base data
 app.get('/api/base/current', (req, res) => {
+  // Convert BigInt values to regular numbers for JSON serialization
+  const safeTokenInfo = token0Info && token1Info ? {
+    token0Info: {
+      address: token0Info.address,
+      decimals: Number(token0Info.decimals),
+      symbol: token0Info.symbol,
+      name: token0Info.name
+    },
+    token1Info: {
+      address: token1Info.address,
+      decimals: Number(token1Info.decimals),
+      symbol: token1Info.symbol,
+      name: token1Info.name
+    }
+  } : null;
+
   res.json({
     currentRanges,
     lastPositionStatus,
     lastPositionPercentages,
-    tokenInfo: { token0Info, token1Info }
+    tokenInfo: safeTokenInfo
   });
 });
 
@@ -440,9 +468,9 @@ async function main() {
       // Log current status
       const isInRange = data.price >= currentRanges.lower && data.price <= currentRanges.upper;
       if (isInRange) {
-        console.log(`[Base] 📊 Monitoring: ${data.price.toFixed(6)} (Range: ${currentRanges.lower.toFixed(6)} - ${currentRanges.upper.toFixed(6)})`);
+        console.log(`[Base] 📊 Monitoring: $${data.price.toFixed(2)} (Range: $${currentRanges.lower.toFixed(2)} - $${currentRanges.upper.toFixed(2)})`);
       } else {
-        console.log(`[Base] ⚠️  Out of Range: ${data.price.toFixed(6)} (Range: ${currentRanges.lower.toFixed(6)} - ${currentRanges.upper.toFixed(6)})`);
+        console.log(`[Base] ⚠️  Out of Range: $${data.price.toFixed(2)} (Range: $${currentRanges.lower.toFixed(2)} - $${currentRanges.upper.toFixed(2)})`);
       }
     } catch (error) {
       console.error('[Base] Error in main loop:', error.message);
