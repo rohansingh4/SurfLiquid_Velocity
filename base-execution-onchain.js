@@ -17,27 +17,27 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configuration from .env
-const RPC_URL = process.env.SONIC_RPC_URL;
-const WRITE_RPC_URL = process.env.SONIC_WRITE_RPC_URL; // Optional: separate RPC for write operations to avoid rate limiting
-const POOL_ADDRESS = process.env.POOL_ADDRESS || '0x6fb30f3fcb864d49cdff15061ed5c6adfee40b40';
+// Configuration from .env - BASE NETWORK
+const RPC_URL = process.env.BASE_RPC_URL;
+const WRITE_RPC_URL = process.env.BASE_RPC_URL; // Use same RPC for now
+const POOL_ADDRESS = process.env.BASE_POOL_ADDRESS || '0xd0b53d9277642d899df5c87a3966a349a798f224';
 const FETCH_INTERVAL = 3000; // 3 seconds (fetch more frequently)
 const CANDLE_INTERVAL = 10000; // 10 seconds (candle period)
 const RANGE_PERCENTAGE = 0.1; // 0.1% range
+const TICK_RANGE = 10; // 10 ticks for Base (vs 100 for Shadow)
 
 // Webhook configuration for AI scientist
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const WEBHOOK_ENABLED = WEBHOOK_URL && WEBHOOK_URL.startsWith('http');
 
-// Token addresses (from the pool)
-const USDC_ADDRESS = '0x29219dd400f2bf60e5a23d13be72b486d4038894';
-const WETH_ADDRESS = '0x50c42deacd8fc9773493ed674b675be577f2634b';
+// Token addresses (Base pool - WETH/USDC)
+const WETH_ADDRESS = '0x4200000000000000000000000000000000000006'; // Token0
+const USDC_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // Token1
 
 // Trading wallet configuration
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const SWAP_HELPER_ADDRESS = process.env.SWAP_HELPER_ADDRESS;
-// TRADING DISABLED - Data collection only (graphs/tables continue working)
-const TRADING_ENABLED = false; // Original: PRIVATE_KEY && PRIVATE_KEY.length > 10 && SWAP_HELPER_ADDRESS;
+const SWAP_HELPER_ADDRESS = process.env.BASE_HELPER_SOL; // Base helper contract
+const TRADING_ENABLED = PRIVATE_KEY && PRIVATE_KEY.length > 10 && SWAP_HELPER_ADDRESS;
 
 // Pool ABI (only the functions we need)
 const POOL_ABI = [
@@ -74,7 +74,7 @@ const poolContract = new ethers.Contract(POOL_ADDRESS, POOL_ABI, provider);
 const token0Contract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
 const token1Contract = new ethers.Contract(WETH_ADDRESS, ERC20_ABI, provider);
 
-// Trading bot setup
+// Trading bot setup - BASE POOL
 let tradingBot = null;
 if (TRADING_ENABLED) {
   const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
@@ -83,7 +83,9 @@ if (TRADING_ENABLED) {
   const writeProvider = WRITE_RPC_URL ? new ethers.JsonRpcProvider(WRITE_RPC_URL) : null;
 
   tradingBot = new TradingBot(provider, wallet, POOL_ADDRESS, WETH_ADDRESS, USDC_ADDRESS, SWAP_HELPER_ADDRESS, writeProvider);
-  console.log(`🤖 Trading Bot initialized with wallet: ${wallet.address}`);
+  console.log(`🤖 BASE POOL Trading Bot initialized with wallet: ${wallet.address}`);
+  console.log(`   Pool: ${POOL_ADDRESS}`);
+  console.log(`   Helper: ${SWAP_HELPER_ADDRESS}`);
   if (WRITE_RPC_URL) {
     console.log(`   📡 Using separate Write RPC to reduce rate limiting`);
   }
@@ -95,8 +97,8 @@ if (TRADING_ENABLED) {
   if (!PRIVATE_KEY || PRIVATE_KEY.length < 10) {
     console.log('⚠️  Trading disabled: No private key configured');
   } else if (!SWAP_HELPER_ADDRESS) {
-    console.log('⚠️  Trading disabled: SwapHelper contract not deployed yet');
-    console.log('   Deploy SwapHelper and update SWAP_HELPER_ADDRESS in .env');
+    console.log('⚠️  Trading disabled: BASE_HELPER_SOL contract not configured');
+    console.log('   Update BASE_HELPER_SOL in .env');
   }
 }
 
@@ -150,7 +152,7 @@ function calculateDistribution(reserve0, reserve1, price) {
 // Fetch pool data from blockchain
 async function fetchPoolData() {
   try {
-    console.log('🔗 Fetching on-chain data from Sonic...');
+    console.log('🔗 Fetching on-chain data from Base...');
 
     // Fetch data in parallel for speed
     const [slot0Data, liquidityData, reserve0, reserve1] = await Promise.all([
@@ -240,27 +242,28 @@ async function updateCandle(data) {
           const isUpRebalance = currentPrice > currentRanges.upper;
           const openPrice = data.price;
 
-          // Update ranges based on OPEN price - ±0.5% range (rounded to 100-tick spacing)
-          // Calculate ideal ±0.5% price targets
+          // Update ranges based on OPEN price - 10 tick range (Base pool)
           const idealUpper = openPrice * 1.005;
           const idealLower = openPrice * 0.995;
 
-          // Get tick spacing from pool (100 ticks = 1% range)
-          const tickSpacing = await getPoolTickSpacing();
+          // Get pool tick spacing (should be 10 for Base pool)
+          const poolTickSpacing = await getPoolTickSpacing();
 
-          // Convert open price to tick and round to nearest 100-tick boundary
+          // Convert open price to tick and round to nearest pool tick spacing boundary
           const openTick = Math.log(openPrice) / Math.log(1.0001);
-          const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
+          const centerTick = Math.round(openTick / poolTickSpacing) * poolTickSpacing;
 
-          // DIRECTIONAL RANGE: Create asymmetric 100-tick range based on signal direction
-          // Open-UP: bias range upward [center, center+100] to capture more upside
-          // Open-DOWN: bias range downward [center-100, center] to capture more downside
+          // BASE POOL LOGIC: Use 10-tick range with directional selection
+          // If rebalancing UP: pick UPPER range [center, center+10]
+          // If rebalancing DOWN: pick LOWER range [center-10, center]
           let tickLower, tickUpper;
           if (isUpRebalance) {
+            // Rebalance UP: Pick upper range
             tickLower = centerTick;
-            tickUpper = centerTick + tickSpacing;
+            tickUpper = centerTick + TICK_RANGE;
           } else {
-            tickLower = centerTick - tickSpacing;
+            // Rebalance DOWN: Pick lower range
+            tickLower = centerTick - TICK_RANGE;
             tickUpper = centerTick;
           }
 
@@ -285,11 +288,12 @@ async function updateCandle(data) {
             usdc_pct: data.usdc_pct   // Current pool composition from latest fetch
           };
 
-          console.log(`\n🔄 REBALANCE: ${status}`);
-          console.log(`  Open Price: $${openPrice.toFixed(2)} (±0.5% target)`);
-          console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
-          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
-          console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC (latest pool composition)`);
+          console.log(`\n🔄 BASE POOL REBALANCE: ${status}`);
+          console.log(`  Open Price: $${openPrice.toFixed(2)}`);
+          console.log(`  New Ranges: Upper=$${currentRanges.upper.toFixed(2)}, Lower=$${currentRanges.lower.toFixed(2)}`);
+          console.log(`  Tick Range: ${tickLower} to ${tickUpper} (${TICK_RANGE} ticks, pool spacing=${poolTickSpacing})`);
+          console.log(`  Direction: ${isUpRebalance ? 'UP (upper range selected)' : 'DOWN (lower range selected)'}`);
+          console.log(`  Target Allocation: ${targetPercentages.weth_pct.toFixed(1)}% WETH, ${targetPercentages.usdc_pct.toFixed(1)}% USDC`);
 
           // Prevent duplicate saves - only save once per rebalance
           if (positionSavedThisCycle) {
@@ -437,20 +441,20 @@ async function streamPositionData(data) {
         // No existing ranges - first time setup
         const openPrice = currentCandle.open;
 
-        // Calculate tick-based range: ±0.5% range (rounded to 100-tick spacing)
-        // Calculate ideal ±0.5% price targets
-        const idealUpper = openPrice * 1.005;
-        const idealLower = openPrice * 0.995;
+        // Calculate tick-based range: ±0.05% range (10 ticks total for Base pool)
+        // Calculate ideal ±0.05% price targets
+        const idealUpper = openPrice * 1.0005;
+        const idealLower = openPrice * 0.9995;
 
         const tickSpacing = await getPoolTickSpacing();
 
-        // Convert open price to tick and create symmetric 100-tick range
+        // Convert open price to tick and create symmetric 10-tick range
         const openTick = Math.log(openPrice) / Math.log(1.0001);
         const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
 
-        // Initial range is symmetric: [center-50, center+50] for 100 ticks total
-        const tickLower = centerTick - (tickSpacing / 2);
-        const tickUpper = centerTick + (tickSpacing / 2);
+        // Initial range is symmetric: [center-5, center+5] for 10 ticks total
+        const tickLower = centerTick - (TICK_RANGE / 2);
+        const tickUpper = centerTick + (TICK_RANGE / 2);
 
         // Calculate actual price boundaries from rounded ticks
         const lowerRange = Math.pow(1.0001, tickLower);
@@ -463,9 +467,9 @@ async function streamPositionData(data) {
           tickUpper: tickUpper
         };
         lastPositionStatus = 'Monitoring';
-        console.log(`\n🎯 Initial Ranges Set (first run): Open=$${openPrice.toFixed(2)} (±0.5% target)`);
+        console.log(`\n🎯 Initial Ranges Set (first run): Open=$${openPrice.toFixed(2)} (±0.05% target, 10 ticks)`);
         console.log(`   Upper=$${currentRanges.upper.toFixed(2)} (ideal: $${idealUpper.toFixed(2)}), Lower=$${currentRanges.lower.toFixed(2)} (ideal: $${idealLower.toFixed(2)})`);
-        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${tickUpper - tickLower} ticks, spacing=${tickSpacing})`);
+        console.log(`   Tick Range: ${tickLower} to ${tickUpper} (${TICK_RANGE} ticks, spacing=${tickSpacing})`);
       }
     } catch (error) {
       console.error('Error restoring ranges from DB:', error);
@@ -473,11 +477,11 @@ async function streamPositionData(data) {
       const openPrice = currentCandle.open;
       const tickSpacing = await getPoolTickSpacing();
 
-      // Convert open price to tick and create symmetric 100-tick range
+      // Convert open price to tick and create symmetric 10-tick range
       const openTick = Math.log(openPrice) / Math.log(1.0001);
       const centerTick = Math.round(openTick / tickSpacing) * tickSpacing;
-      const tickLower = centerTick - (tickSpacing / 2);
-      const tickUpper = centerTick + (tickSpacing / 2);
+      const tickLower = centerTick - (TICK_RANGE / 2);
+      const tickUpper = centerTick + (TICK_RANGE / 2);
       const lowerRange = Math.pow(1.0001, tickLower);
       const upperRange = Math.pow(1.0001, tickUpper);
       currentRanges = {
@@ -518,7 +522,7 @@ async function sendWebhook(positionData) {
       usdc_pct: positionData.usdc_pct,
       rebalance_type: positionData.rebalance_type,
       pool_address: POOL_ADDRESS,
-      network: 'sonic'
+      network: 'base'
     };
 
     // Log the payload being sent
@@ -1097,7 +1101,7 @@ app.get('/api/transactions/stats', async (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
+const PORT = 3001; // Base bot on port 3001 (Shadow bot on 3000)
 app.listen(PORT, () => {
   console.log(`\n🌐 Server running on http://localhost:${PORT}`);
   console.log(`📈 Open http://localhost:${PORT}/index.html to view the dashboard\n`);
@@ -1106,7 +1110,7 @@ app.listen(PORT, () => {
 // Start the main loop
 async function startApplication() {
   console.log('='.repeat(60));
-  console.log('🎯 Sonic Execution Layer - WETH/USDC Pool Monitor (ON-CHAIN)');
+  console.log('🎯 BASE Execution Layer - WETH/USDC Pool Monitor (ON-CHAIN)');
   console.log('='.repeat(60));
 
   // Connect to MongoDB
