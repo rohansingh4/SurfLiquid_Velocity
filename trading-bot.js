@@ -38,12 +38,15 @@ class TradingBot {
 
     // Create a separate wallet for write operations if writeProvider is different
     const writeWallet = writeProvider ? new ethers.Wallet(wallet.privateKey, writeProvider) : wallet;
+    this.writeWallet = writeWallet; // Store for later use
 
     // Initialize contracts
     // Read operations use provider (fetched every 10s)
     this.poolContract = new ethers.Contract(poolAddress, POOL_ABI, provider);
-    this.wethContract = new ethers.Contract(wethAddress, ERC20_ABI, provider);
-    this.usdcContract = new ethers.Contract(usdcAddress, ERC20_ABI, provider);
+
+    // Token contracts MUST use writeWallet for transactions (approve, transfer)
+    this.wethContract = new ethers.Contract(wethAddress, ERC20_ABI, writeWallet);
+    this.usdcContract = new ethers.Contract(usdcAddress, ERC20_ABI, writeWallet);
 
     // Write operations use writeWallet (with separate RPC if provided)
     // Initialize SwapHelper if address provided
