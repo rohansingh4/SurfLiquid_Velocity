@@ -90,12 +90,18 @@ async function initializeTradingBot() {
 }
 
 // Calculate price from sqrtPriceX96
+// For Base pool: token0=WETH (18 decimals), token1=USDC (6 decimals)
+// sqrtPriceX96 = sqrt(token1/token0) * 2^96
 function calculatePriceFromSqrtPriceX96(sqrtPriceX96) {
   const Q96 = 2n ** 96n;
   const sqrtPrice = Number(sqrtPriceX96) / Number(Q96);
-  const priceRaw = sqrtPrice * sqrtPrice;
-  const priceAdjusted = priceRaw / (10 ** 12); // Adjust for WETH(18) / USDC(6)
-  return 1 / priceAdjusted; // USDC per WETH
+  const priceRaw = sqrtPrice * sqrtPrice; // token1/token0 in raw units
+
+  // Adjust for decimals: USDC(6) / WETH(18) = 10^(6-18) = 10^-12
+  // priceRaw * 10^-12 gives USDC per WETH
+  const usdcPerWeth = priceRaw / (10 ** 12);
+
+  return usdcPerWeth; // Price of 1 WETH in USDC
 }
 
 // Get pool tick spacing
