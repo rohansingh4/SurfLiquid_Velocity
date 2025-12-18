@@ -192,6 +192,10 @@ class TradingBot {
     }
 
     try {
+      // Get current pool tick
+      const slot0 = await this.poolContract.slot0();
+      const currentTick = Number(slot0[1]);
+
       // Get position count to find our position
       const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
 
@@ -199,20 +203,38 @@ class TradingBot {
         return 0; // No positions
       }
 
-      // Get the first (latest) position - assumption: we only manage 1 position at a time
-      const [posTickLower, posTickUpper, liquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
+      // Find position for this pool (within reasonable tick distance)
+      const MAX_TICK_DISTANCE = 50000;
+      let liquidity = 0n;
+      let posTickLower = 0;
+      let posTickUpper = 0;
 
-      if (liquidity === 0n) {
-        return 0; // Position closed or empty
+      for (let i = 0; i < Number(positionCount); i++) {
+        const [tickLower, tickUpper, posLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, i);
+
+        const tickDistance = Math.max(
+          Math.abs(tickLower - currentTick),
+          Math.abs(tickUpper - currentTick)
+        );
+
+        if (posLiquidity > 0n && tickDistance <= MAX_TICK_DISTANCE) {
+          liquidity = posLiquidity;
+          posTickLower = tickLower;
+          posTickUpper = tickUpper;
+          break;
+        }
       }
 
-      // Get current pool state
-      const slot0 = await this.poolContract.slot0();
+      if (liquidity === 0n) {
+        return 0; // No valid position found
+      }
+
+      // Use slot0 from above (already fetched)
       const sqrtPriceX96 = slot0[0];
 
-      // Calculate sqrt prices at tick boundaries
-      const sqrtPriceAX96 = this.getSqrtPriceAtTick(this.currentTickLower);
-      const sqrtPriceBX96 = this.getSqrtPriceAtTick(this.currentTickUpper);
+      // Calculate sqrt prices at tick boundaries using ACTUAL position ticks
+      const sqrtPriceAX96 = this.getSqrtPriceAtTick(posTickLower);
+      const sqrtPriceBX96 = this.getSqrtPriceAtTick(posTickUpper);
 
       // Convert liquidity to token amounts
       const { amount0, amount1 } = this.getAmountsForLiquidity(
@@ -529,6 +551,10 @@ class TradingBot {
         console.log(`\n➖ Removing Liquidity via SwapHelper (Attempt ${attempt}/${maxRetries})...`);
         console.log(`   Tick Range: ${this.currentTickLower} to ${this.currentTickUpper}`);
 
+        // Get current pool tick to validate position
+        const slot0 = await this.poolContract.slot0();
+        const currentTick = Number(slot0[1]);
+
         // Get position count to find our position
         const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
 
@@ -538,23 +564,48 @@ class TradingBot {
           return null;
         }
 
-        // Get the first (latest) position - assumption: we only manage 1 position at a time
-        const [posTickLower, posTickUpper, posLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
+        // Find a position that's within reasonable range of current pool state
+        let validPosition = null;
+        const MAX_TICK_DISTANCE = 50000; // Positions more than 50k ticks away are likely from a different pool
 
-        if (posLiquidity === 0n) {
-          console.log('⚠️  Position already empty');
+        for (let i = 0; i < Number(positionCount); i++) {
+          const [posTickLower, posTickUpper, posLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, i);
+
+          if (posLiquidity === 0n) continue; // Skip empty positions
+
+          // Check if position is within reasonable range of current tick
+          const tickDistance = Math.max(
+            Math.abs(posTickLower - currentTick),
+            Math.abs(posTickUpper - currentTick)
+          );
+
+          console.log(`   Position ${i}: [${posTickLower}, ${posTickUpper}], Liquidity: ${posLiquidity.toString()}, Distance: ${tickDistance} ticks`);
+
+          if (tickDistance <= MAX_TICK_DISTANCE) {
+            validPosition = { tickLower: posTickLower, tickUpper: posTickUpper, liquidity: posLiquidity, index: i };
+            console.log(`   ✅ Valid position found (within ${tickDistance} ticks of current)`);
+            break;
+          } else {
+            console.log(`   ⚠️  Position too far from current tick (likely different pool) - skipping`);
+          }
+        }
+
+        if (!validPosition) {
+          console.log('⚠️  No valid positions found for this pool');
           this.hasLiquidity = false;
+          this.currentTickLower = null;
+          this.currentTickUpper = null;
           return null;
         }
 
-        console.log(`   Position found: [${posTickLower}, ${posTickUpper}], Liquidity: ${posLiquidity.toString()}`);
-        console.log(`   Liquidity to remove: ${posLiquidity.toString()}`);
+        console.log(`   Removing liquidity from: [${validPosition.tickLower}, ${validPosition.tickUpper}]`);
+        console.log(`   Liquidity to remove: ${validPosition.liquidity.toString()}`);
 
-        // Remove 100% of liquidity
+        // Remove 100% of liquidity using the ACTUAL position ticks
         const tx = await this.swapHelperContract.removeLiquidity(
-          this.currentTickLower,
-          this.currentTickUpper,
-          posLiquidity, // Remove full liquidity amount
+          validPosition.tickLower,
+          validPosition.tickUpper,
+          validPosition.liquidity, // Remove full liquidity amount
           { gasLimit: 500000 } // Fixed gas to avoid estimation issues
         );
 
