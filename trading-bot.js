@@ -10,17 +10,17 @@ const ERC20_ABI = [
   'function allowance(address owner, address spender) view returns (uint256)'
 ];
 
-// SwapHelper ABI (updated with liquidity functions)
+// SwapHelper ABI (matches deployed BasePoolHelper contract from baseV3/ test scripts)
 const SWAP_HELPER_ABI = [
-  'function executeSwap(address pool, address tokenIn, address tokenOut, bool zeroForOne, uint256 amountIn, uint160 sqrtPriceLimitX96) returns (int256 amount0, int256 amount1)',
-  'function addLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount, uint256 amount0Max, uint256 amount1Max) returns (uint256 amount0, uint256 amount1)',
-  'function removeLiquidity(address pool, int24 tickLower, int24 tickUpper, uint128 liquidityAmount) returns (uint256 amount0, uint256 amount1)',
-  'function getPositionLiquidity(address pool, int24 tickLower, int24 tickUpper) view returns (uint128)',
-  'function withdrawToken(address token, uint256 amount)',
-  'function getTokenBalance(address token) view returns (uint256)',
-  'function owner() view returns (address)',
-  'function token0() view returns (address)',
-  'function token1() view returns (address)'
+  'function executeSwap(address tokenIn, address tokenOut, uint256 amountIn, uint160 sqrtPriceLimitX96) external returns (int256 amount0, int256 amount1)',
+  'function addLiquidity(int24 tickLower, int24 tickUpper, uint256 amount0Desired, uint256 amount1Desired, uint128 liquidityAmount) external returns (uint256 amount0, uint256 amount1)',
+  'function removeLiquidity(int24 tickLower, int24 tickUpper, uint128 liquidityAmount) external returns (uint256 amount0, uint256 amount1)',
+  'function getUserPositionCount(address user) external view returns (uint256)',
+  'function getUserPosition(address user, uint256 index) external view returns (int24 tickLower, int24 tickUpper, uint128 liquidity)',
+  'function getPoolInfo() external view returns (address, address, uint24, int24, uint160, int24)',
+  'event SwapExecuted(address indexed user, address tokenIn, address tokenOut, uint256 amountIn, int256 amount0, int256 amount1)',
+  'event LiquidityAdded(address indexed user, int24 tickLower, int24 tickUpper, uint128 liquidity, uint256 amount0, uint256 amount1)',
+  'event LiquidityRemoved(address indexed user, int24 tickLower, int24 tickUpper, uint128 liquidity, uint256 amount0, uint256 amount1)'
 ];
 
 // Pool ABI (provided by user)
@@ -192,12 +192,15 @@ class TradingBot {
     }
 
     try {
-      // Get current liquidity from contract
-      const liquidity = await this.swapHelperContract.getPositionLiquidity(
-        this.poolAddress,
-        this.currentTickLower,
-        this.currentTickUpper
-      );
+      // Get position count to find our position
+      const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
+
+      if (positionCount === 0n) {
+        return 0; // No positions
+      }
+
+      // Get the first (latest) position - assumption: we only manage 1 position at a time
+      const [posTickLower, posTickUpper, liquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
 
       if (liquidity === 0n) {
         return 0; // Position closed or empty
@@ -352,10 +355,8 @@ class TradingBot {
 
         // Estimate gas and add 50% buffer
         const estimatedGas = await this.swapHelperContract.executeSwap.estimateGas(
-          this.poolAddress,
           tokenIn,
           tokenOut,
-          zeroForOne,
           amountIn,
           sqrtPriceLimitX96
         );
@@ -365,10 +366,8 @@ class TradingBot {
 
         // Execute swap via SwapHelper
         const tx = await this.swapHelperContract.executeSwap(
-          this.poolAddress,
           tokenIn,
           tokenOut,
-          zeroForOne,
           amountIn,
           sqrtPriceLimitX96,
           { gasLimit }
@@ -457,12 +456,11 @@ class TradingBot {
 
         // Estimate gas
         const estimatedGas = await this.swapHelperContract.addLiquidity.estimateGas(
-          this.poolAddress,
           tickLower,
           tickUpper,
-          liquidityAmount,
-          usdcWei, // amount0Max (USDC)
-          wethWei  // amount1Max (WETH)
+          usdcWei, // amount0Desired (USDC)
+          wethWei, // amount1Desired (WETH)
+          liquidityAmount
         );
 
         const gasLimit = (estimatedGas * 150n) / 100n; // 150% of estimated
@@ -470,12 +468,11 @@ class TradingBot {
 
         // Add liquidity via SwapHelper
         const tx = await this.swapHelperContract.addLiquidity(
-          this.poolAddress,
           tickLower,
           tickUpper,
+          usdcWei, // amount0Desired (USDC)
+          wethWei, // amount1Desired (WETH)
           liquidityAmount,
-          usdcWei, // amount0Max
-          wethWei, // amount1Max
           { gasLimit }
         );
 
@@ -532,27 +529,32 @@ class TradingBot {
         console.log(`\n➖ Removing Liquidity via SwapHelper (Attempt ${attempt}/${maxRetries})...`);
         console.log(`   Tick Range: ${this.currentTickLower} to ${this.currentTickUpper}`);
 
-        // Check actual position liquidity
-        const positionLiquidity = await this.swapHelperContract.getPositionLiquidity(
-          this.poolAddress,
-          this.currentTickLower,
-          this.currentTickUpper
-        );
+        // Get position count to find our position
+        const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
 
-        if (positionLiquidity === 0n) {
+        if (positionCount === 0n) {
+          console.log('⚠️  No positions found');
+          this.hasLiquidity = false;
+          return null;
+        }
+
+        // Get the first (latest) position - assumption: we only manage 1 position at a time
+        const [posTickLower, posTickUpper, posLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
+
+        if (posLiquidity === 0n) {
           console.log('⚠️  Position already empty');
           this.hasLiquidity = false;
           return null;
         }
 
-        console.log(`   Liquidity to remove: ${positionLiquidity.toString()}`);
+        console.log(`   Position found: [${posTickLower}, ${posTickUpper}], Liquidity: ${posLiquidity.toString()}`);
+        console.log(`   Liquidity to remove: ${posLiquidity.toString()}`);
 
-        // Pass 0 to remove 100% of liquidity
+        // Remove 100% of liquidity
         const tx = await this.swapHelperContract.removeLiquidity(
-          this.poolAddress,
           this.currentTickLower,
           this.currentTickUpper,
-          0, // 0 = remove 100%
+          posLiquidity, // Remove full liquidity amount
           { gasLimit: 500000 } // Fixed gas to avoid estimation issues
         );
 
@@ -635,25 +637,27 @@ class TradingBot {
 
         // Verify the position still exists on-chain
         if (this.swapHelperContract) {
-          const actualLiquidity = await this.swapHelperContract.getPositionLiquidity(
-            this.poolAddress,
-            savedPosition.tickLower,
-            savedPosition.tickUpper
-          );
+          const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
 
-          if (actualLiquidity > 0n) {
-            this.currentTickLower = savedPosition.tickLower;
-            this.currentTickUpper = savedPosition.tickUpper;
-            this.currentLiquidity = actualLiquidity;
-            this.hasLiquidity = true;
-            console.log(`   ✅ Position restored and verified on-chain`);
-            console.log(`      On-chain liquidity: ${actualLiquidity.toString()}`);
-            return true;
-          } else {
-            console.log(`   ⚠️  Saved position no longer exists on-chain - clearing state`);
-            await this.clearPositionState();
-            return false;
+          if (positionCount > 0n) {
+            // Get the first position (we manage only 1 position at a time)
+            const [posTickLower, posTickUpper, actualLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
+
+            // Verify it matches our saved position
+            if (actualLiquidity > 0n && posTickLower === savedPosition.tickLower && posTickUpper === savedPosition.tickUpper) {
+              this.currentTickLower = savedPosition.tickLower;
+              this.currentTickUpper = savedPosition.tickUpper;
+              this.currentLiquidity = actualLiquidity;
+              this.hasLiquidity = true;
+              console.log(`   ✅ Position restored and verified on-chain`);
+              console.log(`      On-chain liquidity: ${actualLiquidity.toString()}`);
+              return true;
+            }
           }
+
+          console.log(`   ⚠️  Saved position no longer exists on-chain - clearing state`);
+          await this.clearPositionState();
+          return false;
         } else {
           // No SwapHelper, just restore to memory
           this.currentTickLower = savedPosition.tickLower;
@@ -686,29 +690,33 @@ class TradingBot {
       let hasActualLP = false;
       let foundAtTicks = null;
 
-      // First, check if we have stored ticks from a previous position
-      if (this.currentTickLower !== null && this.currentTickUpper !== null) {
-        const currentPositionLiquidity = await this.swapHelperContract.getPositionLiquidity(
-          this.poolAddress,
-          this.currentTickLower,
-          this.currentTickUpper
-        );
-        
-        if (currentPositionLiquidity > 0n) {
+      // Get the user's position (we manage only 1 position at a time)
+      const positionCount = await this.swapHelperContract.getUserPositionCount(this.wallet.address);
+
+      if (positionCount > 0n) {
+        const [posTickLower, posTickUpper, posLiquidity] = await this.swapHelperContract.getUserPosition(this.wallet.address, 0);
+
+        if (posLiquidity > 0n) {
           hasActualLP = true;
-          foundAtTicks = { lower: this.currentTickLower, upper: this.currentTickUpper, liquidity: currentPositionLiquidity };
-          console.log(`   🔍 Found existing LP at stored ticks [${this.currentTickLower}, ${this.currentTickUpper}]: ${currentPositionLiquidity.toString()}`);
+          foundAtTicks = { lower: posTickLower, upper: posTickUpper, liquidity: posLiquidity };
+          console.log(`   🔍 Found existing LP at ticks [${posTickLower}, ${posTickUpper}]: ${posLiquidity.toString()}`);
+
+          // Check if it matches our stored ticks
+          if (this.currentTickLower !== null && this.currentTickUpper !== null) {
+            if (posTickLower === this.currentTickLower && posTickUpper === this.currentTickUpper) {
+              console.log(`   ✅ Position matches stored ticks`);
+            } else {
+              console.log(`   ⚠️  Position ticks differ from stored ticks [${this.currentTickLower}, ${this.currentTickUpper}]`);
+            }
+          }
         }
       }
 
-      // If no liquidity at stored ticks, check the new provided ticks (handles bot restart)
+      // Dummy check to maintain existing logic structure
       if (!hasActualLP && tickLower !== undefined && tickUpper !== undefined) {
-        const newTicksLiquidity = await this.swapHelperContract.getPositionLiquidity(
-          this.poolAddress,
-          tickLower,
-          tickUpper
-        );
-        
+        // No position found on-chain
+        const newTicksLiquidity = 0n;
+
         if (newTicksLiquidity > 0n) {
           hasActualLP = true;
           foundAtTicks = { lower: tickLower, upper: tickUpper, liquidity: newTicksLiquidity };
