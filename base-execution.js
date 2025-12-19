@@ -318,13 +318,13 @@ async function processCandle(candle) {
         positionSavedThisCycle = true;
       }
     } else if (isInRange && lastPositionStatus !== 'Monitoring') {
-      // Price back in range
+      // Price back in range - save this status change
       console.log(`\n✅ [Base] PRICE BACK IN RANGE`);
       lastPositionStatus = 'Monitoring';
       outOfRangeDetectedAt = null;
       positionSavedThisCycle = false;
-    } else if (isInRange && lastPositionStatus === 'Monitoring' && !positionSavedThisCycle) {
-      // Regular monitoring save
+
+      // Save the status change to Monitoring
       await savePositionData({
         timestamp: candle.timestamp,
         status: 'Monitoring',
@@ -340,8 +340,8 @@ async function processCandle(candle) {
         usdc_pct: lastPositionPercentages.usdc_pct,
         rebalance_type: 'N/A'
       });
-      positionSavedThisCycle = false;
     }
+    // DO NOT save during regular monitoring - only save on status/range changes
   } catch (error) {
     console.error('[Base] Error processing candle:', error.message);
   }
